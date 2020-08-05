@@ -1,0 +1,20 @@
+{
+    "name": "webspell_ng/data_structures",
+    "description": "Abstract classes to be used within webSPELL NG projects",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "SlicewOw",
+            "email": "slicewow@webspell-ng.de"
+        }
+    ],
+    "require": {
+        "webspell_ng/query_builder": "dev-master",
+        "respect/validation": "^2.0"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^0.12.36",
+        "phpunit/phpunit": "^9.2"
+    }
+}
