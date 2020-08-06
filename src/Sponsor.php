@@ -4,15 +4,32 @@ namespace webspell_ng;
 
 class Sponsor {
 
-    private int $sponsor_id;
-    private string $name;
-    private string $homepage;
-    private ?string $info;
-    private ?string $banner;
-    private ?string $banner_small;
-    private bool $is_displayed = false;
-    private bool $is_mainsponsor = false;
-    private \DateTime $date;
+    /** @var int $sponsor_id */
+    private $sponsor_id;
+
+    /** @var string $name */
+    private $name;
+
+    /** @var string $homepage */
+    private $homepage;
+
+    /** @var ?string $info */
+    private $info;
+
+    /** @var ?string $banner */
+    private $banner;
+
+    /** @var ?string $banner_small */
+    private $banner_small;
+
+    /** @var bool $is_displayed */
+    private $is_displayed = false;
+
+    /** @var bool $is_mainsponsor */
+    private $is_mainsponsor = false;
+
+    /** @var \DateTime $date */
+    private $date;
 
     public function setSponsorId(int $sponsor_id): void
     {

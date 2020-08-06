@@ -4,9 +4,14 @@ namespace webspell_ng;
 
 class Game {
 
-    private int $game_id;
-    private string $game_tag;
-    private string $game_name;
+    /** @var int $game_id */
+    private $game_id;
+
+    /** @var string $game_tag */
+    private $game_tag;
+
+    /** @var string $game_name */
+    private $game_name;
 
     public function setGameId(int $game_id): void
     {

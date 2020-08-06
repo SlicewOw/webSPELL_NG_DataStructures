@@ -4,10 +4,17 @@ namespace webspell_ng;
 
 class User {
 
-    private int $user_id;
-    private string $user_name;
-    private ?string $firstname;
-    private ?string $lastname;
+    /** @var int $user_id */
+    private $user_id;
+
+    /** @var string $user_name */
+    private $user_name;
+
+    /** @var ?string $user_name */
+    private $firstname;
+
+    /** @var ?string $user_name */
+    private $lastname;
 
     public function setUserId(int $user_id): void
     {
