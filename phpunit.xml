@@ -1,37 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit backupGlobals="false"
-         convertErrorsToExceptions="true"
-         convertWarningsToExceptions="true"
-         convertNoticesToExceptions="true"
-         bootstrap="./vendor/autoload.php"
-         verbose="true"
-         colors="true">
-
-    <php>
-        <ini name="error_reporting" value="-1"/>
-        <ini name="memory_limit" value="3G"/>
-    </php>
-
-    <testsuites>
-        <testsuite name="webspell-ng-data-structures">
-            <directory>./tests</directory>
-        </testsuite>
-    </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory>./src/</directory>
-        </whitelist>
-    </filter>
-
-    <logging>
-        <log type="coverage-html" target="./tests/tmp/report" lowUpperBound="35" highLowerBound="70"/>
-        <log type="coverage-clover" target="./tests/tmp/coverage.xml"/>
-        <log type="coverage-php" target="./tests/tmp/coverage.serialized"/>
-        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
-        <log type="junit" target="./tests/tmp/logfile.xml"/>
-        <log type="testdox-html" target="./tests/tmp/testdox.html"/>
-        <log type="testdox-text" target="./tests/tmp/testdox.txt"/>
-    </logging>
-
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" backupGlobals="false" convertErrorsToExceptions="true" convertWarningsToExceptions="true" convertNoticesToExceptions="true" bootstrap="./vendor/autoload.php" verbose="true" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage>
+    <include>
+      <directory>./src/</directory>
+    </include>
+    <report>
+      <clover outputFile="./tests/tmp/coverage.xml"/>
+      <html outputDirectory="./tests/tmp/report" lowUpperBound="35" highLowerBound="70"/>
+      <php outputFile="./tests/tmp/coverage.serialized"/>
+      <text outputFile="php://stdout" showUncoveredFiles="false"/>
+    </report>
+  </coverage>
+  <php>
+    <ini name="error_reporting" value="-1"/>
+    <ini name="memory_limit" value="3G"/>
+  </php>
+  <testsuites>
+    <testsuite name="webspell-ng-data-structures">
+      <directory>./tests</directory>
+    </testsuite>
+  </testsuites>
+  <logging>
+    <junit outputFile="./tests/tmp/logfile.xml"/>
+    <testdoxHtml outputFile="./tests/tmp/testdox.html"/>
+    <testdoxText outputFile="./tests/tmp/testdox.txt"/>
+  </logging>
 </phpunit>
