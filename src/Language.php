@@ -43,7 +43,7 @@ class Language
     private $language_path = 'languages/';
 
     /**
-     * @var string $language_path
+     * @var string $default_language_path
      */
     private $default_language_path = __DIR__ . '/../languages/';
 
@@ -58,7 +58,7 @@ class Language
     public $module_files = array();
 
     /**
-     * @var array<string> $module
+     * @var array<string> $module_array
      */
     private $module_array = array();
 
