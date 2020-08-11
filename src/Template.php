@@ -38,7 +38,7 @@ class Template
     private $moduleName;
 
     /**
-     * @var bool $moduleName
+     * @var bool $isAdminLanguage
      */
     private $isAdminLanguage;
 
@@ -97,11 +97,11 @@ class Template
     * Longer keys are replaced first (users before user)
     *
     * @param string $template
-    * @param array  $data
+    * @param array<mixed> $data
     *
     * @return string
     */
-    private function replace($template, $data = array()): string
+    private function replace(string $template, array $data = array()): string
     {
         return strtr($template, $data);
     }
@@ -110,11 +110,11 @@ class Template
     * Replace a single template with one set of data and translate all language keys
     *
     * @param string $template name of a template
-    * @param array  $data data which gets replaced
+    * @param array<mixed> $data data which gets replaced
     *
     * @return string
     */
-    public function replaceTemplate($template, $data = array()): string
+    public function replaceTemplate(string $template, array $data = array()): string
     {
         $templateString = $this->loadFile($template);
         $templateTranslated = $this->replaceLanguage($templateString);
