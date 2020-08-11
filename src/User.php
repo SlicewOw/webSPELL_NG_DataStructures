@@ -10,10 +10,10 @@ class User {
     /** @var string $user_name */
     private $user_name;
 
-    /** @var ?string $user_name */
+    /** @var ?string $firstname */
     private $firstname;
 
-    /** @var ?string $user_name */
+    /** @var ?string $lastname */
     private $lastname;
 
     public function setUserId(int $user_id): void
