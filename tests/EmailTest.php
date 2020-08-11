@@ -10,9 +10,7 @@ final class EmailTest extends TestCase
     public function testIfEmailCanBeSend(): void
     {
 
-        //$this->expectException(ConnectionException::class);
-
-        $mail_status_array = $mail = Email::sendEmail(
+        $mail_status_array = Email::sendEmail(
             "slicewow@myrisk-ev.de",
             "Test Mail Module",
             "me@slicewow.de",
