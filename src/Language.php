@@ -53,6 +53,11 @@ class Language
     public $module = array();
 
     /**
+     * @var array<string> $module_files
+     */
+    public $module_files = array();
+
+    /**
      * @var array<string> $module
      */
     private $module_array = array();
@@ -95,62 +100,40 @@ class Language
 
     public function readModule(string $module, bool $add=false, bool $admin=false, bool $pluginpath=false, bool $installpath=false): bool
     {
-        global $default_language;
 
         $module = str_replace(array('\\', '/', '.'), '', $module);
 
         if ($admin && !$pluginpath) {
             $langFolder = '../' . $this->language_path;
-            $folderPath = '%s%s/admin/%s.php';
+            $folderPath = '%s%s/admin/%s.json';
         } else if ($admin && $pluginpath) {
             $langFolder = '../' . $pluginpath . $this->language_path;
-            $folderPath = '%s%s/admin/%s.php';
+            $folderPath = '%s%s/admin/%s.json';
         } else if ($pluginpath) {
             $langFolder = $pluginpath . $this->language_path;
-            $folderPath = '%s%s/%s.php';
+            $folderPath = '%s%s/%s.json';
         } else if ($installpath) {
             $langFolder = '../install/' . $this->language_path;
-            $folderPath = '%s%s/%s.php';
+            $folderPath = '%s%s/%s.json';
         } else if (!$admin && is_dir('../languages/')) {
             $langFolder = '../' . $this->language_path;
-            $folderPath = '%s%s/%s.php';
+            $folderPath = '%s%s/%s.json';
         } else {
-            $langFolder = $this->language_path;
-            $folderPath = '%s%s/%s.php';
+            $langFolder = $this->default_language_path;
+            $folderPath = '%s%s/%s.json';
         }
 
-        $languageFallbackTable = array();
-        if (!empty($this->language)) {
-            $languageFallbackTable[] = $this->language;
-        }
-        if (!empty($default_language)) {
-            $languageFallbackTable[] = $default_language;
-        }
-        if (!in_array('en', $languageFallbackTable)) {
-            $languageFallbackTable[] = 'en';
-        }
+        $module_file = $this->getModuleFile($folderPath, $langFolder, $module);
 
-        foreach ($languageFallbackTable as $folder) {
-
-            if (empty($folder)) {
-                continue;
-            }
-
-            $path = sprintf($folderPath, $langFolder, $folder, $module);
-            if (file_exists($path)) {
-                $module_file = $path;
-                break;
-            }
-
-        }
-
-        if (!isset($module_file)) {
+        if (is_null($module_file)) {
             return false;
         }
 
-        $this->module_array[] = $module_file;
+        $this->module_files[] = $module;
 
-        include($module_file);
+        $language_array = Config::load(
+            $module_file
+        );
 
         if (!$add) {
             $this->module = array();
@@ -166,6 +149,35 @@ class Language
         }
 
         return true;
+    }
+
+    private function getModuleFile(string $folderPath, string $langFolder, string $module): ?string
+    {
+
+        $languageFallbackTable = array();
+        if (!empty($this->language)) {
+            $languageFallbackTable[] = $this->language;
+        }
+
+        if (!in_array('en', $languageFallbackTable)) {
+            $languageFallbackTable[] = 'en';
+        }
+
+        foreach ($languageFallbackTable as $folder) {
+
+            if (empty($folder)) {
+                continue;
+            }
+
+            $path = sprintf($folderPath, $langFolder, $folder, $module);
+            if (file_exists($path)) {
+                return $path;
+            }
+
+        }
+
+        return null;
+
     }
 
     public function replace(string $template): string
