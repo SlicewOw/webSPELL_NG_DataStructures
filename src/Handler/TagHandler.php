@@ -37,8 +37,8 @@ use webspell_ng\WebSpellDatabaseConnection;
 class TagHandler
 {
     /**
-     * @param string $relType
-     * @param int $relID
+     * @param string $related_type
+     * @param int $related_id
      * @param array<string> $tags
      */
     public static function setTags(string $related_type, int $related_id, array $tags): bool
@@ -156,7 +156,7 @@ class TagHandler
     }
 
     /**
-     * @return array<min: int, max: int, tags: array<int, array<name: string, count: int>>>
+     * @return array{min: int, max: int, tags: array{array{name: string, count: int}}}
      */
     public static function getTagCloud(): array
     {
@@ -176,9 +176,12 @@ class TagHandler
 
         $tag_query = $queryBuilder->execute();
         while ($get = $tag_query->fetch()) {
-            $data['tags'][] = array('name' => $get['tag'], 'count' => $get['count']);
-            $data['min'] = min($data['min'], $get['count']);
-            $data['max'] = max($data['max'], $get['count']);
+            $data['tags'][] = array(
+                'name' => (string)$get['tag'],
+                'count' => (int)$get['count']
+            );
+            $data['min'] = (int)min($data['min'], $get['count']);
+            $data['max'] = (int)max($data['max'], $get['count']);
         }
 
         return $data;
@@ -209,164 +212,4 @@ class TagHandler
         return round($minsize + round($a) * $treshold);
     }
 
-    public static function getNews($newsID)
-    {
-        global $userID;
-        $result = safe_query(
-            "SELECT
-                n.*,
-                nc.content,
-                nc.headline
-            FROM
-                " . PREFIX . "news n
-            JOIN
-                " . PREFIX . "news_contents nc ON n.newsID = nc.newsID
-            WHERE
-                n.newsID = " . (int)$newsID
-        );
-        $ds = mysqli_fetch_array($result);
-        if ($ds['intern'] <= isclanmember($userID) &&
-            (
-                $ds['published'] ||
-                (
-                    isnewsadmin($userID) ||
-                    (
-                        isnewswriter($userID) && $ds['poster'] == $userID
-                    )
-                )
-            )
-        ) {
-            return array(
-                'date' => $ds['date'],
-                'type' => 'News',
-                'content' => shortenText($ds['content']),
-                'title' => $ds['headline'],
-                'link' => 'index.php?site=news_comments&amp;newsID=' . $newsID
-            );
-        } else {
-            return false;
-        }
-    }
-
-    public static function getArticle($articlesID)
-    {
-        global $userID;
-        $get1 = safe_query(
-            "SELECT
-                title,
-                date,
-                articlesID
-            FROM
-                `" . PREFIX . "articles`
-            WHERE
-                `articlesID` = " . (int)$articlesID . " AND
-                `saved` = 1"
-        );
-        if ($get1->num_rows) {
-            $ds = mysqli_fetch_array($get1);
-            $get2 = safe_query(
-                "SELECT
-                    *
-                FROM
-                    " . PREFIX . "articles_contents
-                WHERE
-                    `articlesID` = " . (int)$ds['articlesID'] . "
-                ORDER BY
-                    `page` ASC
-                LIMIT
-                    0,1"
-            );
-            $get = mysqli_fetch_assoc($get2);
-            return array(
-                'date' => $ds['date'],
-                'type' => 'Artikel',
-                'content' => shortenText($get['content']),
-                'title' => $ds['title'],
-                'link' => 'index.php?site=articles&amp;action=show&amp;articlesID=' . $articlesID
-            );
-        } else {
-            return false;
-        }
-    }
-
-    public static function getStaticPage($staticID)
-    {
-        global $userID;
-        $get = safe_query("SELECT * FROM " . PREFIX . "static WHERE staticID='" . $staticID . "'");
-        if ($get->num_rows) {
-            $ds = mysqli_fetch_array($get);
-            $allowed = false;
-            switch ($ds['accesslevel']) {
-                case 0:
-                    $allowed = true;
-                    break;
-                case 1:
-                    if ($userID) {
-                        $allowed = true;
-                    }
-                    break;
-                case 2:
-                    if (isclanmember($userID)) {
-                        $allowed = true;
-                    }
-                    break;
-                default:
-                    $allowed = false;
-                    break;
-            }
-            if ($allowed) {
-                return array(
-                    'date' => time(),
-                    'type' => 'StaticPage',
-                    'content' => shortenText($ds['content']),
-                    'title' => $ds['name'],
-                    'link' => 'index.php?site=static&amp;staticID=' . $staticID
-                );
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    public static function getFaq($faqID)
-    {
-        global $userID;
-        $get = safe_query(
-            "SELECT
-                `faqID`,
-                `faqcatID`,
-                `date`,
-                `question`,
-                `answer`
-            FROM
-                `" . PREFIX . "faq`
-            WHERE
-                `faqID` = " . (int)$faqID
-        );
-        if ($get->num_rows) {
-            $ds = mysqli_fetch_array($get);
-            $answer = htmloutput($ds['answer']);
-            return array(
-                'date' => $ds['date'],
-                'type' => 'StaticPage',
-                'content' => shortenText($answer),
-                'title' => $ds['question'],
-                'link' =>
-                    'index.php?site=faq&amp;action=faq&amp;faqID=' . $ds['faqID'] . '&amp;faqcatID=' . $ds['faqcatID']
-            );
-        } else {
-            return false;
-        }
-    }
-
-    public static function sortByDate($tag1, $tag2)
-    {
-        if ($tag1['date'] == $tag2['date']) {
-            return 0;
-        } else {
-            return ($tag1['date'] < $tag2['date']) ? 1 : -1;
-        }
-    }
 }
