@@ -1,3 +1,5 @@
+/src/tmp/*.jpg
+
 /vendor/
 
 /tests/tmp/
