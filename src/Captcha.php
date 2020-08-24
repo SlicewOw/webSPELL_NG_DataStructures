@@ -233,7 +233,7 @@ class Captcha
         @chmod($tmp_file_path, 0655);
 
         $_language = new Language();
-        $_language->readModule('captcha', true);
+        $_language->readModule('captcha');
 
         return '<img src="' . $tmp_file_path . '" alt="' . $_language->module[ 'security_code' ] . '" />';
 
@@ -294,8 +294,7 @@ class Captcha
         return $this->hash;
     }
 
-    /* check if input fits captcha */
-    public function checkCaptcha(string $input, string $hash): bool
+    public function checkCaptcha(int $input, string $hash): bool
     {
 
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
