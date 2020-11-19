@@ -12,7 +12,8 @@
     "require": {
         "webspell_ng/query_builder": "dev-master",
         "respect/validation": "^2.0",
-        "phpmailer/phpmailer": "^6.1"
+        "phpmailer/phpmailer": "^6.1",
+        "hassankhan/config": "^2.1"
     },
     "require-dev": {
         "phpstan/phpstan": "^0.12.36",

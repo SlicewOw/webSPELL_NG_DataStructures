@@ -11,18 +11,21 @@
       <text outputFile="php://stdout" showUncoveredFiles="false"/>
     </report>
   </coverage>
+
   <php>
 
     <ini name="error_reporting" value="-1"/>
     <ini name="memory_limit" value="3G"/>
 
     <env name="DB_CONNECTION" value="mysql"/>
-    <env name="DB_USERNAME" value="root"/>
-    <env name="DB_DATABASE" value="webpsell_ng"/>
+    <env name="DB_USER" value="root"/>
+    <env name="DB_PASS" value=""/>
+    <env name="DB_NAME" value="webpsell_ng"/>
     <env name="DB_HOST" value="127.0.0.1" />
     <env name="DB_PORT" value="3306" />
 
   </php>
+
   <testsuites>
     <testsuite name="webspell-ng-data-structures">
       <directory>./tests</directory>
