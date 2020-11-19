@@ -1033,12 +1033,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SlicewOw/webSPELL_NG_QueryBuilder.git",
-                "reference": "9b48250ee5d1d428d096e101b4eb318dc5be20e5"
+                "reference": "0de6d4630020bb20a3f97e28820b18cd26acd003"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SlicewOw/webSPELL_NG_QueryBuilder/zipball/9b48250ee5d1d428d096e101b4eb318dc5be20e5",
-                "reference": "9b48250ee5d1d428d096e101b4eb318dc5be20e5",
+                "url": "https://api.github.com/repos/SlicewOw/webSPELL_NG_QueryBuilder/zipball/0de6d4630020bb20a3f97e28820b18cd26acd003",
+                "reference": "0de6d4630020bb20a3f97e28820b18cd26acd003",
                 "shasum": ""
             },
             "require": {
@@ -1072,7 +1072,7 @@
                 "issues": "https://github.com/SlicewOw/webSPELL_NG_QueryBuilder/issues",
                 "source": "https://github.com/SlicewOw/webSPELL_NG_QueryBuilder/tree/master"
             },
-            "time": "2020-11-19T11:19:13+00:00"
+            "time": "2020-11-19T11:42:39+00:00"
         }
     ],
     "packages-dev": [
