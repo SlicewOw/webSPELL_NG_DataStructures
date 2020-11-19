@@ -16,9 +16,9 @@ class TrashmailUtils {
     {
 
         if (!($trashmail_json = @file_get_contents(__DIR__ . '/../../resources/' . self::TRASHMAIL_FILE_NAME))) {
-            // @codingStandardsIgnoreStart
+            // @codeCoverageIgnoreStart
             return false;
-            // @codingStandardsIgnoreEnd
+            // @codeCoverageIgnoreEnd
         }
 
         $trashmailArray = json_decode($trashmail_json, TRUE);
@@ -29,9 +29,9 @@ class TrashmailUtils {
         $mail_ext = $mailArray[$anzElements - 1];
 
         if (!isset($trashmailArray[$mail_ext])) {
-            // @codingStandardsIgnoreStart
+            // @codeCoverageIgnoreStart
             return false;
-            // @codingStandardsIgnoreEnd
+            // @codeCoverageIgnoreEnd
         }
 
         if (in_array($email_array[1], $trashmailArray[$mail_ext]) || in_array('*.' . $mail_ext, $trashmailArray[$mail_ext])) {
