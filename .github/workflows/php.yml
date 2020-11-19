@@ -45,7 +45,7 @@ jobs:
       run: sudo systemctl start mysql
 
     - name: Create MySQL tables
-      run: mysql --host=127.0.0.1 --port=3306 --user=root --password="" -p webspell_ng < sql/install.sql
+      run: mysql --host=127.0.0.1 --port=3306 --user=root webspell_ng < sql/install.sql
 
     - name: Run test suite
       run: composer run-script test
