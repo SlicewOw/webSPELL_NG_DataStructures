@@ -22,5 +22,8 @@
         "psr-4": {
             "webspell_ng\\": "src/"
         }
+    },
+    "scripts": {
+        "test": "phpunit"
     }
 }
