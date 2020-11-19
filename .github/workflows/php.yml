@@ -18,7 +18,6 @@ jobs:
         env:
             MYSQL_ALLOW_EMPTY_PASSWORD: yes
             MYSQL_DATABASE: webspell_ng
-            MYSQL_ROOT_PASSWORD: password
         ports:
             - '33306:3306'
         options: >-
@@ -50,7 +49,7 @@ jobs:
       run: sudo systemctl start mysql
 
     - name: Create MySQL tables
-      run: mysql --host=127.0.0.1 --port=33306 --user=root --password=password --protocol=tcp webspell_ng < sql/install.sql
+      run: mysql --host=127.0.0.1 --port=33306 --user=root --protocol=tcp webspell_ng < sql/install.sql
 
     - name: Run test suite
       env:
@@ -58,5 +57,4 @@ jobs:
         DB_DATABASE: webspell_ng
         DB_PORT: 33306
         DB_USER: root
-        DB_PASSWORD: password
       run: composer run-script test
