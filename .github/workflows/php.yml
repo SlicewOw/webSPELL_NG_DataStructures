@@ -6,6 +6,16 @@ on:
   pull_request:
     branches: [ master ]
 
+services:
+  mysql:
+        image: mysql:5.7
+        env:
+            MYSQL_ALLOW_EMPTY_PASSWORD: yes
+            MYSQL_DATABASE: webspell_ng
+        ports:
+            - 3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
 jobs:
   build:
 
@@ -32,3 +42,5 @@ jobs:
 
     - name: Run test suite
       run: composer run-script test
+      env:
+        DB_PORT: ${{ job.services.mysql.ports[3306] }}
