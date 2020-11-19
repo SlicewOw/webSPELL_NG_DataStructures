@@ -41,8 +41,11 @@ jobs:
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress --no-suggest
 
+    - name: Start MySQL service
+      run: sudo systemctl start mysql
+
     - name: Create MySQL tables
-      run: mysql -h 127.0.0.1 -p 3306 -u root --password="" -p webspell_ng < sql/install.sql
+      run: mysql --host=127.0.0.1 --port=3306 --user=root --password="" -p webspell_ng < sql/install.sql
 
     - name: Run test suite
       run: composer run-script test
