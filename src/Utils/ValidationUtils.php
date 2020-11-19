@@ -63,7 +63,7 @@ class ValidationUtils {
             return FALSE;
         }
 
-        return TrashmailUtils::isTrashEmail($emailArray);
+        return !TrashmailUtils::isTrashEmail($emailArray);
 
     }
 
