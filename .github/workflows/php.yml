@@ -42,7 +42,7 @@ jobs:
       run: composer install --prefer-dist --no-progress --no-suggest
 
     - name: Create MySQL tables
-      run: mysql -u root --password="" < ${{ hashFiles('**/sql/install.sql') }}
+      run: mysql -u root --password="" < sql/install.sql
 
     - name: Run test suite
       run: composer run-script test
