@@ -42,7 +42,7 @@ jobs:
       run: composer install --prefer-dist --no-progress --no-suggest
 
     - name: Create MySQL tables
-      run: mysql -u root --password="" < sql/install.sql
+      run: mysql -h 127.0.0.1 -p 3306 -u root --password="" -p webspell_ng < sql/install.sql
 
     - name: Run test suite
       run: composer run-script test
