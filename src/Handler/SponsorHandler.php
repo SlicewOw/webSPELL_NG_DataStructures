@@ -27,6 +27,10 @@ class SponsorHandler {
         $sponsor_query = $queryBuilder->execute();
         $sponsor_result = $sponsor_query->fetch();
 
+        if (empty($sponsor_result)) {
+            throw new \InvalidArgumentException('unknown_sponsor');
+        }
+
         $sponsor = new Sponsor();
         $sponsor->setSponsorId($sponsor_result['sponsorID']);
         $sponsor->setName($sponsor_result['name']);

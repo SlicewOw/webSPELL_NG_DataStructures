@@ -28,7 +28,7 @@ class UserHandler {
         $user_query = $queryBuilder->execute();
         $user_result = $user_query->fetch();
 
-        if (!$user_result || count($user_result) < 1) {
+        if (empty($user_result)) {
             throw new \InvalidArgumentException('unknown_user');
         }
 

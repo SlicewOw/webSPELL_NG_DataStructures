@@ -27,7 +27,7 @@ class GameHandler {
         $game_query = $queryBuilder->execute();
         $game_result = $game_query->fetch();
 
-        if (!$game_result || count($game_result) < 1) {
+        if (empty($game_result)) {
             throw new \InvalidArgumentException('unknown_game');
         }
 

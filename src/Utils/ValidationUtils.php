@@ -12,7 +12,7 @@ class ValidationUtils {
     public static function validateArray(array $array, bool $checkForEmpty=true): bool
     {
 
-        if ((!is_array($array)) || ($checkForEmpty && (count($array) < 1))) {
+        if ((!is_array($array)) || ($checkForEmpty && empty($array))) {
             return FALSE;
         }
 
