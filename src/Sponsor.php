@@ -2,34 +2,59 @@
 
 namespace webspell_ng;
 
+use Respect\Validation\Validator;
+
 class Sponsor {
 
-    /** @var int $sponsor_id */
+    /**
+     * @var int $sponsor_id
+     */
     private $sponsor_id;
 
-    /** @var string $name */
+    /**
+     * @var string $name
+     */
     private $name;
 
-    /** @var string $homepage */
+    /**
+     * @var string $homepage
+     */
     private $homepage;
 
-    /** @var ?string $info */
+    /**
+     * @var ?string $info
+     */
     private $info;
 
-    /** @var ?string $banner */
+    /**
+     * @var ?string $banner
+     */
     private $banner;
 
-    /** @var ?string $banner_small */
+    /**
+     * @var ?string $banner_small
+     */
     private $banner_small;
 
-    /** @var bool $is_displayed */
+    /**
+     * @var bool $is_displayed
+     */
     private $is_displayed = false;
 
-    /** @var bool $is_mainsponsor */
+    /**
+     * @var bool $is_mainsponsor
+     */
     private $is_mainsponsor = false;
 
-    /** @var \DateTime $date */
+    /**
+     * @var \DateTime $date
+     */
     private $date;
+
+    /**
+     * @var int $sort
+     */
+    private $sort = 1;
 
     public function setSponsorId(int $sponsor_id): void
     {
@@ -119,6 +144,18 @@ class Sponsor {
     public function getDate(): \DateTime
     {
         return $this->date;
+    }
+
+    public function setSort(int $sort): void
+    {
+        if (Validator::numericVal()->min(1)->validate($sort)) {
+            $this->sort = $sort;
+        }
+    }
+
+    public function getSort(): int
+    {
+        return $this->sort;
     }
 
 }
