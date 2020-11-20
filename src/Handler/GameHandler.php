@@ -4,9 +4,9 @@ namespace webspell_ng\Handler;
 
 use Respect\Validation\Validator;
 
+use webspell_ng\Game;
 use webspell_ng\WebSpellDatabaseConnection;
 
-use webspell_ng\Game;
 
 class GameHandler {
 
@@ -27,8 +27,12 @@ class GameHandler {
         $game_query = $queryBuilder->execute();
         $game_result = $game_query->fetch();
 
+        if (!$game_result || count($game_result) < 1) {
+            throw new \InvalidArgumentException('unknown_game');
+        }
+
         $game = new Game();
-        $game->setGameId($game_result['gameID']);
+        $game->setGameId((int) $game_result['gameID']);
         $game->setTag($game_result['tag']);
         $game->setName($game_result['name']);
 
