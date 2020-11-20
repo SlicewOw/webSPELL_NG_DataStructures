@@ -4,9 +4,10 @@ namespace webspell_ng\Handler;
 
 use Respect\Validation\Validator;
 
-use webspell_ng\WebSpellDatabaseConnection;
-
 use webspell_ng\User;
+use webspell_ng\WebSpellDatabaseConnection;
+use webspell_ng\Utils\DateUtils;
+
 
 class UserHandler {
 
@@ -27,11 +28,23 @@ class UserHandler {
         $user_query = $queryBuilder->execute();
         $user_result = $user_query->fetch();
 
+        if (!$user_result || count($user_result) < 1) {
+            throw new \InvalidArgumentException('unknown_user');
+        }
+
         $user = new User();
         $user->setUserId($user_result['userID']);
         $user->setUsername($user_result['username']);
         $user->setFirstname($user_result['firstname']);
         $user->setLastname($user_result['lastname']);
+        $user->setEmail($user_result['email']);
+        $user->setCountry($user_result['country']);
+        $user->setTown($user_result['town']);
+        $user->setBirthday(
+            DateUtils::getDateTimeByMktimeValue(
+                strtotime($user_result['birthday'])
+            )
+        );
 
         return $user;
 
