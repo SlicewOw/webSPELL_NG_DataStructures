@@ -142,8 +142,11 @@ class User {
         $this->birthday = $birthday;
     }
 
-    public function getBirthday(): ?\DateTime
+    public function getBirthday(): \DateTime
     {
+        if (is_null($this->birthday)) {
+            return new \DateTime("now");
+        }
         return $this->birthday;
     }
 
