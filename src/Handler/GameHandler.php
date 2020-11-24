@@ -36,6 +36,7 @@ class GameHandler {
         $game->setTag($game_result['tag']);
         $game->setShortcut($game_result['short']);
         $game->setName($game_result['name']);
+        $game->setIsActive($game_result['active']);
 
         return $game;
 

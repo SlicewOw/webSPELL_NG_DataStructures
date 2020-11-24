@@ -24,6 +24,11 @@ class Game {
      */
     private $game_name;
 
+    /**
+     * @var bool $active
+     */
+    private $active = true;
+
     public function setGameId(int $game_id): void
     {
         $this->game_id = $game_id;
@@ -62,6 +67,16 @@ class Game {
     public function getName(): string
     {
         return $this->game_name;
+    }
+
+    public function setIsActive(bool $is_active): void
+    {
+        $this->active = $is_active;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->active;
     }
 
 }
