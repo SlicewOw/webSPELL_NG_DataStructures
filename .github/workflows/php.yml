@@ -16,6 +16,7 @@ jobs:
       mysql-service:
         image: mysql:5.7
         env:
+            MYSQL_ALLOW_EMPTY_PASSWORD: no
             MYSQL_DATABASE: webspell_ng
         ports:
             - '33306:3306'
