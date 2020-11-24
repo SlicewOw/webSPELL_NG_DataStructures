@@ -248,7 +248,7 @@ CREATE TABLE `ws_p40_games` (
   `active` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-INSERT INTO `ws_p40_games` (`gameID`, `tag`, `short`, `name`, `active`) VALUES (1, 'cs', 'CS1.6', 'Counter-Strike', 0);
+INSERT INTO `ws_p40_games` (`gameID`, `tag`, `short`, `name`, `active`) VALUES (1, 'cs', 'CS1.6', 'Counter-Strike', 1);
 
 ALTER TABLE `ws_p40_games` ADD PRIMARY KEY (`gameID`), ADD UNIQUE KEY `tag` (`tag`);
 ALTER TABLE `ws_p40_games` MODIFY `gameID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
