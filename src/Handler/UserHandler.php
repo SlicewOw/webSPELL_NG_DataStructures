@@ -55,8 +55,6 @@ class UserHandler {
     public static function saveUser(User $user): User
     {
 
-        print_r($_ENV);
-
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder
             ->insert(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_USER)
