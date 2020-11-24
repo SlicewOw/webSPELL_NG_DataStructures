@@ -112,6 +112,10 @@ class Captcha
         $settings_query = $queryBuilder->execute();
         $ds = $settings_query->fetch();
 
+        if (empty($ds)) {
+            throw new \InvalidArgumentException('unknown_settings');
+        }
+
         if (mb_strlen($ds[ 'captcha_bgcol' ]) == 7) {
             $this->bgcol = $this->hex2rgb($ds[ 'captcha_bgcol' ]);
         }
