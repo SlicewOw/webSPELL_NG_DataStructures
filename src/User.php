@@ -2,6 +2,7 @@
 
 namespace webspell_ng;
 
+use webspell_ng\Enums\UserEnums;
 use webspell_ng\Utils\ValidationUtils;
 
 class User {
@@ -24,7 +25,7 @@ class User {
     /**
      * @var ?string $lastname
      */
-    private $lastname;
+    private $lastname = null;
 
     /**
      * @var string $email
@@ -34,7 +35,7 @@ class User {
     /**
      * @var string $sex
      */
-    private $sex = "m";
+    private $sex = UserEnums::SEXUALITY_MAN;
 
     /**
      * @var string $country
@@ -86,8 +87,11 @@ class User {
         $this->lastname = $lastname;
     }
 
-    public function getLastname(): ?string
+    public function getLastname(): string
     {
+        if (is_null($this->lastname)) {
+            return "";
+        }
         return $this->lastname;
     }
 
@@ -109,7 +113,14 @@ class User {
 
     public function setSex(string $sex): void
     {
-        $this->sex = $sex;
+        $allowed_options = array(
+            UserEnums::SEXUALITY_MAN,
+            UserEnums::SEXUALITY_WOMAN,
+            UserEnums::SEXUALITY_DIVERS
+        );
+        if (in_array($sex, $allowed_options)) {
+            $this->sex = $sex;
+        }
     }
 
     public function getSex(): string
