@@ -236,6 +236,22 @@ ALTER TABLE `ws_p40_settings` MODIFY `settingID` int(11) NOT NULL AUTO_INCREMENT
 INSERT INTO `ws_p40_settings` (`settingID`, `page`, `cup_url`, `tv_url`, `forum_url`, `admin_url`, `image_url`, `static_url`, `doc_url`, `bot_url`, `download_url`, `system_user`, `title`, `hp_url`, `clanname`, `clantag`, `adminname`, `adminemail`, `facebook`, `twitter`, `youtube`, `steam`, `cronjob`, `news`, `newsarchiv`, `headlines`, `headlineschars`, `topnewschars`, `articles`, `latestarticles`, `articleschars`, `clanwars`, `results`, `upcoming`, `shoutbox`, `sball`, `sbrefresh`, `topics`, `posts`, `latesttopics`, `latesttopicchars`, `awards`, `demos`, `guestbook`, `feedback`, `messages`, `users`, `profilelast`, `topnewsID`, `sessionduration`, `closed`, `gb_info`, `imprint`, `picsize_l`, `picsize_h`, `pictures`, `publicadmin`, `thumbwidth`, `usergalleries`, `maxusergalleries`, `default_language`, `insertlinks`, `search_min_len`, `max_wrong_pw`, `captcha_math`, `captcha_bgcol`, `captcha_fontcol`, `captcha_type`, `captcha_noise`, `captcha_linenoise`, `autoresize`, `bancheck`, `gpicsize_l`, `gpicsize_h`, `max_lastpic`, `spam_check`, `detect_language`, `spamapikey`, `spamapihost`, `spammaxposts`, `spamapiblockerror`, `date_format`, `time_format`, `user_guestbook`, `sc_files`, `sc_demos`, `modRewrite`) VALUES
 (1, 'gaming', 'http://localhost/', 'http://localhost/', 'http://localhost/', 'http://localhost/', 'http://localhost/', 'http://localhost/', 'http://localhost/', NULL, 'http://localhost/', NULL, 'myRisk Gaming e.V.', 'http://localhost/', '', '', '', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 450, 500, 12, 1, 130, 1, 1, 'de', 1, 3, 10, 2, '#FFFFFF', '#000000', 2, 100, 10, 2, 0, 60, 60, 10, 0, 0, '', '', 0, 0, 'd.m.y', 'G:i', 0, 1, 1, 1);
 
+--
+-- Games
+--
+
+CREATE TABLE `ws_p40_games` (
+  `gameID` int(11) NOT NULL,
+  `tag` varchar(5) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `short` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `active` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `ws_p40_games` (`gameID`, `tag`, `short`, `name`, `active`) VALUES (1, 'cs', 'CS1.6', 'Counter-Strike', 0);
+
+ALTER TABLE `ws_p40_games` ADD PRIMARY KEY (`gameID`), ADD UNIQUE KEY `tag` (`tag`);
+ALTER TABLE `ws_p40_games` MODIFY `gameID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- DONE :)

@@ -4,13 +4,24 @@ namespace webspell_ng;
 
 class Game {
 
-    /** @var int $game_id */
+    /**
+     * @var int $game_id
+     */
     private $game_id;
 
-    /** @var string $game_tag */
+    /**
+     * @var string $game_tag
+     */
     private $game_tag;
 
-    /** @var string $game_name */
+    /**
+     * @var string $game_shortcut
+     */
+    private $game_shortcut;
+
+    /**
+     * @var string $game_name
+     */
     private $game_name;
 
     public function setGameId(int $game_id): void
@@ -31,6 +42,16 @@ class Game {
     public function getTag(): string
     {
         return $this->game_tag;
+    }
+
+    public function setShortcut(string $game_shortcut): void
+    {
+        $this->game_shortcut = $game_shortcut;
+    }
+
+    public function getShortcut(): string
+    {
+        return $this->game_shortcut;
     }
 
     public function setName(string $game_name): void

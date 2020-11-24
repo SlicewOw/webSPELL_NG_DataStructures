@@ -34,6 +34,7 @@ class GameHandler {
         $game = new Game();
         $game->setGameId((int) $game_result['gameID']);
         $game->setTag($game_result['tag']);
+        $game->setShortcut($game_result['short']);
         $game->setName($game_result['name']);
 
         return $game;
