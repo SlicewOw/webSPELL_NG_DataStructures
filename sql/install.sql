@@ -131,7 +131,7 @@ CREATE TABLE `ws_p40_user` (
   `time_format` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'H:i',
   `overview_redirect` int(11) NOT NULL DEFAULT 0,
   `hits` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `ws_p40_user` ADD PRIMARY KEY (`userID`), ADD UNIQUE KEY `username` (`username`);
 ALTER TABLE `ws_p40_user` MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT;
@@ -228,7 +228,7 @@ CREATE TABLE `ws_p40_settings` (
   `sc_files` int(11) NOT NULL DEFAULT 1,
   `sc_demos` int(11) NOT NULL DEFAULT 0,
   `modRewrite` int(11) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 ALTER TABLE `ws_p40_settings` ADD PRIMARY KEY (`settingID`), ADD UNIQUE KEY `page` (`page`);
