@@ -157,7 +157,7 @@ class Captcha
             $this->length = 6;
             $first = rand(1, $this->math_max);
             $catpcha_result = $first;
-            while (mb_strlen($first) < mb_strlen($this->math_max)) {
+            while (mb_strlen($first) < mb_strlen((string) $this->math_max)) {
                 $first = ' ' . $first;
             }
             $captcha_shown = (string)$first;
@@ -170,7 +170,7 @@ class Captcha
                 $next = rand(1, $first - 1);
                 $catpcha_result -= $next;
             }
-            while (mb_strlen($next) < mb_strlen($this->math_max)) {
+            while (mb_strlen($next) < mb_strlen((string) $this->math_max)) {
                 $next = ' ' . $next;
             }
             $captcha_shown .= $next;

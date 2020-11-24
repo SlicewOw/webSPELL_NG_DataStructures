@@ -31,6 +31,7 @@ namespace webspell_ng\Handler;
 use Respect\Validation\Validator;
 
 use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\DBAL\Query\Expression\CompositeExpression;
 
 use webspell_ng\WebSpellDatabaseConnection;
 
@@ -86,15 +87,12 @@ class TagHandler
         return implode(", ", self::getTags($related_type, $related_id));
     }
 
-    private static function getTagConditionToBeUsedInQueryBuilder(QueryBuilder $query_builder, string $related_type, int $related_id)
+    private static function getTagConditionToBeUsedInQueryBuilder(QueryBuilder $query_builder, string $related_type, int $related_id): CompositeExpression
     {
-
-        $where_clause = $query_builder->expr()->andX();
-        $where_clause->add($query_builder->expr()->eq('rel', '\'' . $related_type . '\''));
-        $where_clause->add($query_builder->expr()->eq('ID', $related_id));
-
-        return $where_clause;
-
+        return $query_builder->expr()->and(
+            $query_builder->expr()->eq('rel', '\'' . $related_type . '\''),
+            $query_builder->expr()->eq('ID', $related_id)
+        );
     }
 
     /**
@@ -188,7 +186,7 @@ class TagHandler
 
     }
 
-    public static function removeTags(string $related_type, int $related_id)
+    public static function removeTags(string $related_type, int $related_id): void
     {
 
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
@@ -198,18 +196,6 @@ class TagHandler
 
         $queryBuilder->execute();
 
-    }
-
-    public static function getTagSizeLogarithmic($count, $mincount, $maxcount, $minsize, $maxsize, $tresholds)
-    {
-        if (!is_int($tresholds) || $tresholds < 2) {
-            $tresholds = $maxsize - $minsize;
-            $treshold = 1;
-        } else {
-            $treshold = ($maxsize - $minsize) / ($tresholds - 1);
-        }
-        $a = $tresholds * log($count - $mincount + 2) / log($maxcount - $mincount + 2) - 1;
-        return round($minsize + round($a) * $treshold);
     }
 
 }
