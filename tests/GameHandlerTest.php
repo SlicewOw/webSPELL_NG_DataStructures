@@ -2,7 +2,6 @@
 
 use PHPUnit\Framework\TestCase;
 
-use webspell_ng\Game;
 use webspell_ng\Handler\GameHandler;
 
 final class GameHandlerTest extends TestCase
