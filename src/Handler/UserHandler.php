@@ -70,7 +70,8 @@ class UserHandler {
                     'sex' => '?',
                     'birthday' => '?',
                     'country' => '?',
-                    'town' => '?'
+                    'town' => '?',
+                    'registerdate' => '?'
                 )
             )
             ->setParameter(0, $user->getUsername())
@@ -80,7 +81,8 @@ class UserHandler {
             ->setParameter(4, $user->getSex())
             ->setParameter(5, $user->getBirthday()->format("Y-m-d H:i:s"))
             ->setParameter(6, $user->getCountry()->getShortcut())
-            ->setParameter(7, $user->getTown());
+            ->setParameter(7, $user->getTown())
+            ->setParameter(8, time());
 
         $queryBuilder->execute();
 
