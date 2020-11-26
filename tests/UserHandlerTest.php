@@ -4,6 +4,7 @@ use PHPUnit\Framework\TestCase;
 
 use \webspell_ng\User;
 use \webspell_ng\Enums\UserEnums;
+use \webspell_ng\Handler\CountryHandler;
 use \webspell_ng\Handler\UserHandler;
 
 final class UserHandlerTest extends TestCase
@@ -27,7 +28,9 @@ final class UserHandlerTest extends TestCase
         $new_user->setSex(UserEnums::SEXUALITY_WOMAN);
         $new_user->setTown($this->getRandomString());
         $new_user->setBirthday(new \DateTime("2020-09-04 00:00:00"));
-        $new_user->setCountry("de");
+        $new_user->setCountry(
+            CountryHandler::getCountryByCountryShortcut("uk")
+        );
 
         $saved_user = UserHandler::saveUser($new_user);
 
@@ -40,6 +43,8 @@ final class UserHandlerTest extends TestCase
         $this->assertGreaterThan(0, $user->getUserId(), "User ID is set.");
         $this->assertEquals($saved_user->getUserId(), $user->getUserId(), "User ID is expected.");
         $this->assertEquals($username, $user->getUsername(), "Username is set.");
+        $this->assertEquals("United Kingdom", $user->getCountry()->getName(), "Country name of user is set.");
+        $this->assertEquals("uk", $user->getCountry()->getShortcut(), "Country shortcut of user is set.");
 
     }
 

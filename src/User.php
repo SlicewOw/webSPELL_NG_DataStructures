@@ -2,6 +2,7 @@
 
 namespace webspell_ng;
 
+use webspell_ng\Country;
 use webspell_ng\Enums\UserEnums;
 use webspell_ng\Utils\ValidationUtils;
 
@@ -38,9 +39,9 @@ class User {
     private $sex = UserEnums::SEXUALITY_MAN;
 
     /**
-     * @var string $country
+     * @var Country $country
      */
-    private $country = "de";
+    private $country;
 
     /**
      * @var string $town
@@ -128,12 +129,12 @@ class User {
         return $this->sex;
     }
 
-    public function setCountry(string $country): void
+    public function setCountry(Country $country): void
     {
         $this->country = $country;
     }
 
-    public function getCountry(): string
+    public function getCountry(): Country
     {
         return $this->country;
     }
@@ -155,9 +156,6 @@ class User {
 
     public function getBirthday(): \DateTime
     {
-        if (is_null($this->birthday)) {
-            return new \DateTime("now");
-        }
         return $this->birthday;
     }
 

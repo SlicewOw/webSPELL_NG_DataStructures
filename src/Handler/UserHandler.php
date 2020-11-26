@@ -6,6 +6,7 @@ use Respect\Validation\Validator;
 
 use webspell_ng\User;
 use webspell_ng\WebSpellDatabaseConnection;
+use webspell_ng\Handler\CountryHandler;
 use webspell_ng\Utils\DateUtils;
 
 
@@ -40,8 +41,10 @@ class UserHandler {
         $user->setFirstname($user_result['firstname']);
         $user->setLastname($user_result['lastname']);
         $user->setEmail($user_result['email']);
-        $user->setCountry($user_result['country']);
         $user->setTown($user_result['town']);
+        $user->setCountry(
+            CountryHandler::getCountryByCountryShortcut($user_result['country'])
+        );
         $user->setBirthday(
             DateUtils::getDateTimeByMktimeValue(
                 strtotime($user_result['birthday'])
@@ -76,7 +79,7 @@ class UserHandler {
             ->setParameter(3, $user->getLastname())
             ->setParameter(4, $user->getSex())
             ->setParameter(5, $user->getBirthday()->format("Y-m-d H:i:s"))
-            ->setParameter(6, $user->getCountry())
+            ->setParameter(6, $user->getCountry()->getShortcut())
             ->setParameter(7, $user->getTown());
 
         $queryBuilder->execute();
