@@ -6,27 +6,24 @@ use \webspell_ng\User;
 use \webspell_ng\Enums\UserEnums;
 use \webspell_ng\Handler\CountryHandler;
 use \webspell_ng\Handler\UserHandler;
+use \webspell_ng\Utils\StringFormatterUtils;
+
 
 final class UserHandlerTest extends TestCase
 {
 
-    private function getRandomString(): string
-    {
-        return bin2hex(random_bytes(10));
-    }
-
     public function testIfUserCanBeSavedAndReadFromDatabase(): void
     {
 
-        $username = "Test User " . $this->getRandomString();
+        $username = "Test User " . StringFormatterUtils::getRandomString(10);
 
         $new_user = new User();
         $new_user->setUsername($username);
-        $new_user->setFirstname($this->getRandomString());
-        $new_user->setLastname($this->getRandomString());
-        $new_user->setEmail($this->getRandomString() . "@myrisk-ev.de");
+        $new_user->setFirstname(StringFormatterUtils::getRandomString(10));
+        $new_user->setLastname(StringFormatterUtils::getRandomString(10));
+        $new_user->setEmail(StringFormatterUtils::getRandomString(10) . "@myrisk-ev.de");
         $new_user->setSex(UserEnums::SEXUALITY_WOMAN);
-        $new_user->setTown($this->getRandomString());
+        $new_user->setTown(StringFormatterUtils::getRandomString(10));
         $new_user->setBirthday(new \DateTime("2020-09-04 00:00:00"));
         $new_user->setCountry(
             CountryHandler::getCountryByCountryShortcut("uk")
