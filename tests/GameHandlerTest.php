@@ -20,6 +20,19 @@ final class GameHandlerTest extends TestCase
 
     }
 
+    public function testIfGameIsReturnedByGameTag(): void
+    {
+
+        $game = GameHandler::getGameByTag("csg");
+
+        $this->assertGreaterThan(0, $game->getGameId(), "Game ID is set.");
+        $this->assertEquals("csg", $game->getTag(), "Game tag is set.");
+        $this->assertEquals("CS:GO", $game->getShortcut(), "Game shortcut is set.");
+        $this->assertEquals("Counter-Strike: Global Offensive", $game->getName(), "Game name is set.");
+        $this->assertTrue($game->isActive(), "Game is active.");
+
+    }
+
     public function testIfInvalidArgumentExceptionIsThrownIfGameIdIsInvalid(): void
     {
 
@@ -29,12 +42,21 @@ final class GameHandlerTest extends TestCase
 
     }
 
-    public function testIfInvalidArgumentExceptionIsThrownIfGameDoesNotExist(): void
+    public function testIfInvalidArgumentExceptionIsThrownIfGameDoesNotExistByGameId(): void
     {
 
         $this->expectException(InvalidArgumentException::class);
 
         GameHandler::getGameByGameId(99999999);
+
+    }
+
+    public function testIfInvalidArgumentExceptionIsThrownIfGameDoesNotExistByTag(): void
+    {
+
+        $this->expectException(InvalidArgumentException::class);
+
+        GameHandler::getGameByTag("aaa");
 
     }
 

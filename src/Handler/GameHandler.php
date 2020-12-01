@@ -10,6 +10,8 @@ use webspell_ng\WebSpellDatabaseConnection;
 
 class GameHandler {
 
+    private const DB_TABLE_NAME_GAMES = "games";
+
     public static function getGameByGameId(int $game_id): Game
     {
 
@@ -20,7 +22,7 @@ class GameHandler {
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder
             ->select('*')
-            ->from(WebSpellDatabaseConnection::getTablePrefix() . 'games')
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_GAMES)
             ->where('gameID = ?')
             ->setParameter(0, $game_id);
 
@@ -39,6 +41,27 @@ class GameHandler {
         $game->setIsActive($game_result['active']);
 
         return $game;
+
+    }
+
+    public static function getGameByTag(string $game_tag): Game
+    {
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->select('gameID')
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_GAMES)
+            ->where('tag = ?')
+            ->setParameter(0, $game_tag);
+
+        $game_query = $queryBuilder->execute();
+        $game_result = $game_query->fetch();
+
+        if (empty($game_result)) {
+            throw new \InvalidArgumentException('unknown_game');
+        }
+
+        return self::getGameByGameId($game_result['gameID']);
 
     }
 
