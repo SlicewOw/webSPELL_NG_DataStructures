@@ -544,6 +544,24 @@ ALTER TABLE `ws_p40_squads` ADD PRIMARY KEY (`squadID`);
 ALTER TABLE `ws_p40_squads` MODIFY `squadID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- Clan
+--
+
+CREATE TABLE `ws_p40_clans` (
+  `clanID` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `tag` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `homepage` varchar(255) COLLATE utf8_unicode_ci NULL,
+  `logotype` varchar(255) COLLATE utf8_unicode_ci NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `ws_p40_clans` ADD PRIMARY KEY (`clanID`);
+ALTER TABLE `ws_p40_clans` MODIFY `clanID` int(11) NOT NULL AUTO_INCREMENT;
+
+INSERT INTO `ws_p40_clans` (`clanID`, `name`, `tag`, `homepage`) VALUES
+(1, 'myRisk Gaming e.V.', 'myRisk e.V.', 'https://gaming.myrisk-ev.de');
+
+--
 -- DONE :)
 --
 
