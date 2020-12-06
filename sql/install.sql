@@ -543,7 +543,7 @@ CREATE TABLE `ws_p40_squads` (
 ALTER TABLE `ws_p40_squads` ADD PRIMARY KEY (`squadID`);
 ALTER TABLE `ws_p40_squads` MODIFY `squadID` int(11) NOT NULL AUTO_INCREMENT;
 
-INSERT INTO `ws_p40_squads` (`squadID`, `name`, `tag`, `homepage`) VALUES
+INSERT INTO `ws_p40_squads` (`squadID`, `name`, `date`, `gamesquad`, `rubric`, `gameID`) VALUES
 (1, 'Team Red', 1007638496, 1, 3, 1);
 
 --
