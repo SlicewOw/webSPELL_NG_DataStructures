@@ -44,6 +44,11 @@ class Event extends DataStatus {
      */
     private $is_offline = false;
 
+    public function __construct()
+    {
+        $this->date = new \DateTime("now");
+    }
+
     public function setEventId(int $event_id): void
     {
         $this->id = $event_id;

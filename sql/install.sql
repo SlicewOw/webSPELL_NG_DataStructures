@@ -526,14 +526,14 @@ ALTER TABLE `ws_p40_countries` MODIFY `countryID` int(11) NOT NULL AUTO_INCREMEN
 
 CREATE TABLE `ws_p40_squads` (
   `squadID` int(11) NOT NULL,
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `date` int(11) NOT NULL,
   `gamesquad` int(11) NOT NULL DEFAULT 1,
   `rubric` int(3) NOT NULL DEFAULT 3,
   `gameID` int(11) NOT NULL,
   `icon` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `icon_small` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `info` text COLLATE utf8_unicode_ci NOT NULL,
+  `info` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `sort` int(11) NOT NULL DEFAULT 0,
   `hits` int(11) NOT NULL DEFAULT 0,
   `active` int(1) NOT NULL DEFAULT 1,
@@ -542,6 +542,9 @@ CREATE TABLE `ws_p40_squads` (
 
 ALTER TABLE `ws_p40_squads` ADD PRIMARY KEY (`squadID`);
 ALTER TABLE `ws_p40_squads` MODIFY `squadID` int(11) NOT NULL AUTO_INCREMENT;
+
+INSERT INTO `ws_p40_squads` (`squadID`, `name`, `tag`, `homepage`) VALUES
+(1, 'Team Red', 1007638496, 1, 3, 1);
 
 --
 -- Clan

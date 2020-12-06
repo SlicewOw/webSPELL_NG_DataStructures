@@ -62,7 +62,12 @@ class Award {
 	/**
 	 * @var \DateTime $date
 	 */
-	var $date = null;
+	var $date;
+
+	public function __construct()
+	{
+		$this->date = new \DateTime("now");
+	}
 
 	public function setAwardId(int $award_id): void
 	{
