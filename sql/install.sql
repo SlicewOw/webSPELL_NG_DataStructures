@@ -576,7 +576,7 @@ CREATE TABLE `ws_p40_events` (
   `homepage` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `squadID` int(11) NOT NULL DEFAULT 0,
   `offline` int(1) NOT NULL DEFAULT 0,
-  `info` text COLLATE utf8_unicode_ci NOT NULL,
+  `info` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `hits` int(11) NOT NULL DEFAULT 0,
   `active` int(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -598,7 +598,7 @@ CREATE TABLE `ws_p40_awards` (
   `homepage` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `rang` int(5) NOT NULL DEFAULT 0,
   `offline` int(1) NOT NULL DEFAULT 0,
-  `info` text COLLATE utf8_unicode_ci NOT NULL,
+  `info` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `hits` int(11) NOT NULL DEFAULT 0,
   `active` int(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
