@@ -41,7 +41,6 @@ class SquadHandler {
         $squad->setSquadId($squad_id);
         $squad->setIsGameSquad($is_gaming_squad);
         $squad->setName($squad_result['name']);
-        $squad->setInfo($squad_result['info']);
         $squad->setRubric($squad_result['rubric']);
         $squad->setIcon($squad_result['icon']);
         $squad->setIconSmall($squad_result['icon_small']);
@@ -52,6 +51,9 @@ class SquadHandler {
         $squad->setDate(
             DateUtils::getDateTimeByMktimeValue($squad_result['date'])
         );
+        if (!is_null($squad_result['info'])) {
+            $squad->setInfo($squad_result['info']);
+        }
 
         if ($is_gaming_squad) {
             $squad->setGame(
