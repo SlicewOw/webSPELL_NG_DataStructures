@@ -551,8 +551,8 @@ CREATE TABLE `ws_p40_clans` (
   `clanID` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `tag` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `homepage` varchar(255) COLLATE utf8_unicode_ci NULL,
-  `logotype` varchar(255) COLLATE utf8_unicode_ci NULL
+  `homepage` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `logotype` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `ws_p40_clans` ADD PRIMARY KEY (`clanID`);
@@ -560,6 +560,48 @@ ALTER TABLE `ws_p40_clans` MODIFY `clanID` int(11) NOT NULL AUTO_INCREMENT;
 
 INSERT INTO `ws_p40_clans` (`clanID`, `name`, `tag`, `homepage`) VALUES
 (1, 'myRisk Gaming e.V.', 'myRisk e.V.', 'https://gaming.myrisk-ev.de');
+
+--
+-- Events
+--
+
+CREATE TABLE `ws_p40_events` (
+  `eventID` int(11) NOT NULL,
+  `date` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `category` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `homepage` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `squadID` int(11) NOT NULL DEFAULT 0,
+  `offline` int(1) NOT NULL DEFAULT 0,
+  `info` text COLLATE utf8_unicode_ci NOT NULL,
+  `hits` int(11) NOT NULL DEFAULT 0,
+  `active` int(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `ws_p40_events` ADD PRIMARY KEY (`eventID`), ADD UNIQUE KEY `eventID` (`eventID`);
+ALTER TABLE `ws_p40_events` MODIFY `eventID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Awards
+--
+
+CREATE TABLE `ws_p40_awards` (
+  `awardID` int(11) NOT NULL,
+  `date` int(11) NOT NULL DEFAULT 0,
+  `eventID` int(11) DEFAULT NULL,
+  `squadID` int(11) NOT NULL DEFAULT 0,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `category` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `homepage` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `rang` int(5) NOT NULL DEFAULT 0,
+  `offline` int(1) NOT NULL DEFAULT 0,
+  `info` text COLLATE utf8_unicode_ci NOT NULL,
+  `hits` int(11) NOT NULL DEFAULT 0,
+  `active` int(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `ws_p40_awards` ADD PRIMARY KEY (`awardID`);
+ALTER TABLE `ws_p40_awards` MODIFY `awardID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- DONE :)

@@ -1,0 +1,109 @@
+<?php
+
+namespace webspell_ng\Handler;
+
+use \webspell_ng\Award;
+use \webspell_ng\Event;
+use \webspell_ng\WebSpellDatabaseConnection;
+use \webspell_ng\Utils\ValidationUtils;
+
+
+class LeagueCategoryHandler {
+
+    public static function setAwardLeagueCategory(Award $award): Award
+    {
+        $award_category = self::setLeagueCategory($award->getAwardId(), 'awards', 'awardID');
+        $award->setLeagueCategory($award_category);
+        return $award;
+    }
+
+    public static function setEventLeagueCategory(Event $event): Event
+    {
+        $event_category = self::setLeagueCategory($event->getEventId(), 'events', 'eventID');
+        $event->setLeagueCategory($event_category);
+        return $event;
+    }
+
+    private static function setLeagueCategory(int $parent_id, string $table, string $parent_id_column): string
+    {
+
+        if (!ValidationUtils::validateInteger($parent_id, true)) {
+            throw new \UnexpectedValueException('unknown_parameter_parent_id');
+        }
+
+        $url = self::getHomepageValue($table, $parent_id_column, $parent_id);
+
+        $categoryArray = array();
+
+        preg_match(
+            '@^(?:http[s]?://)?([^/]+)@i',
+            $url,
+            $categoryArray
+        );
+
+        if (!ValidationUtils::validateArray($categoryArray, true)) {
+            throw new \UnexpectedValueException('unknown_category_array');
+        }
+
+        $getCount = count($categoryArray);
+
+        if ($getCount < 2) {
+            throw new \UnexpectedValueException('unknown_category_array_count');
+        }
+
+        $categorySubArray = explode('.', $categoryArray[1]);
+
+        $getSubCount = count($categorySubArray);
+        unset($categorySubArray[$getSubCount - 1]);
+
+        $unsetIfExistArray = array(
+            'www',
+            'play'
+        );
+
+        foreach ($unsetIfExistArray as $identifier) {
+
+            if ($categorySubArray[0] == $identifier) {
+                unset($categorySubArray[0]);
+            } else if (isset($categorySubArray[1]) && ($categorySubArray[1] == $identifier)) {
+                unset($categorySubArray[1]);
+            }
+
+        }
+
+        $category = implode('.', $categorySubArray);
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->update(WebSpellDatabaseConnection::getTablePrefix() . $table)
+            ->set('category', '?')
+            ->where($parent_id_column . ' = ?')
+            ->setParameter(0, $category)
+            ->setParameter(1, $parent_id);
+
+        return $category;
+
+    }
+
+    private static function getHomepageValue(string $table, string $parent_identifier, int $parent_id): string
+    {
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->select('*')
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . $table)
+            ->where($parent_identifier . ' = ?')
+            ->setParameter(0, $parent_id);
+
+        $homepage_query = $queryBuilder->execute();
+        $homepage_result = $homepage_query->fetch();
+
+        if (empty($homepage_result)) {
+            throw new \UnexpectedValueException("unknown_homepage");
+        }
+
+        return $homepage_result['homepage'];
+
+    }
+
+}
