@@ -3,6 +3,7 @@
 namespace webspell_ng\Handler;
 
 use \webspell_ng\Clanwar;
+use webspell_ng\ClanwarMap;
 use \webspell_ng\WebSpellDatabaseConnection;
 use \webspell_ng\Handler\ClanwarMapsHandler;
 use \webspell_ng\Utils\ValidationUtils;
@@ -121,7 +122,10 @@ class ClanwarHandler {
     public static function addMapToClanwar(Clanwar $clanwar, int $map_id, int $score_home, int $score_opponent): Clanwar
     {
 
-        $clanwar_map = ClanwarMapsHandler::getMapByMapId($map_id);
+        $clanwar_map = new ClanwarMap();
+        $clanwar_map->setMap(
+            MapHandler::getMapByMapId($map_id)
+        );
         $clanwar_map->setScoreHome($score_home);
         $clanwar_map->setScoreOpponent($score_opponent);
 

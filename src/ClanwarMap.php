@@ -2,30 +2,20 @@
 
 namespace webspell_ng;
 
-use \webspell_ng\Game;
+use \webspell_ng\Map;
 
 
 class ClanwarMap {
 
     /**
-     * @var int $map_id
+     * @var int $mapping_id
      */
-    private $map_id = null;
+    private $mapping_id = null;
 
     /**
-     * @var string $map_name
+     * @var Map $map
      */
-    private $map_name = null;
-
-    /**
-     * @var string $map_icon
-     */
-    private $map_icon = null;
-
-    /**
-     * @var Game $game
-     */
-    private $game = null;
+    private $map = null;
 
     /**
      * @var int $score_home
@@ -37,44 +27,24 @@ class ClanwarMap {
      */
     private $score_opponent = 0;
 
-    public function setMapId(int $map_id): void
+    public function setMappingId(int $mapping_id): void
     {
-        $this->map_id = $map_id;
+        $this->mapping_id = $mapping_id;
     }
 
-    public function getMapId(): ?int
+    public function getMappingId(): ?int
     {
-        return $this->map_id;
+        return $this->mapping_id;
     }
 
-    public function setName(string $map_name): void
+    public function setMap(Map $map): void
     {
-        $this->map_name = $map_name;
+        $this->map = $map;
     }
 
-    public function getName(): ?string
+    public function getMap(): ?Map
     {
-        return $this->map_name;
-    }
-
-    public function setIcon(string $map_icon): void
-    {
-        $this->map_icon = $map_icon;
-    }
-
-    public function getIcon(): ?string
-    {
-        return $this->map_icon;
-    }
-
-    public function setGame(Game $game): void
-    {
-        $this->game = $game;
-    }
-
-    public function getGame(): ?Game
-    {
-        return $this->game;
+        return $this->map;
     }
 
     public function setScoreHome(int $score_home): void
@@ -82,7 +52,7 @@ class ClanwarMap {
         $this->score_home = $score_home;
     }
 
-    public function getScoreHome(): ?int
+    public function getScoreHome(): int
     {
         return $this->score_home;
     }
@@ -92,7 +62,7 @@ class ClanwarMap {
         $this->score_opponent = $score_opponent;
     }
 
-    public function getScoreOpponent(): ?int
+    public function getScoreOpponent(): int
     {
         return $this->score_opponent;
     }
