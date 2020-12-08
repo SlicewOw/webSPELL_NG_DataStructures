@@ -1,0 +1,100 @@
+<?php
+
+namespace webspell_ng;
+
+use \webspell_ng\Game;
+
+
+class ClanwarMap {
+
+    /**
+     * @var int $map_id
+     */
+    private $map_id = null;
+
+    /**
+     * @var string $map_name
+     */
+    private $map_name = null;
+
+    /**
+     * @var string $map_icon
+     */
+    private $map_icon = null;
+
+    /**
+     * @var Game $game
+     */
+    private $game = null;
+
+    /**
+     * @var int $score_home
+     */
+    private $score_home = 0;
+
+    /**
+     * @var int $score_opponent
+     */
+    private $score_opponent = 0;
+
+    public function setMapId(int $map_id): void
+    {
+        $this->map_id = $map_id;
+    }
+
+    public function getMapId(): ?int
+    {
+        return $this->map_id;
+    }
+
+    public function setName(string $map_name): void
+    {
+        $this->map_name = $map_name;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->map_name;
+    }
+
+    public function setIcon(string $map_icon): void
+    {
+        $this->map_icon = $map_icon;
+    }
+
+    public function getIcon(): ?string
+    {
+        return $this->map_icon;
+    }
+
+    public function setGame(Game $game): void
+    {
+        $this->game = $game;
+    }
+
+    public function getGame(): ?Game
+    {
+        return $this->game;
+    }
+
+    public function setScoreHome(int $score_home): void
+    {
+        $this->score_home = $score_home;
+    }
+
+    public function getScoreHome(): ?int
+    {
+        return $this->score_home;
+    }
+
+    public function setScoreOpponent(int $score_opponent): void
+    {
+        $this->score_opponent = $score_opponent;
+    }
+
+    public function getScoreOpponent(): ?int
+    {
+        return $this->score_opponent;
+    }
+
+}

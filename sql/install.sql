@@ -607,6 +607,69 @@ ALTER TABLE `ws_p40_awards` ADD PRIMARY KEY (`awardID`);
 ALTER TABLE `ws_p40_awards` MODIFY `awardID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- Clanwars
+--
+
+CREATE TABLE `ws_p40_clanwars` (
+  `cwID` int(11) NOT NULL,
+  `date` int(11) NOT NULL,
+  `squadID` int(11) NOT NULL,
+  `gameID` int(11) NOT NULL,
+  `eventID` int(11) NOT NULL,
+  `homepage` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `opponentID` int(11) DEFAULT NULL,
+  `hometeam` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'a:0:{}',
+  `report` text COLLATE utf8_unicode_ci NOT NULL,
+  `report_uk` text COLLATE utf8_unicode_ci NOT NULL,
+  `comments` int(1) NOT NULL DEFAULT 1,
+  `hits` int(11) NOT NULL DEFAULT 0,
+  `active` int(1) NOT NULL DEFAULT 1,
+  `def_win` int(1) NOT NULL DEFAULT 0,
+  `def_loss` int(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `ws_p40_clanwars` ADD PRIMARY KEY (`cwID`);
+ALTER TABLE `ws_p40_clanwars` MODIFY `cwID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Clanwars Maps
+--
+
+CREATE TABLE `ws_p40_clanwars_maps` (
+  `mapID` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `gameID` int(11) NOT NULL,
+  `pic` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `ws_p40_clanwars_maps` ADD PRIMARY KEY (`mapID`), ADD UNIQUE KEY `mapID` (`mapID`);
+ALTER TABLE `ws_p40_clanwars_maps` MODIFY `mapID` int(11) NOT NULL AUTO_INCREMENT;
+
+INSERT INTO `ws_p40_clanwars_maps` (`mapID`, `name`, `gameID`, `pic`) VALUES
+(1, 'de_dust2', '1', 'cs_de_dust2.jpg'),
+(2, 'de_tuscan', '1', 'cs_de_tuscan.jpg'),
+(3, 'de_cpl_mill', '1', 'cs_de_cpl_mill.jpg');
+
+--
+-- Clanwars Maps Mapping
+--
+
+CREATE TABLE `ws_p40_clanwars_maps_mapping` (
+  `mappingID` int(11) NOT NULL,
+  `cw_id` int(11) NOT NULL,
+  `map_id` int(11) NOT NULL,
+  `map_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `score_home` int(11) NOT NULL,
+  `score_opponent` int(11) NOT NULL,
+  `def_win` int(1) NOT NULL DEFAULT 0,
+  `def_loss` int(1) NOT NULL DEFAULT 0,
+  `sort` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `ws_p40_clanwars_maps_mapping` ADD PRIMARY KEY (`mappingID`);
+ALTER TABLE `ws_p40_clanwars_maps_mapping` MODIFY `mappingID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- DONE :)
 --
 
