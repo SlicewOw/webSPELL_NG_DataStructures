@@ -51,12 +51,12 @@ class Clanwar {
     /**
      * @var string $report_de
      */
-    private $report_de = null;
+    private $report_de = "";
 
     /**
      * @var string $report_uk
      */
-    private $report_uk = null;
+    private $report_uk = "";
 
     /**
      * @var bool $def_win
@@ -139,17 +139,11 @@ class Clanwar {
 
     public function getReportInGerman(): string
     {
-        if (is_null($this->report_de)) {
-            return "";
-        }
         return $this->report_de;
     }
 
     public function getReportInEnglish(): string
     {
-        if (is_null($this->report_uk)) {
-            return "";
-        }
         return $this->report_uk;
     }
 
