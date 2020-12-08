@@ -45,6 +45,7 @@ class ClanwarHandler {
                         'homepage'=>'?',
                         'hometeam' => '?',
                         'report' => '?',
+                        'report_uk' => '?',
                         'def_win' => '?',
                         'def_loss' => '?',
                         'active' => '?'
@@ -60,9 +61,10 @@ class ClanwarHandler {
                         5 => $clanwar->getMatchHomepage(),
                         6 => $home_string,
                         7 => $clanwar->getReportInGerman(),
-                        8 => $clanwar->getIsDefaultWin() ? 1 : 0,
-                        9 => $clanwar->getIsDefaultLoss() ? 1 : 0,
-                        10 => 1
+                        8 => $clanwar->getReportInEnglish(),
+                        9 => $clanwar->getIsDefaultWin() ? 1 : 0,
+                        10 => $clanwar->getIsDefaultLoss() ? 1 : 0,
+                        11 => 1
                     ]
                 );
 
@@ -92,6 +94,7 @@ class ClanwarHandler {
             ->set('homepage', '?')
             ->set('hometeam', '?')
             ->set('report', '?')
+            ->set('report_uk', '?')
             ->set('def_win', '?')
             ->set('def_loss', '?')
             ->set('active', '?')
@@ -104,10 +107,11 @@ class ClanwarHandler {
             ->setParameter(5, $clanwar->getMatchHomepage())
             ->setParameter(6, $home_string)
             ->setParameter(7, $clanwar->getReportInGerman())
-            ->setParameter(8, $clanwar->getIsDefaultWin() ? 1 : 0)
-            ->setParameter(9, $clanwar->getIsDefaultLoss() ? 1 : 0)
-            ->setParameter(10, 1)
-            ->setParameter(11, $clanwar->getClanwarId());
+            ->setParameter(8, $clanwar->getReportInEnglish())
+            ->setParameter(9, $clanwar->getIsDefaultWin() ? 1 : 0)
+            ->setParameter(10, $clanwar->getIsDefaultLoss() ? 1 : 0)
+            ->setParameter(11, 1)
+            ->setParameter(12, $clanwar->getClanwarId());
 
         $queryBuilder->execute();
 
