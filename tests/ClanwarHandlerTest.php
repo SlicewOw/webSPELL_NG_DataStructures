@@ -7,9 +7,11 @@ use \webspell_ng\Clanwar;
 use \webspell_ng\Event;
 use \webspell_ng\Game;
 use \webspell_ng\Squad;
+use \webspell_ng\Enums\SquadEnums;
 use \webspell_ng\Handler\ClanHandler;
 use \webspell_ng\Handler\ClanwarHandler;
 use \webspell_ng\Handler\EventHandler;
+use \webspell_ng\Handler\GameHandler;
 use \webspell_ng\Handler\SquadHandler;
 use \webspell_ng\Utils\StringFormatterUtils;
 
@@ -38,7 +40,20 @@ final class ClanwarHandlerTest extends TestCase
     {
 
         $date = new \DateTime("2019-02-28 20:00:00");
-        $squad = SquadHandler::getSquadBySquadId(1);
+
+        $new_squad_01 = new Squad();
+        $new_squad_01->setName("Test Squad " . StringFormatterUtils::getRandomString(10, 2));
+        $new_squad_01->setDate($date);
+        $new_squad_01->setIcon("icon.jpg");
+        $new_squad_01->setIconSmall("icon_small.jpg");
+        $new_squad_01->setInfo("Information text ...");
+        $new_squad_01->setRubric(SquadEnums::SQUAD_RUBRIC_AMATEUR);
+        $new_squad_01->setIsGameSquad(true);
+        $new_squad_01->setGame(
+            GameHandler::getGameByGameId(1)
+        );
+
+        $first_squad = SquadHandler::saveSquad($new_squad_01);
 
         $new_clan = new Clan();
         $new_clan->setClanName("Test Clan " . StringFormatterUtils::getRandomString(10, 2));
@@ -52,7 +67,7 @@ final class ClanwarHandlerTest extends TestCase
 
         $new_clanwar = new Clanwar();
         $new_clanwar->setSquad(
-            $squad,
+            $first_squad,
             array(1, 2, 3)
         );
         $new_clanwar->setOpponent($clan);
@@ -80,7 +95,7 @@ final class ClanwarHandlerTest extends TestCase
         $this->assertNotEmpty($clanwar->getGame()->getTag(), "Game tag is expected.");
 
         $this->assertInstanceOf(Squad::class, $clanwar->getSquad(), "Squad is set!");
-        $this->assertEquals(1, $clanwar->getSquadId(), "Squad is expected.");
+        $this->assertEquals($first_squad->getSquadId(), $clanwar->getSquadId(), "Squad is expected.");
         $this->assertEquals($clan->getClanId(), $clanwar->getOpponent()->getClanId(), "Opponent is expected.");
 
         $this->assertInstanceOf(Event::class, $clanwar->getEvent(), "Event is set!");
@@ -88,10 +103,24 @@ final class ClanwarHandlerTest extends TestCase
 
         $new_date = new \DateTime("2019-07-02 13:37:00");
 
+        $new_squad_02 = new Squad();
+        $new_squad_02->setName("Test Squad " . StringFormatterUtils::getRandomString(10, 2));
+        $new_squad_02->setDate($date);
+        $new_squad_02->setIcon("icon.jpg");
+        $new_squad_02->setIconSmall("icon_small.jpg");
+        $new_squad_02->setInfo("Information text ...");
+        $new_squad_02->setRubric(SquadEnums::SQUAD_RUBRIC_AMATEUR);
+        $new_squad_02->setIsGameSquad(true);
+        $new_squad_02->setGame(
+            GameHandler::getGameByGameId(1)
+        );
+
+        $second_squad = SquadHandler::saveSquad($new_squad_02);
+
         $changed_clanwar = $clanwar;
         $changed_clanwar->setDate($new_date);
         $changed_clanwar->setSquad(
-            SquadHandler::getSquadBySquadId(2),
+            $second_squad,
             array(3)
         );
         $new_clanwar->setMatchURL("https://tv.myrisk-ev.de");
@@ -109,7 +138,7 @@ final class ClanwarHandlerTest extends TestCase
         $this->assertNotEmpty($updated_clanwar->getGame()->getTag(), "Game tag is expected.");
 
         $this->assertInstanceOf(Squad::class, $updated_clanwar->getSquad(), "Squad is set!");
-        $this->assertEquals(2, $updated_clanwar->getSquadId(), "Squad is expected.");
+        $this->assertEquals($second_squad->getSquadId(), $updated_clanwar->getSquadId(), "Squad is expected.");
         $this->assertEquals($clan->getClanId(), $updated_clanwar->getOpponent()->getClanId(), "Opponent is expected.");
 
         $this->assertInstanceOf(Event::class, $updated_clanwar->getEvent(), "Event is set!");
