@@ -5,11 +5,14 @@ namespace webspell_ng\Handler;
 use \webspell_ng\Clanwar;
 use \webspell_ng\ClanwarMap;
 use \webspell_ng\WebSpellDatabaseConnection;
+use \webspell_ng\Utils\ValidationUtils;
 
 
 class ClanwarMapsHandler {
 
     private const DB_TABLE_NAME_CLANWARS_MAPS_MAPPING = "clanwars_maps_mapping";
+
+    private const DB_TABLE_COLUMN_NAME_CLANWAR_ID = "cw_id";
 
     /**
      * @return array<ClanwarMap>
@@ -21,7 +24,7 @@ class ClanwarMapsHandler {
         $queryBuilder
             ->select('*')
             ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_CLANWARS_MAPS_MAPPING)
-            ->where('cwID = ?')
+            ->where(self::DB_TABLE_COLUMN_NAME_CLANWAR_ID . ' = ?')
             ->setParameter(0, $clanwar->getClanwarId());
 
         $clanwar_maps = array();
@@ -69,7 +72,7 @@ class ClanwarMapsHandler {
                 ->insert(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_CLANWARS_MAPS_MAPPING)
                 ->values(
                         [
-                            'cw_id' => '?',
+                            self::DB_TABLE_COLUMN_NAME_CLANWAR_ID => '?',
                             'map_id' => '?',
                             'map_name' => '?',
                             'score_home' => '?',
@@ -94,13 +97,34 @@ class ClanwarMapsHandler {
 
     }
 
+    public static function isAnyMapSavedForClanwar(int $clanwar_id): bool
+    {
+
+        if (!ValidationUtils::validateInteger($clanwar_id, true)) {
+            throw new \InvalidArgumentException("clanwar_id_value_is_not_valid");
+        }
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->select('*')
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_CLANWARS_MAPS_MAPPING)
+            ->where(self::DB_TABLE_COLUMN_NAME_CLANWAR_ID . ' = ?')
+            ->setParameter(0, $clanwar_id);
+
+        $clanwar_map_query = $queryBuilder->execute();
+        $clanwar_map_result = $clanwar_map_query->fetch();
+
+        return !empty($clanwar_map_result);
+
+    }
+
     private static function removeExistingMapMappingsOfClanwar(Clanwar $clanwar): void
     {
 
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder
             ->delete(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_CLANWARS_MAPS_MAPPING)
-            ->where('cw_id = ?')
+            ->where(self::DB_TABLE_COLUMN_NAME_CLANWAR_ID . ' = ?')
             ->setParameter(0, $clanwar->getClanwarId());
 
     }

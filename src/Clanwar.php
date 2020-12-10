@@ -7,6 +7,7 @@ use \webspell_ng\ClanwarMap;
 use \webspell_ng\Event;
 use \webspell_ng\Game;
 use \webspell_ng\Squad;
+use \webspell_ng\Enums\ClanwarEnums;
 use \webspell_ng\Utils\StringFormatterUtils;
 use \webspell_ng\Utils\ValidationUtils;
 
@@ -203,7 +204,7 @@ class Clanwar {
     {
 
         if (empty($url) || !ValidationUtils::validateUrl($url)) {
-            throw new \UnexpectedValueException('error_cw_url_format');
+            throw new \InvalidArgumentException('error_cw_url_format');
         }
 
         $this->match_url = $url;
@@ -213,31 +214,29 @@ class Clanwar {
     public function setStatus(string $status): void
     {
 
-        $game_type_normal = 'normal';
-
         if (empty($status)) {
-            $status = $game_type_normal;
+            $status = ClanwarEnums::CLANWAR_STATUS_NORMAL;
         }
 
         $statusArray = array(
-            'normal',
-            'def_win',
-            'def_loss'
+            ClanwarEnums::CLANWAR_STATUS_NORMAL,
+            ClanwarEnums::CLANWAR_STATUS_DEFAULT_WIN,
+            ClanwarEnums::CLANWAR_STATUS_DEFAULT_LOSS
         );
 
         if (!in_array($status, $statusArray)) {
-            $status = $game_type_normal;
+            $status = ClanwarEnums::CLANWAR_STATUS_NORMAL;
         }
 
-        if ($status == $game_type_normal) {
-            $this->def_win = false;
-            $this->def_loss = false;
-        } else if ($status == 'def_win') {
+        if ($status == ClanwarEnums::CLANWAR_STATUS_DEFAULT_WIN) {
             $this->def_win = true;
             $this->def_loss = false;
-        } else {
+        } else if ($status == ClanwarEnums::CLANWAR_STATUS_DEFAULT_LOSS) {
             $this->def_win = false;
             $this->def_loss = true;
+        } else {
+            $this->def_win = false;
+            $this->def_loss = false;
         }
 
     }

@@ -3,15 +3,80 @@
 namespace webspell_ng\Handler;
 
 use \webspell_ng\Clanwar;
-use webspell_ng\ClanwarMap;
+use \webspell_ng\ClanwarMap;
 use \webspell_ng\WebSpellDatabaseConnection;
+use \webspell_ng\Enums\ClanwarEnums;
 use \webspell_ng\Handler\ClanwarMapsHandler;
+use \webspell_ng\Utils\DateUtils;
 use \webspell_ng\Utils\ValidationUtils;
 
 
 class ClanwarHandler {
 
     private const DB_TABLE_NAME_CLANWARS = "clanwars";
+
+    public static function getClanwarByClanwarId(int $clanwar_id): Clanwar
+    {
+
+        if (!ValidationUtils::validateInteger($clanwar_id, true)) {
+            throw new \InvalidArgumentException("clanwar_id_value_is_invalid");
+        }
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->select('*')
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_CLANWARS)
+            ->where('cwID = ?')
+            ->setParameter(0, $clanwar_id);
+
+        $clanwar_query = $queryBuilder->execute();
+        $clanwar_result = $clanwar_query->fetch();
+
+        if (empty($clanwar_result)) {
+            throw new \UnexpectedValueException("unknown_clanwar");
+        }
+
+        $hometeam = array();
+        if (!empty($clanwar_result["hometeam"])) {
+            $hometeam = unserialize($clanwar_result["hometeam"]);
+        }
+
+        $clanwar_status = ClanwarEnums::CLANWAR_STATUS_NORMAL;
+        if ($clanwar_result["def_win"]) {
+            $clanwar_status = ClanwarEnums::CLANWAR_STATUS_DEFAULT_WIN;
+        } else if ($clanwar_result["def_loss"]) {
+            $clanwar_status = ClanwarEnums::CLANWAR_STATUS_DEFAULT_LOSS;
+        }
+
+        $clanwar = new Clanwar();
+        $clanwar->setClanwarId($clanwar_result["cwID"]);
+        $clanwar->setMatchURL($clanwar_result["homepage"]);
+        $clanwar->setStatus($clanwar_status);
+        $clanwar->setSquad(
+            SquadHandler::getSquadBySquadId($clanwar_result["squadID"]),
+            $hometeam
+        );
+        $clanwar->setOpponent(
+            ClanHandler::getClanByClanId($clanwar_result["opponentID"])
+        );
+        $clanwar->setLeague(
+            EventHandler::getEventById($clanwar_result["eventID"])
+        );
+        $clanwar->setDate(
+            DateUtils::getDateTimeByMktimeValue($clanwar_result["date"])
+        );
+        $clanwar->setReports(
+            $clanwar_result["report"],
+            $clanwar_result["report_uk"]
+        );
+
+        $clanwar->setMap(
+            ClanwarMapsHandler::getMapsOfClanwar($clanwar)
+        );
+
+        return $clanwar;
+
+    }
 
     public static function saveMatch(Clanwar $clanwar): Clanwar
     {
@@ -135,27 +200,6 @@ class ClanwarHandler {
         $clanwar->setMap($existing_maps);
 
         return $clanwar;
-
-    }
-
-    public static function isAnyMapSavedForClanwar(int $clanwar_id): bool
-    {
-
-        if (!ValidationUtils::validateInteger($clanwar_id, true)) {
-            throw new \InvalidArgumentException("clanwar_id_value_is_not_valid");
-        }
-
-        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
-        $queryBuilder
-            ->select('*')
-            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_CLANWARS)
-            ->where('cwID = ?')
-            ->setParameter(0, $clanwar_id);
-
-        $clanwar_map_query = $queryBuilder->execute();
-        $clanwar_map_result = $clanwar_map_query->fetch();
-
-        return !empty($clanwar_map_result);
 
     }
 
