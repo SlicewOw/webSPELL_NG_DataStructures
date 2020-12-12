@@ -84,20 +84,19 @@ CREATE TABLE `ws_p40_user` (
   `registerdate` int(11) NOT NULL DEFAULT 0,
   `firstlogin` int(11) NOT NULL DEFAULT 0,
   `lastlogin` int(11) NOT NULL DEFAULT 0,
-  `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `password_check` int(11) NOT NULL DEFAULT 0,
   `confirm` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `delete_confirm` varchar(12) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `nickname` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `email_hide` int(11) NOT NULL DEFAULT 1,
   `email_change` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `email_activate` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `accept_cookies` int(11) NOT NULL DEFAULT 0,
-  `firstname` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `firstname` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `lastname` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `sex` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'u',
+  `sex` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'm',
   `country` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'eu',
   `town` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `birthday` datetime DEFAULT NULL,
@@ -134,6 +133,9 @@ CREATE TABLE `ws_p40_user` (
 
 ALTER TABLE `ws_p40_user` ADD PRIMARY KEY (`userID`), ADD UNIQUE KEY `username` (`username`);
 ALTER TABLE `ws_p40_user` MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT;
+
+INSERT INTO `ws_p40_user` (`username`, `email`, `birthday`) VALUES
+('Test User', 'info@webspell-ng.de', '2020-09-04 00:00:00');
 
 --
 -- Settings
