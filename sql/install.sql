@@ -134,7 +134,7 @@ CREATE TABLE `ws_p40_user` (
 ALTER TABLE `ws_p40_user` ADD PRIMARY KEY (`userID`), ADD UNIQUE KEY `username` (`username`);
 ALTER TABLE `ws_p40_user` MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT;
 
-INSERT INTO `ws_p40_user` (`username`, `email`, `birthday`) VALUES
+INSERT INTO `ws_p40_user` (`username`, `firstname`, `email`, `birthday`) VALUES
 ('Test User', 'info@webspell-ng.de', '2020-09-04 00:00:00');
 
 --
