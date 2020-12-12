@@ -670,6 +670,20 @@ ALTER TABLE `ws_p40_clanwars_maps_mapping` ADD PRIMARY KEY (`mappingID`);
 ALTER TABLE `ws_p40_clanwars_maps_mapping` MODIFY `mappingID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- Contact receiver
+--
+
+CREATE TABLE `ws_p40_contact` (
+  `contactID` int(11) NOT NULL,
+  `name` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `sort` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `ws_p40_contact` ADD PRIMARY KEY (`contactID`), ADD UNIQUE KEY `email` (`email`);
+ALTER TABLE `ws_p40_contact` MODIFY `contactID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- DONE :)
 --
 
