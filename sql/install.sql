@@ -255,7 +255,7 @@ INSERT INTO `ws_p40_games` (`gameID`, `tag`, `name`, `short`, `active`) VALUES
 (2, 'ut', 'Unreal Tournament', 'UT', 1),
 (3, 'to', 'Tactical Ops', 'TO', 1),
 (4, 'hl2', 'Half-Life 2', "HL 2", 1),
-(5, 'wc3', 'WarCraft 3', WC3, 1),
+(5, 'wc3', 'WarCraft 3', "WC3", 1),
 (6, 'hl', 'Half-Life', "HL", 1),
 (7, 'bf', 'Battlefield 1942', "BF 1942", 1),
 (8, 'aa', 'Americas Army', "AA", 1),
