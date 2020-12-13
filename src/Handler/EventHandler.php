@@ -67,6 +67,35 @@ class EventHandler {
 
     }
 
+    /**
+     * @return array<Event>
+     */
+    public static function getEventsOfSquad(int $squad_id): array
+    {
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->select('eventID')
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_EVENTS)
+            ->where(
+                $queryBuilder->expr()->and(
+                    $queryBuilder->expr()->eq('squadID', $squad_id),
+                    $queryBuilder->expr()->eq('active', 1)
+                )
+            );
+
+        $event_query = $queryBuilder->execute();
+
+        $events = array();
+        while ($event_result = $event_query->fetch())
+        {
+            array_push($events, self::getEventById($event_result['eventID']));
+        }
+
+        return $events;
+
+    }
+
     public static function saveEvent(Event $event): Event
     {
 

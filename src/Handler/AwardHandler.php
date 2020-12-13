@@ -64,6 +64,34 @@ class AwardHandler {
         return $award;
 
     }
+    /**
+     * @return array<Award>
+     */
+    public static function getAwardsOfSquad(int $squad_id): array
+    {
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->select('awardID')
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_AWARDS)
+            ->where(
+                $queryBuilder->expr()->and(
+                    $queryBuilder->expr()->eq('squadID', $squad_id),
+                    $queryBuilder->expr()->eq('active', 1)
+                )
+            );
+
+        $award_query = $queryBuilder->execute();
+
+        $awards = array();
+        while ($award_result = $award_query->fetch())
+        {
+            array_push($awards, self::getAwardById($award_result['awardID']));
+        }
+
+        return $awards;
+
+    }
 
     /**
      * @codeCoverageIgnore

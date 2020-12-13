@@ -2,6 +2,8 @@
 
 namespace webspell_ng\Handler;
 
+use \Respect\Validation\Validator;
+
 use \webspell_ng\Clanwar;
 use \webspell_ng\ClanwarMap;
 use \webspell_ng\WebSpellDatabaseConnection;
@@ -183,7 +185,6 @@ class ClanwarHandler {
 
     }
 
-
     public static function addMapToClanwar(Clanwar $clanwar, int $map_id, int $score_home, int $score_opponent): Clanwar
     {
 
@@ -200,6 +201,32 @@ class ClanwarHandler {
         $clanwar->setMap($existing_maps);
 
         return $clanwar;
+
+    }
+
+    public static function getCountOfPlayedMatches(int $squad_id): int
+    {
+
+        if (!Validator::numericVal()->min(1)->validate($squad_id)) {
+            throw new \InvalidArgumentException("squad_id_value_is_invalid");
+        }
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->select('COUNT(*) as `clanwars_played`')
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_CLANWARS)
+            ->where(
+                $queryBuilder->expr()->and(
+                    $queryBuilder->expr()->eq('squadID', $squad_id),
+                    $queryBuilder->expr()->lt('date', time())
+                )
+            )
+            ->setParameter(0, $squad_id);
+
+        $stats_query = $queryBuilder->execute();
+        $stats_result = $stats_query->fetch();
+
+        return (int) $stats_result['clanwars_played'];
 
     }
 

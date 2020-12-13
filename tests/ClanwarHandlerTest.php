@@ -109,6 +109,27 @@ final class ClanwarHandlerTest extends TestCase
 
     }
 
+    public function testIfNewClanHasNoClanwarsPlayed(): void
+    {
+
+        $new_squad = new Squad();
+        $new_squad->setName("Test Squad " . StringFormatterUtils::getRandomString(10, 2));
+        $new_squad->setDate(self::$new_date);
+        $new_squad->setIcon("icon.jpg");
+        $new_squad->setIconSmall("icon_small.jpg");
+        $new_squad->setInfo("Information text ...");
+        $new_squad->setRubric(SquadEnums::SQUAD_RUBRIC_AMATEUR);
+        $new_squad->setIsGameSquad(true);
+        $new_squad->setGame(
+            GameHandler::getGameByGameId(1)
+        );
+
+        $squad = SquadHandler::saveSquad($new_squad);
+
+        $this->assertEquals(0, ClanwarHandler::getCountOfPlayedMatches($squad->getSquadId()), "New squad has not played any clanwar.");
+
+    }
+
     public function testIfClanwarCanBeSavedAndUpdated(): void
     {
 
@@ -261,6 +282,8 @@ final class ClanwarHandlerTest extends TestCase
         $this->assertInstanceOf(Event::class, $clanwar_from_database->getEvent(), "Event is set!");
         $this->assertEquals(1, $clanwar_from_database->getEventId(), "Event ID is expected.");
 
+        $this->assertGreaterThan(0, ClanwarHandler::getCountOfPlayedMatches(self::$first_squad->getSquadId()), "Squad played matches.");
+
     }
 
     public function testIfInvalidArgumentExceptionIsThrownIfClanwarIdIsInvalid(): void
@@ -278,6 +301,15 @@ final class ClanwarHandlerTest extends TestCase
         $this->expectException(UnexpectedValueException::class);
 
         ClanwarHandler::getClanwarByClanwarId(999999999);
+
+    }
+
+    public function testIfInvalidArgumentExceptionIsThrownIfSquadIdIsInvalid(): void
+    {
+
+        $this->expectException(InvalidArgumentException::class);
+
+        ClanwarHandler::getCountOfPlayedMatches(-1);
 
     }
 

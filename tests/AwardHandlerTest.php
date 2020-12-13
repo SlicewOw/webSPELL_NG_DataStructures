@@ -107,6 +107,8 @@ final class AwardHandlerTest extends TestCase
             SquadHandler::getSquadBySquadId(1)
         );
 
+        $old_award_count = count(AwardHandler::getAwardsOfSquad(1));
+
         $tmp_award = AwardHandler::saveAward($new_award);
 
         $this->assertGreaterThan(0, $tmp_award->getAwardId());
@@ -119,6 +121,10 @@ final class AwardHandlerTest extends TestCase
         $this->assertFalse($award->getOffline(), "Der Award wurde online erspielt!");
         $this->assertEquals(1, $award->getSquadId(), "Ein Squad hat den Award erspielt!");
         $this->assertEquals($date->getTimestamp(), $award->getTimestamp(), "Date is set.");
+
+        $awards_of_squad = AwardHandler::getAwardsOfSquad(1);
+        $this->assertNotEmpty($awards_of_squad, "Awards are returnd");
+        $this->assertGreaterThan($old_award_count, count($awards_of_squad), "New award of squad is recognized.");
 
     }
 

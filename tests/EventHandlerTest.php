@@ -28,6 +28,8 @@ final class EventHandlerTest extends TestCase
             SquadHandler::getSquadBySquadId(1)
         );
 
+        $old_event_count = count(EventHandler::getEventsOfSquad(1));
+
         $event = EventHandler::saveEvent($new_event);
 
         $this->assertGreaterThan(0, $event->getEventId(), "Event ID is set.");
@@ -39,6 +41,10 @@ final class EventHandlerTest extends TestCase
         $this->assertEquals("tv.myrisk-ev", $event->getLeagueCategory(), "League category is set.");
 
         $this->assertTrue(EventHandler::isExistingEvent($event->getEventId()), "Event is saved into database.");
+
+        $events_of_squad = EventHandler::getEventsOfSquad(1);
+        $this->assertNotEmpty($events_of_squad, "Events are returnd");
+        $this->assertGreaterThan($old_event_count, count($events_of_squad), "New event of squad is recognized.");
 
     }
 

@@ -2,11 +2,11 @@
 
 namespace webspell_ng\Handler;
 
-use \Respect\Validation\Validator;
+use Respect\Validation\Validator;
 
-use \webspell_ng\Squad;
-use \webspell_ng\WebSpellDatabaseConnection;
-use \webspell_ng\Handler\GameHandler;
+use webspell_ng\Squad;
+use webspell_ng\WebSpellDatabaseConnection;
+use webspell_ng\Handler\GameHandler;
 use webspell_ng\Utils\DateUtils;
 
 class SquadHandler {
