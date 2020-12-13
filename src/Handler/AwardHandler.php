@@ -99,10 +99,6 @@ class AwardHandler {
     private static function checkAwardVariables(Award $award): bool
     {
 
-        if (!ValidationUtils::validateInteger($award->getTimestamp(), true)) {
-            throw new \UnexpectedValueException('enter_date');
-        }
-
         if (is_null($award->getSquad()) || !ValidationUtils::validateInteger($award->getSquadId(), true)) {
             throw new \UnexpectedValueException('enter_squad');
         }
@@ -134,7 +130,7 @@ class AwardHandler {
             self::updateAward($award);
         }
 
-        return $award;
+        return LeagueCategoryHandler::setAwardLeagueCategory($award);
 
     }
 
@@ -159,7 +155,7 @@ class AwardHandler {
                 )
             ->setParameters(
                     [
-                        0 => $award->getTimestamp(),
+                        0 => $award->getDate()->getTimestamp(),
                         1 => $award->getName(),
                         2 => $award->getSquadId(),
                         3 => $award->getEventId(),
@@ -177,11 +173,11 @@ class AwardHandler {
             (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId()
         );
 
-        return LeagueCategoryHandler::setAwardLeagueCategory($award);
+        return $award;
 
     }
 
-    private static function updateAward(Award $award): Award
+    private static function updateAward(Award $award): void
     {
 
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
@@ -195,7 +191,7 @@ class AwardHandler {
             ->set('rang', '?')
             ->set('offline', '?')
             ->where('awardID = ?')
-            ->setParameter(0, $award->getTimestamp())
+            ->setParameter(0, $award->getDate()->getTimestamp())
             ->setParameter(1, $award->getName())
             ->setParameter(2, $award->getSquadId())
             ->setParameter(3, $award->getEventId())
@@ -205,8 +201,6 @@ class AwardHandler {
             ->setParameter(7, $award->getAwardId());
 
         $queryBuilder->execute();
-
-        return LeagueCategoryHandler::setAwardLeagueCategory($award);
 
     }
 

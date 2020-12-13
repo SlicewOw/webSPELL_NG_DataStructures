@@ -220,9 +220,14 @@ class Award {
 		return $this->info;
 	}
 
-	public function getTimestamp(): int
+	public function getDate(): \DateTime
 	{
-		return $this->date->getTimestamp();
+		return $this->date;
+	}
+
+	public function getLeagueCategory(): ?string
+	{
+		return $this->category;
 	}
 
 }

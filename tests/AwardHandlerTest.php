@@ -120,7 +120,8 @@ final class AwardHandlerTest extends TestCase
         $this->assertEquals($award->getHomepage(), self::$CONST_MYRISK_GAMING_URL, "Homepage des Awards ist editiert!");
         $this->assertFalse($award->getOffline(), "Der Award wurde online erspielt!");
         $this->assertEquals(1, $award->getSquadId(), "Ein Squad hat den Award erspielt!");
-        $this->assertEquals($date->getTimestamp(), $award->getTimestamp(), "Date is set.");
+        $this->assertEquals($date, $award->getDate(), "Date is set.");
+        $this->assertEquals("gaming.myrisk-ev", $award->getLeagueCategory(), "League category is set.");
 
         $awards_of_squad = AwardHandler::getAwardsOfSquad(1);
         $this->assertNotEmpty($awards_of_squad, "Awards are returnd");
@@ -168,7 +169,7 @@ final class AwardHandlerTest extends TestCase
         $this->assertEquals(1, $award->getSquadId(), "Squad wurde gesetzt, welches den Award erspielt hat!");
         $this->assertEquals("Dies ist eine Beschreibung des Awards", $award->getDescription(), "Award Beschreibung wurde gespeichert!");
         $this->assertEquals($event->getEventId(), $award->getEventId(), "Event wurde gesetzt, welches den Award erspielt hat!");
-        $this->assertEquals($award_date->getTimestamp(), $award->getTimestamp(), "Date is set.");
+        $this->assertEquals($award_date, $award->getDate(), "Date is set.");
 
     }
 
@@ -209,7 +210,7 @@ final class AwardHandlerTest extends TestCase
         $this->assertEquals(self::$CONST_MYRISK_CUP_URL, $award->getHomepage(), "Homepage des Awards ist editiert!");
         $this->assertFalse($award->getOffline(), "Der Award wurde online erspielt!");
         $this->assertEquals(1, $award->getSquadId(), "Squad wurde gesetzt, welches den Award erspielt hat!");
-        $this->assertEquals($changed_date->getTimestamp(), $award->getTimestamp(), "Date is set.");
+        $this->assertEquals($changed_date, $award->getDate(), "Date is set.");
 
     }
 

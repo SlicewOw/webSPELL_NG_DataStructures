@@ -12,32 +12,30 @@ class LeagueCategoryHandler {
 
     public static function setAwardLeagueCategory(Award $award): Award
     {
-        $award_category = self::setLeagueCategory($award->getAwardId(), 'awards', 'awardID');
+        $award_category = self::setLeagueCategory($award->getHomepage(), $award->getAwardId(), 'awards', 'awardID');
         $award->setLeagueCategory($award_category);
         return $award;
     }
 
     public static function setEventLeagueCategory(Event $event): Event
     {
-        $event_category = self::setLeagueCategory($event->getEventId(), 'events', 'eventID');
+        $event_category = self::setLeagueCategory($event->getHomepage(), $event->getEventId(), 'events', 'eventID');
         $event->setLeagueCategory($event_category);
         return $event;
     }
 
-    private static function setLeagueCategory(int $parent_id, string $table, string $parent_id_column): string
+    private static function setLeagueCategory(string $homepage, int $parent_id, string $table, string $parent_id_column): string
     {
 
-        if (!ValidationUtils::validateInteger($parent_id, true)) {
-            throw new \UnexpectedValueException('unknown_parameter_parent_id');
+        if (empty($homepage)) {
+            throw new \UnexpectedValueException('unknown_parameter_homepage');
         }
-
-        $url = self::getHomepageValue($table, $parent_id_column, $parent_id);
 
         $categoryArray = array();
 
         preg_match(
             '@^(?:http[s]?://)?([^/]+)@i',
-            $url,
+            $homepage,
             $categoryArray
         );
 
@@ -81,28 +79,9 @@ class LeagueCategoryHandler {
             ->setParameter(0, $category)
             ->setParameter(1, $parent_id);
 
+        $queryBuilder->execute();
+
         return $category;
-
-    }
-
-    private static function getHomepageValue(string $table, string $parent_identifier, int $parent_id): string
-    {
-
-        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
-        $queryBuilder
-            ->select('*')
-            ->from(WebSpellDatabaseConnection::getTablePrefix() . $table)
-            ->where($parent_identifier . ' = ?')
-            ->setParameter(0, $parent_id);
-
-        $homepage_query = $queryBuilder->execute();
-        $homepage_result = $homepage_query->fetch();
-
-        if (empty($homepage_result)) {
-            throw new \UnexpectedValueException("unknown_homepage");
-        }
-
-        return $homepage_result['homepage'];
 
     }
 
