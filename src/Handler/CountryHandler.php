@@ -2,8 +2,6 @@
 
 namespace webspell_ng\Handler;
 
-use Respect\Validation\Validator;
-
 use webspell_ng\Country;
 use webspell_ng\WebSpellDatabaseConnection;
 
@@ -15,7 +13,7 @@ class CountryHandler {
     public static function getCountryByCountryShortcut(string $country_shortcut): Country
     {
 
-        if (empty($country_shortcut) || (strlen($country_shortcut) != 2)) {
+        if (empty($country_shortcut) || (strlen($country_shortcut) > 3)) {
             throw new \InvalidArgumentException('country_shortcut_value_is_invalid');
         }
 
