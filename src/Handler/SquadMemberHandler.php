@@ -6,6 +6,7 @@ use Respect\Validation\Validator;
 
 use webspell_ng\Squad;
 use webspell_ng\SquadMember;
+use webspell_ng\Utils\DateUtils;
 use webspell_ng\WebSpellDatabaseConnection;
 
 
@@ -74,6 +75,15 @@ class SquadMemberHandler {
         $member->setMemberPosition(
             SquadMemberPositionHandler::getMemberPositionById($member_result['positionID'])
         );
+        $member->setJoinDate(
+            DateUtils::getDateTimeByMktimeValue($member_result['join_date'])
+        );
+
+        if (!is_null($member_result['left_date'])) {
+            $member->setLeftDate(
+                DateUtils::getDateTimeByMktimeValue($member_result['left_date'])
+            );
+        }
 
         return $member;
 

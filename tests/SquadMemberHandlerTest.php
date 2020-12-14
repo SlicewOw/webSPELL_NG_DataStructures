@@ -58,6 +58,10 @@ final class SquadMemberHandlerTest extends TestCase
 
         $this->assertEquals(1, count($saved_squad->getMembers()), "Member is set.");
 
+        $member = $saved_squad->getMembers()[0];
+        $this->assertEquals(1, $member->getUser()->getUserId(), "User data of member is set.");
+        $this->assertGreaterThan(0, $member->getJoinDate()->getTimestamp(), "Join date is set.");
+
     }
 
 }

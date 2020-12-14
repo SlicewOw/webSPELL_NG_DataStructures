@@ -24,6 +24,16 @@ class SquadMember extends DataStatus {
      */
     private $position;
 
+    /**
+     * @var \DateTime $join_date
+     */
+    private $join_date;
+
+    /**
+     * @var \DateTime $left_date
+     */
+    private $left_date;
+
     public function setMemberId(int $member_id): void
     {
         $this->member_id = $member_id;
@@ -52,6 +62,26 @@ class SquadMember extends DataStatus {
     public function getMemberPosition(): SquadMemberPosition
     {
         return $this->position;
+    }
+
+    public function setJoinDate(\DateTime $join_date): void
+    {
+        $this->join_date = $join_date;
+    }
+
+    public function getJoinDate(): \DateTime
+    {
+        return $this->join_date;
+    }
+
+    public function setLeftDate(\DateTime $left_date): void
+    {
+        $this->left_date = $left_date;
+    }
+
+    public function getLeftDate(): \DateTime
+    {
+        return $this->left_date;
     }
 
 }
