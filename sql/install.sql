@@ -745,6 +745,21 @@ ALTER TABLE `ws_p40_contact` ADD PRIMARY KEY (`contactID`), ADD UNIQUE KEY `emai
 ALTER TABLE `ws_p40_contact` MODIFY `contactID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- Squad Member Position
+--
+
+CREATE TABLE `ws_p40_squads_members_position` (
+  `positionID` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `tag` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `gameID` int(11) DEFAULT NULL,
+  `sort` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `ws_p40_squads_members_position` ADD PRIMARY KEY (`positionID`);
+ALTER TABLE `ws_p40_squads_members_position` MODIFY `positionID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- DONE :)
 --
 

@@ -2,9 +2,9 @@
 
 namespace webspell_ng;
 
-use \webspell_ng\DataStatus;
+use webspell_ng\DataStatus;
+use webspell_ng\Game;
 use webspell_ng\Enums\SquadEnums;
-use \webspell_ng\Game;
 
 
 class Squad extends DataStatus {
