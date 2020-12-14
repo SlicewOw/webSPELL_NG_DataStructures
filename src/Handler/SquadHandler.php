@@ -51,6 +51,10 @@ class SquadHandler {
         $squad->setDate(
             DateUtils::getDateTimeByMktimeValue($squad_result['date'])
         );
+        $squad->setMembers(
+            SquadMemberHandler::getMembersOfSquad($squad_id)
+        );
+
         if (!is_null($squad_result['info'])) {
             $squad->setInfo($squad_result['info']);
         }

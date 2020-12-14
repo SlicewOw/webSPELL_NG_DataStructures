@@ -4,6 +4,7 @@ namespace webspell_ng;
 
 use webspell_ng\DataStatus;
 use webspell_ng\Game;
+use webspell_ng\SquadMember;
 use webspell_ng\Enums\SquadEnums;
 
 
@@ -28,6 +29,11 @@ class Squad extends DataStatus {
      * @var bool $is_game_squad
      */
     private $is_game_squad = true;
+
+    /**
+     * @var array<SquadMember> $members
+     */
+    private $members = array();
 
     /**
      * @var Game $game
@@ -74,6 +80,14 @@ class Squad extends DataStatus {
         $this->is_game_squad = $is_game_squad;
     }
 
+    /**
+     * @param array<SquadMember> $members
+     */
+    public function setMembers(array $members): void
+    {
+        $this->members = $members;
+    }
+
     public function setGame(Game $game): void
     {
         $this->game = $game;
@@ -117,6 +131,14 @@ class Squad extends DataStatus {
     public function getIsGameSquad(): bool
     {
         return $this->is_game_squad;
+    }
+
+    /**
+     * @return array<SquadMember>
+     */
+    public function getMembers(): array
+    {
+        return $this->members;
     }
 
     public function getDate(): \DateTime

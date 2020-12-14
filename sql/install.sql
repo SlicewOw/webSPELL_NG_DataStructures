@@ -760,6 +760,35 @@ ALTER TABLE `ws_p40_squads_members_position` ADD PRIMARY KEY (`positionID`);
 ALTER TABLE `ws_p40_squads_members_position` MODIFY `positionID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- Squad Member
+--
+
+CREATE TABLE `ws_p40_squads_members` (
+  `sqmID` int(11) NOT NULL,
+  `squadID` int(11) NOT NULL,
+  `userID` int(11) NOT NULL,
+  `positionID` int(11) NOT NULL,
+  `sort` int(11) NOT NULL DEFAULT 1,
+  `join_date` int(11) NOT NULL,
+  `left_date` int(11) DEFAULT NULL,
+  `active` int(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `ws_p40_squads_members`
+  ADD PRIMARY KEY (`sqmID`),
+  ADD UNIQUE KEY `unique_squad_member_row` (`squadID`,`userID`),
+  ADD KEY `FK_SquadsMembers_UserId` (`userID`),
+  ADD KEY `FK_SquadMembers_PositionId` (`positionID`);
+
+ALTER TABLE `ws_p40_squads_members` MODIFY `sqmID` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `ws_p40_squads_members`
+  ADD CONSTRAINT `FK_SquadMembers_PositionId` FOREIGN KEY (`positionID`) REFERENCES `ws_p40_squads_members_position` (`positionID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_SquadsMembers_PositionId` FOREIGN KEY (`positionID`) REFERENCES `ws_p40_squads_members_position` (`positionID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_SquadsMembers_SquadId` FOREIGN KEY (`squadID`) REFERENCES `ws_p40_squads` (`squadID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `FK_SquadsMembers_UserId` FOREIGN KEY (`userID`) REFERENCES `ws_p40_user` (`userID`) ON DELETE CASCADE;
+
+--
 -- DONE :)
 --
 
