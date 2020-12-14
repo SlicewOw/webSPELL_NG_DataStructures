@@ -2,8 +2,6 @@
 
 namespace webspell_ng\Utils;
 
-use \webspell_ng\Enums\SocialNetworkEnums;
-
 
 class StringFormatterUtils {
 
@@ -229,6 +227,31 @@ class StringFormatterUtils {
             '',
             $id
         );
+
+    }
+
+    public static function convertStringToPrizeValue(string $prize): string
+    {
+
+        $text = str_replace(
+            ',',
+            '.',
+            $prize
+        );
+
+        $textArray = explode('.', $text);
+
+        $count_of_strings = count($textArray);
+        if ($count_of_strings == 1) {
+            $text .= '.00';
+        } else if ($count_of_strings == 2) {
+            $second_value = (strlen($textArray[1]) > 1) ? $textArray[1] : $textArray[1] . '0';
+            $text = $textArray[0] . '.' . $second_value;
+        } else {
+            throw new \InvalidArgumentException("prize_value_is_invalid");
+        }
+
+        return $text;
 
     }
 

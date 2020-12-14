@@ -11,4 +11,19 @@ class DateUtils {
         );
     }
 
+    public static function daysSinceTimestamp(int $time): int
+    {
+
+        if (!is_numeric($time) || ($time == 0)) {
+            return -1;
+        }
+
+        $timeNow = time();
+
+        $timeDiff = $timeNow - $time;
+
+        return (int) ($timeDiff / 60 / 60 / 24);
+
+    }
+
 }

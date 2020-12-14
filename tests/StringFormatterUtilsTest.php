@@ -110,4 +110,22 @@ final class StringFormatterUtilsTest extends TestCase
         );
     }
 
+    public function testIfPrizeConvertionIsWorking(): void
+    {
+
+        $this->assertEquals("13.37", StringFormatterUtils::convertStringToPrizeValue("13.37"), "Normal prize is detected with english format");
+        $this->assertEquals("13.37", StringFormatterUtils::convertStringToPrizeValue("13,37"), "Normal prize is detected with german format");
+        $this->assertEquals("13.00", StringFormatterUtils::convertStringToPrizeValue("13"), "Normal prize is detected");
+
+    }
+
+    public function testIfInvalidArgumentExceptionIsThrownIfPrizeValueIsInvalid(): void
+    {
+
+        $this->expectException(InvalidArgumentException::class);
+
+        StringFormatterUtils::convertStringToPrizeValue("13,37,00");
+
+    }
+
 }

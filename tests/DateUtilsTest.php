@@ -17,4 +17,20 @@ final class DateUtilsTest extends TestCase
 
     }
 
+    public function testIfDaysSinceTimestampIsWorking(): void
+    {
+
+        $date = new \DateTime("5 days ago");
+
+        $this->assertEquals(5, DateUtils::daysSinceTimestamp($date->getTimestamp()), "Days since timestamp is working.");
+
+    }
+
+    public function testIfDaysSinceTimestampReturnsInvalidInteger(): void
+    {
+
+        $this->assertEquals(-1, DateUtils::daysSinceTimestamp(0), "Invalid date is found.");
+
+    }
+
 }
