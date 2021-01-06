@@ -9,6 +9,7 @@ use \webspell_ng\ClanwarMap;
 use \webspell_ng\WebSpellDatabaseConnection;
 use \webspell_ng\Enums\ClanwarEnums;
 use \webspell_ng\Handler\ClanwarMapsHandler;
+use webspell_ng\Squad;
 use \webspell_ng\Utils\DateUtils;
 use \webspell_ng\Utils\ValidationUtils;
 
@@ -80,6 +81,66 @@ class ClanwarHandler {
         }
 
         return $clanwar;
+
+    }
+
+    /**
+     * @return array<Clanwar>
+     */
+    public static function getUpcomingMatchesOfSquad(Squad $squad): array
+    {
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->select('cwID')
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_CLANWARS)
+            ->where('squadID = ?', 'active = 1', 'date > ?')
+            ->setParameter(0, $squad->getSquadId())
+            ->setParameter(1, time());
+
+        $clanwar_query = $queryBuilder->execute();
+
+        $upcoming_matches = array();
+
+        while ($clanwar_result = $clanwar_query->fetch())
+        {
+            array_push(
+                $upcoming_matches,
+                self::getClanwarByClanwarId((int) $clanwar_result['cwID'])
+            );
+        }
+
+        return $upcoming_matches;
+
+    }
+
+    /**
+     * @return array<Clanwar>
+     */
+    public static function getRecentMatchesOfSquad(Squad $squad): array
+    {
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->select('cwID')
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_CLANWARS)
+            ->where('squadID = ?', 'active = 1', 'date <= ?')
+            ->setParameter(0, $squad->getSquadId())
+            ->setParameter(1, time());
+
+        $clanwar_query = $queryBuilder->execute();
+
+        $upcoming_matches = array();
+
+        while ($clanwar_result = $clanwar_query->fetch())
+        {
+            array_push(
+                $upcoming_matches,
+                self::getClanwarByClanwarId((int) $clanwar_result['cwID'])
+            );
+        }
+
+        return $upcoming_matches;
 
     }
 

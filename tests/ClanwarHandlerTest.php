@@ -284,6 +284,42 @@ final class ClanwarHandlerTest extends TestCase
 
         $this->assertGreaterThan(0, ClanwarHandler::getCountOfPlayedMatches(self::$first_squad->getSquadId()), "Squad played matches.");
 
+        $this->assertGreaterThan(0, count(ClanwarHandler::getRecentMatchesOfSquad(self::$first_squad)), "Squad played matches recently.");
+
+    }
+
+    public function testIfUpcomingMatchIsReturned(): void
+    {
+
+        $future_date = new \DateTime("+5 days");
+
+        $old_count_of_upcoming_matches = count(ClanwarHandler::getUpcomingMatchesOfSquad(self::$first_squad));
+
+        $new_clanwar = new Clanwar();
+        $new_clanwar->setSquad(
+            self::$first_squad,
+            array(1, 2, 3)
+        );
+        $new_clanwar->setOpponent(self::$clan);
+        $new_clanwar->setLeague(self::$event);
+        $new_clanwar->setMatchURL("https://gaming.myrisk-ev.de");
+        $new_clanwar->setDate($future_date);
+        $new_clanwar->setReports(
+            "Deutsche Version",
+            "English version"
+        );
+
+        ClanwarHandler::saveMatch($new_clanwar);
+
+        $upcoming_matches = ClanwarHandler::getUpcomingMatchesOfSquad(self::$first_squad);
+        $new_count_of_upcoming_matches = count($upcoming_matches);
+
+        $this->assertGreaterThan($old_count_of_upcoming_matches, $new_count_of_upcoming_matches, "Upcoming match is detected.");
+
+        $upcoming_clanwar = $upcoming_matches[$new_count_of_upcoming_matches - 1];
+
+        $this->assertEquals($future_date->getTimestamp(), $upcoming_clanwar->getDate()->getTimestamp(), "Timestamp of clanwar is set.");
+
     }
 
     public function testIfInvalidArgumentExceptionIsThrownIfClanwarIdIsInvalid(): void
