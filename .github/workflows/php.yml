@@ -2,7 +2,8 @@ name: PHP Composer
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - '*'
   pull_request:
     branches: [ master ]
 
@@ -28,6 +29,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Set PHP version
+      uses: nanasess/setup-php@master
+      with:
+        php-version: '7.4'
 
     - name: Validate composer.json and composer.lock
       run: composer validate

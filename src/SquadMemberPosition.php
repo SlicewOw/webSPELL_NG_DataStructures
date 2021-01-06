@@ -23,7 +23,7 @@ class SquadMemberPosition {
     private $tag;
 
     /**
-     * @var Game $game
+     * @var ?Game $game
      */
     private $game;
 

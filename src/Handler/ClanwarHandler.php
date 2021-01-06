@@ -52,7 +52,6 @@ class ClanwarHandler {
 
         $clanwar = new Clanwar();
         $clanwar->setClanwarId($clanwar_result["cwID"]);
-        $clanwar->setMatchURL($clanwar_result["homepage"]);
         $clanwar->setStatus($clanwar_status);
         $clanwar->setSquad(
             SquadHandler::getSquadBySquadId($clanwar_result["squadID"]),
@@ -75,6 +74,10 @@ class ClanwarHandler {
         $clanwar->setMap(
             ClanwarMapsHandler::getMapsOfClanwar($clanwar)
         );
+
+        if (!is_null($clanwar_result["homepage"])) {
+            $clanwar->setMatchURL($clanwar_result["homepage"]);
+        }
 
         return $clanwar;
 
