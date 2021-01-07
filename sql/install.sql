@@ -134,8 +134,23 @@ CREATE TABLE `ws_p40_user` (
 ALTER TABLE `ws_p40_user` ADD PRIMARY KEY (`userID`), ADD UNIQUE KEY `username` (`username`);
 ALTER TABLE `ws_p40_user` MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT;
 
-INSERT INTO `ws_p40_user` (`username`, `firstname`, `email`, `birthday`) VALUES
-('Test User', 'Firstname', 'info@webspell-ng.de', '2020-09-04 00:00:00');
+INSERT INTO `ws_p40_user` (`username`, `firstname`, `email`, `birthday`, `country`) VALUES
+('Test User', 'Firstname', 'info@webspell-ng.de', '2020-09-04 00:00:00', 'eu');
+
+--
+-- User Log
+--
+
+CREATE TABLE `ws_p40_user_log` (
+  `userID` int(11) NOT NULL,
+  `username` varchar(100) COLLATE latin1_german1_ci NOT NULL,
+  `date` int(11) NOT NULL,
+  `parent_id` int(11) NOT NULL,
+  `action` varchar(255) COLLATE latin1_german1_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_german1_ci;
+
+ALTER TABLE `ws_p40_user_log` ADD KEY `FK_UserLog_UserId` (`userID`);
+ALTER TABLE `ws_p40_user_log` ADD CONSTRAINT `FK_UserLog_UserId` FOREIGN KEY (`userID`) REFERENCES `ws_p40_user` (`userID`) ON DELETE CASCADE;
 
 --
 -- Settings

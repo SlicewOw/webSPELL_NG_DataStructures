@@ -5,8 +5,10 @@ namespace webspell_ng\Handler;
 use Respect\Validation\Validator;
 
 use webspell_ng\User;
+use webspell_ng\UserLog;
 use webspell_ng\WebSpellDatabaseConnection;
 use webspell_ng\Handler\CountryHandler;
+use webspell_ng\Handler\UserLogHandler;
 use webspell_ng\Utils\DateUtils;
 
 
@@ -90,7 +92,23 @@ class UserHandler {
             (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId()
         );
 
+        self::saveUserLogNewUser($user);
+
         return $user;
+
+    }
+
+    private static function saveUserLogNewUser(User $user): void
+    {
+
+        $log = new UserLog();
+        $log->setInfo("user_registered");
+        $log->setParentId($user->getUserId());
+
+        UserLogHandler::saveUserLog(
+            $user,
+            $log
+        );
 
     }
 

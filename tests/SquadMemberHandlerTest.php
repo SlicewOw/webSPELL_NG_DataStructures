@@ -6,12 +6,14 @@ use webspell_ng\Game;
 use webspell_ng\Squad;
 use webspell_ng\SquadMember;
 use webspell_ng\SquadMemberPosition;
+use webspell_ng\User;
 use webspell_ng\Enums\SquadEnums;
 use webspell_ng\Handler\GameHandler;
 use webspell_ng\Handler\SquadHandler;
 use webspell_ng\Handler\SquadMemberHandler;
 use webspell_ng\Handler\SquadMemberPositionHandler;
 use webspell_ng\Handler\UserHandler;
+use webspell_ng\Handler\UserLogHandler;
 use webspell_ng\Utils\StringFormatterUtils;
 
 final class SquadMemberHandlerTest extends TestCase
@@ -27,8 +29,15 @@ final class SquadMemberHandlerTest extends TestCase
      */
     private static $squad;
 
+    /**
+     * @var User $user
+     */
+    private static $user;
+
     public static function setUpBeforeClass(): void
     {
+
+        self::$user = UserHandler::getUserByUserId(1);
 
         self::$game = GameHandler::getGameByGameId(1);
 
@@ -49,6 +58,7 @@ final class SquadMemberHandlerTest extends TestCase
     public function testIfSquadMemberPositionCanBeSavedAndUpdated(): void
     {
 
+        $old_count_of_user_logs = count(UserLogHandler::getLogsOfUser(self::$user));
 
         $new_position = new SquadMemberPosition();
         $new_position->setName("Test Position " . StringFormatterUtils::getRandomString(10));
@@ -63,9 +73,7 @@ final class SquadMemberHandlerTest extends TestCase
         $new_member = new SquadMember();
         $new_member->setMemberPosition($position);
         $new_member->setIsActive(true);
-        $new_member->setUser(
-            UserHandler::getUserByUserId(1)
-        );
+        $new_member->setUser(self::$user);
 
         $member = SquadMemberHandler::saveSquadMember(self::$squad, $new_member);
 
@@ -89,6 +97,10 @@ final class SquadMemberHandlerTest extends TestCase
         $kicked_member = SquadMemberHandler::getSquadMemberById($member->getMemberId());
 
         $this->assertFalse($kicked_member->getIsActive(), "Member is active.");
+
+        $new_count_of_user_logs = UserLogHandler::getLogsOfUser(self::$user);
+
+        $this->assertEquals($old_count_of_user_logs + 2, count($new_count_of_user_logs), "Count of user logs is expected.");
 
     }
 

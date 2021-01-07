@@ -6,8 +6,10 @@ use Respect\Validation\Validator;
 
 use webspell_ng\Squad;
 use webspell_ng\SquadMember;
-use webspell_ng\Utils\DateUtils;
+use webspell_ng\UserLog;
 use webspell_ng\WebSpellDatabaseConnection;
+use webspell_ng\Handler\UserLogHandler;
+use webspell_ng\Utils\DateUtils;
 
 
 class SquadMemberHandler {
@@ -129,9 +131,13 @@ class SquadMemberHandler {
 
         $queryBuilder->execute();
 
-        $member_id = (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId();
+        $member->setMemberId(
+            (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId()
+        );
 
-        return self::getSquadMemberById($member_id);
+        self::saveUserLogNewSquadMember($squad, $member);
+
+        return self::getSquadMemberById($member->getMemberId());
 
     }
 
@@ -173,8 +179,32 @@ class SquadMemberHandler {
 
         self::saveSquadMember($squad, $member);
 
-        // TODO: Add UserLog if implement
+        self::saveUserLogLeftSquadMember($squad, $member);
 
+    }
+
+    private static function saveUserLogNewSquadMember(Squad $squad, SquadMember $member): void
+    {
+        UserLogHandler::saveUserLog(
+            $member->getUser(),
+            self::getSquadMemberUserLog($squad, "squad_joined")
+        );
+    }
+
+    private static function saveUserLogLeftSquadMember(Squad $squad, SquadMember $member): void
+    {
+        UserLogHandler::saveUserLog(
+            $member->getUser(),
+            self::getSquadMemberUserLog($squad, "squad_left")
+        );
+    }
+
+    private static function getSquadMemberUserLog(Squad $squad, string $info): UserLog
+    {
+        $log = new UserLog();
+        $log->setInfo($info);
+        $log->setParentId($squad->getSquadId());
+        return $log;
     }
 
 }
