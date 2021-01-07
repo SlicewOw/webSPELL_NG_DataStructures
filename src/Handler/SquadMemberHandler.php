@@ -62,7 +62,7 @@ class SquadMemberHandler {
         $member_result = $member_query->fetch();
 
         if (empty($member_result)) {
-            throw new \InvalidArgumentException('unknown_member');
+            throw new \UnexpectedValueException('unknown_member');
         }
 
         $member = new SquadMember();
@@ -136,6 +136,8 @@ class SquadMemberHandler {
     private static function updateSquadMember(Squad $squad, SquadMember $member): void
     {
 
+        $left_date = (!is_null($member->getLeftDate())) ? $member->getLeftDate()->getTimestamp() : null;
+
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder
             ->update(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_SQUADS_MEMBERS)
@@ -143,16 +145,32 @@ class SquadMemberHandler {
             ->set('squadID', '?')
             ->set('positionID', '?')
             ->set('active', '?')
+            ->set('left_date', '?')
             ->set('sort', '?')
             ->where('sqmID = ?')
             ->setParameter(0, $member->getUser()->getUserId())
             ->setParameter(1, $squad->getSquadId())
             ->setParameter(2, $member->getMemberPosition()->getPositionId())
             ->setParameter(3, $member->getIsActive())
-            ->setParameter(4, $member->getSort())
-            ->setParameter(5, $member->getMemberId());
+            ->setParameter(4, $left_date)
+            ->setParameter(5, $member->getSort())
+            ->setParameter(6, $member->getMemberId());
 
         $queryBuilder->execute();
+
+    }
+
+    public static function kickSquadMember(Squad $squad, SquadMember $member): void
+    {
+
+        $member->setIsActive(false);
+        $member->setLeftDate(
+            new \DateTime("now")
+        );
+
+        self::saveSquadMember($squad, $member);
+
+        // TODO: Add UserLog if implement
 
     }
 

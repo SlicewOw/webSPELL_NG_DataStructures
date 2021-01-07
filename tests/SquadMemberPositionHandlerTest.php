@@ -51,4 +51,22 @@ final class SquadMemberPositionHandlerTest extends TestCase
 
     }
 
+    public function testIfInvalidArgumentExceptionIsThrownIfMemberPositionIdIsInvalid(): void
+    {
+
+        $this->expectException(InvalidArgumentException::class);
+
+        SquadMemberPositionHandler::getMemberPositionById(-1);
+
+    }
+
+    public function testIfUnexpectedValueExceptionIsThrownIfMemberPositionDoesNotExist(): void
+    {
+
+        $this->expectException(UnexpectedValueException::class);
+
+        SquadMemberPositionHandler::getMemberPositionById(99999999);
+
+    }
+
 }

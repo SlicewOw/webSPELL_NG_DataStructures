@@ -30,9 +30,9 @@ class SquadMember extends DataStatus {
     private $join_date;
 
     /**
-     * @var \DateTime $left_date
+     * @var ?\DateTime $left_date
      */
-    private $left_date;
+    private $left_date = null;
 
     public function setMemberId(int $member_id): void
     {
@@ -79,7 +79,7 @@ class SquadMember extends DataStatus {
         $this->left_date = $left_date;
     }
 
-    public function getLeftDate(): \DateTime
+    public function getLeftDate(): ?\DateTime
     {
         return $this->left_date;
     }

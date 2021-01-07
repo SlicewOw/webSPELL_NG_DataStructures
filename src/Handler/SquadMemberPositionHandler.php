@@ -30,7 +30,7 @@ class SquadMemberPositionHandler {
         $position_result = $position_query->fetch();
 
         if (empty($position_result)) {
-            throw new \InvalidArgumentException('unknown_member_position');
+            throw new \UnexpectedValueException('unknown_member_position');
         }
 
         $member_position = new SquadMemberPosition();

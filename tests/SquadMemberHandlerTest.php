@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
+use webspell_ng\Game;
 use webspell_ng\Squad;
 use webspell_ng\SquadMember;
 use webspell_ng\SquadMemberPosition;
@@ -16,10 +17,20 @@ use webspell_ng\Utils\StringFormatterUtils;
 final class SquadMemberHandlerTest extends TestCase
 {
 
-    public function testIfSquadMemberPositionCanBeSavedAndUpdated(): void
+    /**
+     * @var Game $game
+     */
+    private static $game;
+
+    /**
+     * @var Squad $squad
+     */
+    private static $squad;
+
+    public static function setUpBeforeClass(): void
     {
 
-        $game = GameHandler::getGameByGameId(1);
+        self::$game = GameHandler::getGameByGameId(1);
 
         $new_squad = new Squad();
         $new_squad->setName("Test Squad " . StringFormatterUtils::getRandomString(10));
@@ -29,9 +40,15 @@ final class SquadMemberHandlerTest extends TestCase
         $new_squad->setInfo("Information text ...");
         $new_squad->setRubric(SquadEnums::SQUAD_RUBRIC_AMATEUR);
         $new_squad->setIsGameSquad(true);
-        $new_squad->setGame($game);
+        $new_squad->setGame(self::$game);
 
-        $squad = SquadHandler::saveSquad($new_squad);
+        self::$squad = SquadHandler::saveSquad($new_squad);
+
+    }
+
+    public function testIfSquadMemberPositionCanBeSavedAndUpdated(): void
+    {
+
 
         $new_position = new SquadMemberPosition();
         $new_position->setName("Test Position " . StringFormatterUtils::getRandomString(10));
@@ -39,7 +56,7 @@ final class SquadMemberHandlerTest extends TestCase
         $new_position->setSort(
             rand(100, 999999)
         );
-        $new_position->setGame($game);
+        $new_position->setGame(self::$game);
 
         $position = SquadMemberPositionHandler::saveMemberPosition($new_position);
 
@@ -50,17 +67,46 @@ final class SquadMemberHandlerTest extends TestCase
             UserHandler::getUserByUserId(1)
         );
 
-        $member = SquadMemberHandler::saveSquadMember($squad, $new_member);
+        $member = SquadMemberHandler::saveSquadMember(self::$squad, $new_member);
 
         $this->assertGreaterThan(0, $member->getMemberId(), "Member ID is set.");
 
-        $saved_squad = SquadHandler::getSquadBySquadId($squad->getSquadId());
+        $saved_squad = SquadHandler::getSquadBySquadId(self::$squad->getSquadId());
 
         $this->assertEquals(1, count($saved_squad->getMembers()), "Member is set.");
 
         $member = $saved_squad->getMembers()[0];
         $this->assertEquals(1, $member->getUser()->getUserId(), "User data of member is set.");
         $this->assertGreaterThan(0, $member->getJoinDate()->getTimestamp(), "Join date is set.");
+        $this->assertTrue($member->getIsActive(), "Member is active.");
+
+        SquadMemberHandler::kickSquadMember(self::$squad, $member);
+
+        $squad_members = SquadMemberHandler::getMembersOfSquad(self::$squad->getSquadId());
+
+        $this->assertEquals(0, count($squad_members), "Member is kicked successfully.");
+
+        $kicked_member = SquadMemberHandler::getSquadMemberById($member->getMemberId());
+
+        $this->assertFalse($kicked_member->getIsActive(), "Member is active.");
+
+    }
+
+    public function testIfInvalidArgumentExceptionIsThrownIfMemberIdIsInvalid(): void
+    {
+
+        $this->expectException(InvalidArgumentException::class);
+
+        SquadMemberHandler::getSquadMemberById(-1);
+
+    }
+
+    public function testIfUnexpectedValueExceptionIsThrownIfMemberDoesNotExist(): void
+    {
+
+        $this->expectException(UnexpectedValueException::class);
+
+        SquadMemberHandler::getSquadMemberById(99999999);
 
     }
 
