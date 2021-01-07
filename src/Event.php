@@ -83,7 +83,7 @@ class Event extends DataStatus {
     {
 
         if (!ValidationUtils::validateUrl($event_url)) {
-            throw new \InvalidArgumentException("event_homepage_value_is_invalid");
+            throw new \UnexpectedValueException("event_homepage_value_is_invalid");
         }
 
         $this->homepage = $event_url;

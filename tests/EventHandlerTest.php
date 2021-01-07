@@ -82,16 +82,12 @@ final class EventHandlerTest extends TestCase
 
     }
 
-    public function testIfInvalidArgumentExceptionIsThrownIfEventIdIsInvalid_01(): void
+    public function testIfFalseIsReturnedIfEventIdIsInvalid(): void
     {
-
-        $this->expectException(InvalidArgumentException::class);
-
-        EventHandler::isExistingEvent(-1);
-
+        $this->assertFalse(EventHandler::isExistingEvent(-1));
     }
 
-    public function testIfInvalidArgumentExceptionIsThrownIfEventIdIsInvalid_02(): void
+    public function testIfInvalidArgumentExceptionIsThrownIfEventIdIsInvalid(): void
     {
 
         $this->expectException(InvalidArgumentException::class);

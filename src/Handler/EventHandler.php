@@ -2,12 +2,13 @@
 
 namespace webspell_ng\Handler;
 
-use \webspell_ng\Event;
-use \webspell_ng\WebSpellDatabaseConnection;
-use \webspell_ng\Handler\LeagueCategoryHandler;
-use \webspell_ng\Handler\SquadHandler;
-use \webspell_ng\Utils\DateUtils;
-use \webspell_ng\Utils\ValidationUtils;
+use Respect\Validation\Validator;
+
+use webspell_ng\Event;
+use webspell_ng\WebSpellDatabaseConnection;
+use webspell_ng\Handler\LeagueCategoryHandler;
+use webspell_ng\Handler\SquadHandler;
+use webspell_ng\Utils\DateUtils;
 
 
 class EventHandler {
@@ -17,8 +18,8 @@ class EventHandler {
     public static function isExistingEvent(int $event_id): bool
     {
 
-        if (!ValidationUtils::validateInteger($event_id, true)) {
-            throw new \InvalidArgumentException("event_id_value_is_not_valid");
+        if (!Validator::numericVal()->min(1)->validate($event_id)) {
+            return false;
         }
 
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
@@ -38,8 +39,12 @@ class EventHandler {
     public static function getEventById(int $event_id): Event
     {
 
+        if (!Validator::numericVal()->min(1)->validate($event_id)) {
+            throw new \InvalidArgumentException("event_id_value_is_invalid");
+        }
+
         if (!EventHandler::isExistingEvent($event_id)) {
-            throw new \InvalidArgumentException("event_id_value_is_not_valid");
+            throw new \InvalidArgumentException("event_id_is_not_existing");
         }
 
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
@@ -146,7 +151,7 @@ class EventHandler {
             (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId()
         );
 
-        return LeagueCategoryHandler::setEventLeagueCategory($event);
+        return $event;
 
     }
 
@@ -170,8 +175,6 @@ class EventHandler {
             ->setParameter(5, $event->getEventId());
 
         $queryBuilder->execute();
-
-        LeagueCategoryHandler::setEventLeagueCategory($event);
 
     }
 

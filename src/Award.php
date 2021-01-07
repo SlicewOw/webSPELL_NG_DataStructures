@@ -151,11 +151,9 @@ class Award {
 
 	public function setHits(int $hits): void
 	{
-
 		if ($hits > 0) {
 			$this->hits = $hits;
 		}
-
 	}
 
 	public function getAwardId(): ?int
@@ -218,6 +216,11 @@ class Award {
 	public function getDescription(): ?string
 	{
 		return $this->info;
+	}
+
+	public function getHits(): int
+	{
+		return $this->hits;
 	}
 
 	public function getDate(): \DateTime
