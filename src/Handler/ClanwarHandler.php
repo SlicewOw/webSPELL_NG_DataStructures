@@ -2,16 +2,17 @@
 
 namespace webspell_ng\Handler;
 
-use \Respect\Validation\Validator;
+use Doctrine\DBAL\Query\Expression\CompositeExpression;
+use Respect\Validation\Validator;
 
-use \webspell_ng\Clanwar;
-use \webspell_ng\ClanwarMap;
-use \webspell_ng\WebSpellDatabaseConnection;
-use \webspell_ng\Enums\ClanwarEnums;
-use \webspell_ng\Handler\ClanwarMapsHandler;
+use webspell_ng\Clanwar;
+use webspell_ng\ClanwarMap;
 use webspell_ng\Squad;
-use \webspell_ng\Utils\DateUtils;
-use \webspell_ng\Utils\ValidationUtils;
+use webspell_ng\WebSpellDatabaseConnection;
+use webspell_ng\Enums\ClanwarEnums;
+use webspell_ng\Handler\ClanwarMapsHandler;
+use webspell_ng\Utils\DateUtils;
+use webspell_ng\Utils\ValidationUtils;
 
 
 class ClanwarHandler {
@@ -72,13 +73,13 @@ class ClanwarHandler {
             $clanwar_result["report_uk"]
         );
 
-        $clanwar->setMap(
-            ClanwarMapsHandler::getMapsOfClanwar($clanwar)
-        );
-
         if (!is_null($clanwar_result["homepage"])) {
             $clanwar->setMatchURL($clanwar_result["homepage"]);
         }
+
+        $clanwar->setMap(
+            ClanwarMapsHandler::getMapsOfClanwar($clanwar)
+        );
 
         return $clanwar;
 
@@ -89,29 +90,14 @@ class ClanwarHandler {
      */
     public static function getUpcomingMatchesOfSquad(Squad $squad): array
     {
-
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
-        $queryBuilder
-            ->select('cwID')
-            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_CLANWARS)
-            ->where('squadID = ?', 'active = 1', 'date > ?')
-            ->setParameter(0, $squad->getSquadId())
-            ->setParameter(1, time());
-
-        $clanwar_query = $queryBuilder->execute();
-
-        $upcoming_matches = array();
-
-        while ($clanwar_result = $clanwar_query->fetch())
-        {
-            array_push(
-                $upcoming_matches,
-                self::getClanwarByClanwarId((int) $clanwar_result['cwID'])
-            );
-        }
-
-        return $upcoming_matches;
-
+        return self::getMatchesByFilter(
+            $queryBuilder->expr()->and(
+                $queryBuilder->expr()->eq('squadID', $squad->getSquadId()),
+                $queryBuilder->expr()->eq('active', 1),
+                $queryBuilder->expr()->gt('date', time())
+            )
+        );
     }
 
     /**
@@ -119,28 +105,42 @@ class ClanwarHandler {
      */
     public static function getRecentMatchesOfSquad(Squad $squad): array
     {
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        return self::getMatchesByFilter(
+            $queryBuilder->expr()->and(
+                $queryBuilder->expr()->eq('squadID', $squad->getSquadId()),
+                $queryBuilder->expr()->eq('active', 1),
+                $queryBuilder->expr()->lte('date', time())
+            )
+        );
+    }
+
+    /**
+     * @return array<Clanwar>
+     */
+    private static function getMatchesByFilter(CompositeExpression $expression): array
+    {
 
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder
             ->select('cwID')
             ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_CLANWARS)
-            ->where('squadID = ?', 'active = 1', 'date <= ?')
-            ->setParameter(0, $squad->getSquadId())
-            ->setParameter(1, time());
+            ->where($expression)
+            ->orderBy("date", "ASC");
 
         $clanwar_query = $queryBuilder->execute();
 
-        $upcoming_matches = array();
+        $matches = array();
 
         while ($clanwar_result = $clanwar_query->fetch())
         {
             array_push(
-                $upcoming_matches,
+                $matches,
                 self::getClanwarByClanwarId((int) $clanwar_result['cwID'])
             );
         }
 
-        return $upcoming_matches;
+        return $matches;
 
     }
 
