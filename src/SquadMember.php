@@ -25,7 +25,7 @@ class SquadMember extends DataStatus {
     private $position;
 
     /**
-     * @var \DateTime $join_date
+     * @var ?\DateTime $join_date
      */
     private $join_date;
 
@@ -71,6 +71,9 @@ class SquadMember extends DataStatus {
 
     public function getJoinDate(): \DateTime
     {
+        if (is_null($this->join_date)) {
+            return new \DateTime("now");
+        }
         return $this->join_date;
     }
 

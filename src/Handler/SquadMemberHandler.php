@@ -105,6 +105,8 @@ class SquadMemberHandler {
     private static function insertSquadMember(Squad $squad, SquadMember $member): SquadMember
     {
 
+        $is_active = $member->getIsActive() ? 1 : 0;
+
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder
             ->insert(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_SQUADS_MEMBERS)
@@ -121,8 +123,8 @@ class SquadMemberHandler {
             ->setParameter(0, $member->getUser()->getUserId())
             ->setParameter(1, $squad->getSquadId())
             ->setParameter(2, $member->getMemberPosition()->getPositionId())
-            ->setParameter(3, time())
-            ->setParameter(4, $member->getIsActive())
+            ->setParameter(3, $member->getJoinDate()->getTimestamp())
+            ->setParameter(4, $is_active)
             ->setParameter(5, $member->getSort());
 
         $queryBuilder->execute();
@@ -136,6 +138,7 @@ class SquadMemberHandler {
     private static function updateSquadMember(Squad $squad, SquadMember $member): void
     {
 
+        $is_active = $member->getIsActive() ? 1 : 0;
         $left_date = (!is_null($member->getLeftDate())) ? $member->getLeftDate()->getTimestamp() : null;
 
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
@@ -151,7 +154,7 @@ class SquadMemberHandler {
             ->setParameter(0, $member->getUser()->getUserId())
             ->setParameter(1, $squad->getSquadId())
             ->setParameter(2, $member->getMemberPosition()->getPositionId())
-            ->setParameter(3, $member->getIsActive())
+            ->setParameter(3, $is_active)
             ->setParameter(4, $left_date)
             ->setParameter(5, $member->getSort())
             ->setParameter(6, $member->getMemberId());
