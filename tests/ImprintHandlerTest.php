@@ -2,18 +2,18 @@
 
 use PHPUnit\Framework\TestCase;
 
-use webspell_ng\PrivacyPolicy;
+use webspell_ng\Imprint;
 use webspell_ng\Enums\PageEnums;
-use webspell_ng\Handler\PrivacyPolicyHandler;
+use webspell_ng\Handler\ImprintHandler;
 use webspell_ng\Utils\StringFormatterUtils;
 
-final class PrivacyPolicyHandlerTest extends TestCase
+final class ImprintHandlerTest extends TestCase
 {
 
     public function testIfDefaultPolicyIsExisting(): void
     {
 
-        $policy = PrivacyPolicyHandler::getPrivacyPolicyByPage(PageEnums::POLICY_DEFAULT);
+        $policy = ImprintHandler::getImprintByPage(PageEnums::POLICY_DEFAULT);
 
         $this->assertEquals(PageEnums::POLICY_DEFAULT, $policy->getPage(), "Page is set.");
         $this->assertGreaterThan(0, $policy->getDate()->getTimestamp(), "Date is set");
@@ -28,13 +28,13 @@ final class PrivacyPolicyHandlerTest extends TestCase
         $info = StringFormatterUtils::getRandomString(10);
         $old_date = new \DateTime("1 minute ago");
 
-        $policy = new PrivacyPolicy();
+        $policy = new Imprint();
         $policy->setPage($page);
         $policy->setInfo($info);
 
-        PrivacyPolicyHandler::savePolicy($policy);
+        ImprintHandler::saveImprint($policy);
 
-        $saved_policy = PrivacyPolicyHandler::getPrivacyPolicyByPage($page);
+        $saved_policy = ImprintHandler::getImprintByPage($page);
 
         $this->assertEquals($page, $saved_policy->getPage(), "Page is set.");
         $this->assertGreaterThan($old_date, $saved_policy->getDate(), "Date is set automatically");
@@ -44,9 +44,9 @@ final class PrivacyPolicyHandlerTest extends TestCase
 
         $saved_policy->setInfo($changed_info);
 
-        PrivacyPolicyHandler::savePolicy($saved_policy);
+        ImprintHandler::saveImprint($saved_policy);
 
-        $saved_policy = PrivacyPolicyHandler::getPrivacyPolicyByPage($page);
+        $saved_policy = ImprintHandler::getImprintByPage($page);
 
         $this->assertEquals($page, $saved_policy->getPage(), "Page is set.");
         $this->assertGreaterThan($old_date, $saved_policy->getDate(), "Date is set automatically");
@@ -57,7 +57,7 @@ final class PrivacyPolicyHandlerTest extends TestCase
     public function testIfDefaultIsReturnedIfPageIsNotSavedYet(): void
     {
 
-        $policy = PrivacyPolicyHandler::getPrivacyPolicyByPage(
+        $policy = ImprintHandler::getImprintByPage(
             StringFormatterUtils::getRandomString(10)
         );
 
@@ -72,7 +72,7 @@ final class PrivacyPolicyHandlerTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
 
-        PrivacyPolicyHandler::getPrivacyPolicyByPage("");
+        ImprintHandler::getImprintByPage("");
 
     }
 
@@ -81,10 +81,10 @@ final class PrivacyPolicyHandlerTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
 
-        $policy = new PrivacyPolicy();
-        $policy->setPage("");
+        $imprint = new Imprint();
+        $imprint->setPage("");
 
-        PrivacyPolicyHandler::savePolicy($policy);
+        ImprintHandler::saveImprint($imprint);
 
     }
 

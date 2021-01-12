@@ -821,6 +821,23 @@ VALUES
 ('default', 'To be continued ...');
 
 --
+-- Imprint
+--
+
+CREATE TABLE `ws_p40_imprint` (
+  `page` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `date` INT(11) NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `ws_p40_imprint` ADD UNIQUE KEY (`page`);
+
+INSERT INTO `ws_p40_imprint`
+(`page`, `description`)
+VALUES
+('default', 'all rights reserved');
+
+--
 -- DONE :)
 --
 

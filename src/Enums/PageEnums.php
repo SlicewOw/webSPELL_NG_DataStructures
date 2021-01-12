@@ -3,7 +3,7 @@
 namespace webspell_ng\Enums;
 
 
-class PolicyEnums {
+class PageEnums {
 
     const POLICY_DEFAULT = "default";
 

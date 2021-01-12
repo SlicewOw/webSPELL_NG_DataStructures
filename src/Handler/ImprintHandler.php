@@ -2,17 +2,17 @@
 
 namespace webspell_ng\Handler;
 
-use webspell_ng\PrivacyPolicy;
+use webspell_ng\Imprint;
 use webspell_ng\WebSpellDatabaseConnection;
 use webspell_ng\Enums\PageEnums;
 use webspell_ng\Utils\DateUtils;
 
 
-class PrivacyPolicyHandler {
+class ImprintHandler {
 
-    private const DB_TABLE_NAME_PRIVACY_POLICY = "privacy_policy";
+    private const DB_TABLE_NAME_IMPRINT = "imprint";
 
-    public static function getPrivacyPolicyByPage(string $page): PrivacyPolicy
+    public static function getImprintByPage(string $page): Imprint
     {
 
         if (empty($page)) {
@@ -22,45 +22,45 @@ class PrivacyPolicyHandler {
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder
             ->select('*')
-            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_PRIVACY_POLICY)
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_IMPRINT)
             ->where('page = ?')
             ->setParameter(0, $page);
 
-        $policy_query = $queryBuilder->execute();
-        $policy_result = $policy_query->fetch();
+        $imprint_query = $queryBuilder->execute();
+        $imprint_result = $imprint_query->fetch();
 
-        if (empty($policy_result)) {
-            return self::getPrivacyPolicyByPage(PageEnums::POLICY_DEFAULT);
+        if (empty($imprint_result)) {
+            return self::getImprintByPage(PageEnums::POLICY_DEFAULT);
         }
 
-        $policy = new PrivacyPolicy();
-        $policy->setPage($policy_result['page']);
-        $policy->setInfo($policy_result['description']);
+        $policy = new Imprint();
+        $policy->setPage($imprint_result['page']);
+        $policy->setInfo($imprint_result['description']);
         $policy->setDate(
-            DateUtils::getDateTimeByMktimeValue((int) $policy_result['date'])
+            DateUtils::getDateTimeByMktimeValue((int) $imprint_result['date'])
         );
 
         return $policy;
 
     }
 
-    public static function savePolicy(PrivacyPolicy $policy): void
+    public static function saveImprint(Imprint $imprint): void
     {
 
-        if (!self::isExistingPolicy($policy)) {
-            self::insertPolicy($policy);
+        if (!self::isExistingImprint($imprint)) {
+            self::insertImprint($imprint);
         } else {
-            self::updatePolicy($policy);
+            self::updateImprint($imprint);
         }
 
     }
 
-    public static function insertPolicy(PrivacyPolicy $policy): void
+    public static function insertImprint(Imprint $imprint): void
     {
 
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder
-            ->insert(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_PRIVACY_POLICY)
+            ->insert(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_IMPRINT)
             ->values(
                     [
                         'page' => '?',
@@ -70,8 +70,8 @@ class PrivacyPolicyHandler {
                 )
             ->setParameters(
                     [
-                        0 => $policy->getPage(),
-                        1 => $policy->getInfo(),
+                        0 => $imprint->getPage(),
+                        1 => $imprint->getInfo(),
                         2 => time()
                     ]
                 );
@@ -80,36 +80,36 @@ class PrivacyPolicyHandler {
 
     }
 
-    public static function updatePolicy(PrivacyPolicy $policy): void
+    public static function updateImprint(Imprint $imprint): void
     {
 
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder
-            ->update(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_PRIVACY_POLICY)
+            ->update(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_IMPRINT)
             ->set("description", "?")
             ->set("date", "?")
             ->where("page = ?")
-            ->setParameter(0, $policy->getInfo())
+            ->setParameter(0, $imprint->getInfo())
             ->setParameter(1, time())
-            ->setParameter(2, $policy->getPage());
+            ->setParameter(2, $imprint->getPage());
 
         $queryBuilder->execute();
 
     }
 
-    private static function isExistingPolicy(PrivacyPolicy $policy): bool
+    private static function isExistingImprint(Imprint $imprint): bool
     {
 
-        if (empty($policy->getPage())) {
+        if (empty($imprint->getPage())) {
             throw new \InvalidArgumentException("page_value_is_invalid");
         }
 
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder
             ->select('*')
-            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_PRIVACY_POLICY)
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_IMPRINT)
             ->where('page = ?')
-            ->setParameter(0, $policy->getPage());
+            ->setParameter(0, $imprint->getPage());
 
         $policy_query = $queryBuilder->execute();
         $policy_result = $policy_query->fetch();
