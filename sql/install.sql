@@ -810,15 +810,15 @@ ALTER TABLE `ws_p40_squads_members`
 CREATE TABLE `ws_p40_privacy_policy` (
   `page` varchar(255) NOT NULL,
   `description` text NOT NULL,
-  `date` INT(11) NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `date` INT(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `ws_p40_privacy_policy` ADD UNIQUE KEY (`page`);
 
 INSERT INTO `ws_p40_privacy_policy`
-(`page`, `description`)
+(`page`, `description`, `date`)
 VALUES
-('default', 'To be continued ...');
+('default', 'To be continued ...', 1610438176);
 
 --
 -- Imprint
@@ -827,15 +827,15 @@ VALUES
 CREATE TABLE `ws_p40_imprint` (
   `page` varchar(255) NOT NULL,
   `description` text NOT NULL,
-  `date` INT(11) NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `date` INT(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `ws_p40_imprint` ADD UNIQUE KEY (`page`);
 
 INSERT INTO `ws_p40_imprint`
-(`page`, `description`)
+(`page`, `description`, `date`)
 VALUES
-('default', 'all rights reserved');
+('default', 'all rights reserved', 1610438176);
 
 --
 -- DONE :)
