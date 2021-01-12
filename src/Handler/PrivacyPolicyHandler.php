@@ -44,6 +44,34 @@ class PrivacyPolicyHandler {
 
     }
 
+    /**
+     * @return array<PrivacyPolicy>
+     */
+    public static function getAllPrivacyPolicies(): array
+    {
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->select('page')
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_PRIVACY_POLICY)
+            ->orderBy("date", "ASC");
+
+        $policy_query = $queryBuilder->execute();
+
+        $policies = array();
+
+        while ($policy_result = $policy_query->fetch())
+        {
+            array_push(
+                $policies,
+                self::getPrivacyPolicyByPage($policy_result['page'])
+            );
+        }
+
+        return $policies;
+
+    }
+
     public static function savePolicy(PrivacyPolicy $policy): void
     {
 

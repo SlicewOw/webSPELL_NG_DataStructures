@@ -54,6 +54,15 @@ final class PrivacyPolicyHandlerTest extends TestCase
 
     }
 
+    public function testIfAllPoliciesAreReturned(): void
+    {
+
+        $policies = PrivacyPolicyHandler::getAllPrivacyPolicies();
+
+        $this->assertGreaterThan(1, count($policies));
+
+    }
+
     public function testIfDefaultIsReturnedIfPageIsNotSavedYet(): void
     {
 

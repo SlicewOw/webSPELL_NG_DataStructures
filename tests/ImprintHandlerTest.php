@@ -67,6 +67,15 @@ final class ImprintHandlerTest extends TestCase
 
     }
 
+    public function testIfAllImprintsAreReturned(): void
+    {
+
+        $imprints = ImprintHandler::getAllImprints();
+
+        $this->assertGreaterThan(1, count($imprints));
+
+    }
+
     public function testIfInvalidArgumentExceptionIsThrownIfPageValueIsInvalid(): void
     {
 

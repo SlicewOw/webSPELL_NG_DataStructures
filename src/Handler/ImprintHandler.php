@@ -44,6 +44,34 @@ class ImprintHandler {
 
     }
 
+    /**
+     * @return array<Imprint>
+     */
+    public static function getAllImprints(): array
+    {
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->select('page')
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_IMPRINT)
+            ->orderBy("date", "ASC");
+
+        $imprint_query = $queryBuilder->execute();
+
+        $imprints = array();
+
+        while ($imprint_result = $imprint_query->fetch())
+        {
+            array_push(
+                $imprints,
+                self::getImprintByPage($imprint_result['page'])
+            );
+        }
+
+        return $imprints;
+
+    }
+
     public static function saveImprint(Imprint $imprint): void
     {
 
