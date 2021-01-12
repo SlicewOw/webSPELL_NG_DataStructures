@@ -7,6 +7,14 @@ use webspell_ng\Utils\StringFormatterUtils;
 final class StringFormatterUtilsTest extends TestCase
 {
 
+    public function testIfStringCanBeConvertedToHtmlOutput(): void
+    {
+        $this->assertEquals(
+            '<a href="https://123.de">Link</a> test 123 ä ß',
+            StringFormatterUtils::resolveHtmlToString('&lt;a href="https://123.de"&gt;Link&lt;/a&gt; test 123 ä ß')
+        );
+    }
+
     public function testIfInputIsConverted(): void
     {
         $this->assertEquals("test 123 ä ß", StringFormatterUtils::getInput("test 123 ä ß", false));

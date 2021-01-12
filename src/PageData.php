@@ -2,6 +2,7 @@
 
 namespace webspell_ng;
 
+use webspell_ng\Utils\StringFormatterUtils;
 
 class PageData {
 
@@ -38,6 +39,11 @@ class PageData {
     public function getInfo(): string
     {
         return $this->info;
+    }
+
+    public function getFormattedInfo(): string
+    {
+        return StringFormatterUtils::resolveHtmlToString($this->info);
     }
 
     public function setDate(\DateTime $date): void

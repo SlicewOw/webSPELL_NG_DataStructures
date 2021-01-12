@@ -5,6 +5,21 @@ namespace webspell_ng\Utils;
 
 class StringFormatterUtils {
 
+    public static function resolveHtmlToString(string $input_string): string
+    {
+
+        $output_string = nl2br($input_string);
+        $output_string = htmlspecialchars_decode($output_string, ENT_QUOTES);
+        return str_replace(
+            array('&lt;', '&gt;'),
+            array('<', '>'),
+            $output_string
+        );
+
+        return $output_string;
+
+    }
+
     public static function getInput(string $input_string, bool $onlyCharAllowed=false): string
     {
 
