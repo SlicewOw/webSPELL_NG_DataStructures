@@ -804,6 +804,23 @@ ALTER TABLE `ws_p40_squads_members`
   ADD CONSTRAINT `FK_SquadsMembers_UserId` FOREIGN KEY (`userID`) REFERENCES `ws_p40_user` (`userID`) ON DELETE CASCADE;
 
 --
+-- Privacy policy
+--
+
+CREATE TABLE `ws_p40_privacy_policy` (
+  `page` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `date` INT(11) NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `ws_p40_privacy_policy` ADD UNIQUE KEY (`page`);
+
+INSERT INTO `ws_p40_privacy_policy`
+(`page`, `description`)
+VALUES
+('default', 'To be continued ...');
+
+--
 -- DONE :)
 --
 
