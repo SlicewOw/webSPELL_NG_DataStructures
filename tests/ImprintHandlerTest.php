@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-use webspell_ng\Imprint;
+use webspell_ng\PageData;
 use webspell_ng\Enums\PageEnums;
 use webspell_ng\Handler\ImprintHandler;
 use webspell_ng\Utils\StringFormatterUtils;
@@ -28,7 +28,7 @@ final class ImprintHandlerTest extends TestCase
         $info = StringFormatterUtils::getRandomString(10);
         $old_date = new \DateTime("1 minute ago");
 
-        $policy = new Imprint();
+        $policy = new PageData();
         $policy->setPage($page);
         $policy->setInfo($info);
 
@@ -90,7 +90,7 @@ final class ImprintHandlerTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
 
-        $imprint = new Imprint();
+        $imprint = new PageData();
         $imprint->setPage("");
 
         ImprintHandler::saveImprint($imprint);

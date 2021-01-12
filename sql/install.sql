@@ -838,6 +838,23 @@ VALUES
 ('default', 'all rights reserved', 1610438176);
 
 --
+-- Imprint
+--
+
+CREATE TABLE `ws_p40_about` (
+  `page` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `date` INT(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `ws_p40_about` ADD UNIQUE KEY (`page`);
+
+INSERT INTO `ws_p40_about`
+(`page`, `description`, `date`)
+VALUES
+('default', 'To be determined ...', 1610438176);
+
+--
 -- DONE :)
 --
 

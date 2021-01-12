@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-use webspell_ng\PrivacyPolicy;
+use webspell_ng\PageData;
 use webspell_ng\Enums\PageEnums;
 use webspell_ng\Handler\PrivacyPolicyHandler;
 use webspell_ng\Utils\StringFormatterUtils;
@@ -28,7 +28,7 @@ final class PrivacyPolicyHandlerTest extends TestCase
         $info = StringFormatterUtils::getRandomString(10);
         $old_date = new \DateTime("1 minute ago");
 
-        $policy = new PrivacyPolicy();
+        $policy = new PageData();
         $policy->setPage($page);
         $policy->setInfo($info);
 
@@ -90,7 +90,7 @@ final class PrivacyPolicyHandlerTest extends TestCase
 
         $this->expectException(InvalidArgumentException::class);
 
-        $policy = new PrivacyPolicy();
+        $policy = new PageData();
         $policy->setPage("");
 
         PrivacyPolicyHandler::savePolicy($policy);

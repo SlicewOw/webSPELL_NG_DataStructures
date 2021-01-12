@@ -2,15 +2,15 @@
 
 use PHPUnit\Framework\TestCase;
 
-use webspell_ng\Imprint;
+use webspell_ng\PageData;
 
-final class ImprintTest extends TestCase
+final class PageDataTest extends TestCase
 {
 
     public function testIfDefaultDateIsReturned(): void
     {
 
-        $imprint = new Imprint();
+        $imprint = new PageData();
 
         $this->assertGreaterThan(new \DateTime("1 minute ago"), $imprint->getDate());
 

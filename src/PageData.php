@@ -3,7 +3,7 @@
 namespace webspell_ng;
 
 
-class PrivacyPolicy {
+class PageData {
 
     /**
      * @var string $page
