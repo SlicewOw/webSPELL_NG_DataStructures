@@ -2,10 +2,11 @@
 
 namespace webspell_ng\Handler;
 
-use \webspell_ng\Map;
-use \webspell_ng\WebSpellDatabaseConnection;
-use \webspell_ng\Handler\GameHandler;
-use \webspell_ng\Utils\ValidationUtils;
+use webspell_ng\Game;
+use webspell_ng\Map;
+use webspell_ng\WebSpellDatabaseConnection;
+use webspell_ng\Handler\GameHandler;
+use webspell_ng\Utils\ValidationUtils;
 
 
 class MapHandler {
@@ -42,6 +43,36 @@ class MapHandler {
         );
 
         return $clanwar_map;
+
+    }
+
+    /**
+     * @return array<Map>
+     */
+    public static function getMapsByGame(Game $game): array
+    {
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->select('mapID')
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_CLANWARS_MAPS)
+            ->where('gameID = ?')
+            ->setParameter(0, $game->getGameId())
+            ->orderBy("name", "ASC");
+
+        $map_query = $queryBuilder->execute();
+
+        $maps = array();
+
+        while ($map_result = $map_query->fetch())
+        {
+            array_push(
+                $maps,
+                self::getMapByMapId((int) $map_result['mapID'])
+            );
+        }
+
+        return $maps;
 
     }
 

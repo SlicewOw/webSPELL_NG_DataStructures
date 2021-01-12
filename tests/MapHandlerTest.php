@@ -2,9 +2,9 @@
 
 use PHPUnit\Framework\TestCase;
 
-use \webspell_ng\Game;
-use \webspell_ng\Map;
-use \webspell_ng\Handler\MapHandler;
+use webspell_ng\Game;
+use webspell_ng\Map;
+use webspell_ng\Handler\MapHandler;
 
 
 final class MapHandlerTest extends TestCase
@@ -21,6 +21,10 @@ final class MapHandlerTest extends TestCase
         $this->assertNotEmpty($map->getIcon(), "Map icon is not empty.");
         $this->assertInstanceOf(Game::class, $map->getGame(), "Instance is of class 'Game'");
         $this->assertNotEmpty($map->getGame()->getName(), "Game name is not empty.");
+
+        $maps = MapHandler::getMapsByGame($map->getGame());
+
+        $this->assertGreaterThan(0, count($maps), "Maps are returned.");
 
     }
 
