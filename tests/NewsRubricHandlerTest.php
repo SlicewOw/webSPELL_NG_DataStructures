@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\Exception\Call\UnexpectedCallException;
+
 use webspell_ng\NewsRubric;
 use webspell_ng\Handler\NewsRubricHandler;
 use webspell_ng\Utils\StringFormatterUtils;

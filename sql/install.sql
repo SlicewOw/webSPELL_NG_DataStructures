@@ -869,6 +869,19 @@ ALTER TABLE `ws_p40_news_rubrics` ADD PRIMARY KEY (`rubricID`);
 ALTER TABLE `ws_p40_news_rubrics` MODIFY `rubricID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- News languages
+--
+
+CREATE TABLE `ws_p40_news_languages` (
+  `langID` int(11) NOT NULL,
+  `language` varchar(255) NOT NULL,
+  `lang` char(2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `ws_p40_news_languages` ADD PRIMARY KEY (`langID`);
+ALTER TABLE `ws_p40_news_languages` MODIFY `langID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- DONE :)
 --
 
