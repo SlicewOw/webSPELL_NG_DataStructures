@@ -855,6 +855,20 @@ VALUES
 ('default', 'To be determined ...', 1610438176);
 
 --
+-- News rubrics
+--
+
+CREATE TABLE `ws_p40_news_rubrics` (
+  `rubricID` int(11) NOT NULL,
+  `rubric` varchar(255) NOT NULL,
+  `pic` varchar(255) DEFAULT NULL,
+  `active` int(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `ws_p40_news_rubrics` ADD PRIMARY KEY (`rubricID`);
+ALTER TABLE `ws_p40_news_rubrics` MODIFY `rubricID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- DONE :)
 --
 
