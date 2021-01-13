@@ -5,11 +5,12 @@ namespace webspell_ng\Handler;
 use Respect\Validation\Validator;
 
 use webspell_ng\News;
+use webspell_ng\WebSpellDatabaseConnection;
 use webspell_ng\Handler\NewsContentHandler;
 use webspell_ng\Handler\NewsRubricHandler;
+use webspell_ng\Handler\NewsSourceHandler;
 use webspell_ng\Handler\UserHandler;
 use webspell_ng\Utils\DateUtils;
-use webspell_ng\WebSpellDatabaseConnection;
 
 
 class NewsHandler {
@@ -54,8 +55,13 @@ class NewsHandler {
         $news->setRubric(
             NewsRubricHandler::getRubricByRubricId((int) $news_result['rubricID'])
         );
+
         $news->setContent(
             NewsContentHandler::getContentsOfNews($news)
+        );
+
+        $news->setSources(
+            NewsSourceHandler::getSourcesOfNews($news)
         );
 
         return $news;
@@ -74,6 +80,11 @@ class NewsHandler {
         $news_contents = $news->getContent();
         foreach ($news_contents as $news_content) {
             NewsContentHandler::saveContent($news, $news_content);
+        }
+
+        $news_sources = $news->getSources();
+        foreach ($news_sources as $news_source) {
+            NewsSourceHandler::saveSource($news, $news_source);
         }
 
         return self::getNewsByNewsId($news->getNewsId());

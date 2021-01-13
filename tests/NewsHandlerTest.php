@@ -6,10 +6,12 @@ use webspell_ng\News;
 use webspell_ng\NewsContent;
 use webspell_ng\NewsLanguage;
 use webspell_ng\NewsRubric;
+use webspell_ng\NewsSource;
 use webspell_ng\User;
 use webspell_ng\Handler\NewsHandler;
 use webspell_ng\Handler\NewsLanguageHandler;
 use webspell_ng\Handler\NewsRubricHandler;
+use webspell_ng\Handler\NewsSourceHandler;
 use webspell_ng\Handler\UserHandler;
 use webspell_ng\Utils\StringFormatterUtils;
 
@@ -68,10 +70,15 @@ final class NewsHandlerTest extends TestCase
         $new_content->setContent($news_text);
         $new_content->setLanguage(self::$language);
 
+        $new_source = new NewsSource();
+        $new_source->setName("myRisk Gaming e.V.");
+        $new_source->setHomepage("https://gaming.myrisk-ev.de");
+
         $new_news = new News();
         $new_news->setWriter(self::$user);
         $new_news->setRubric(self::$first_rubric);
         $new_news->addContent($new_content);
+        $new_news->addSource($new_source);
 
         $saved_news = NewsHandler::saveNews($new_news);
 
@@ -91,6 +98,16 @@ final class NewsHandlerTest extends TestCase
         $this->assertEquals($news_text, $news_content->getContent(), "Content is set.");
         $this->assertEquals(self::$language->getLanguage(), $news_content->getLanguage()->getLanguage(), "Content language is set.");
 
+        $news_sources = $saved_news->getSources();
+
+        $this->assertEquals(1, count($news_sources), "News source is saved.");
+
+        $news_source = $news_sources[0];
+
+        $this->assertGreaterThan(0, $news_source->getSourceId(), "Source ID is set.");
+        $this->assertEquals("myRisk Gaming e.V.", $news_source->getName(), "Source name is set.");
+        $this->assertEquals("https://gaming.myrisk-ev.de", $news_source->getHomepage(), "Source homepage is set.");
+
         $new_news->setRubric(self::$second_rubric);
 
         $update_news = NewsHandler::saveNews($new_news);
@@ -100,6 +117,8 @@ final class NewsHandlerTest extends TestCase
         $this->assertEquals(self::$user->getUserId(), $update_news->getWriter()->getUserId(), "Writer is set.");
         $this->assertFalse($update_news->isPublished(), "News is not published yet.");
         $this->assertFalse($update_news->isInternal(), "News is not an internal news.");
+        $this->assertEquals(1, count($update_news->getContent()), "News content is saved.");
+        $this->assertEquals(1, count($update_news->getSources()), "News source is saved.");
 
     }
 

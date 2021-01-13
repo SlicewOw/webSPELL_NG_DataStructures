@@ -921,6 +921,20 @@ CREATE TABLE `ws_p40_news_contents` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
+-- News sources
+--
+
+CREATE TABLE `ws_p40_news_sources` (
+  `sourceID` int(11) NOT NULL,
+  `newsID` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `homepage` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `ws_p40_news_sources` ADD PRIMARY KEY (`sourceID`);
+ALTER TABLE `ws_p40_news_sources` MODIFY `sourceID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- DONE :)
 --
 

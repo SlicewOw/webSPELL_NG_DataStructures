@@ -4,6 +4,7 @@ namespace webspell_ng;
 
 use webspell_ng\NewsContent;
 use webspell_ng\NewsRubric;
+use webspell_ng\NewsSourcec;
 use webspell_ng\User;
 
 
@@ -28,6 +29,11 @@ class News {
      * @var array<NewsContent> $content
      */
     private $content = array();
+
+    /**
+     * @var array<NewsSource> $sources
+     */
+    private $sources = array();
 
     /**
      * @var bool $published
@@ -96,6 +102,30 @@ class News {
     public function getContent(): array
     {
         return $this->content;
+    }
+
+    /**
+     * @param array<NewsSource> $sources
+     */
+    public function setSources(array $sources): void
+    {
+        $this->sources = $sources;
+    }
+
+    public function addSource(NewsSource $source): void
+    {
+        array_push(
+            $this->sources,
+            $source
+        );
+    }
+
+    /**
+     * @return array<NewsSource>
+     */
+    public function getSources(): array
+    {
+        return $this->sources;
     }
 
     public function setIsPublished(bool $published): void
