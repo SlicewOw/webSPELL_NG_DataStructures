@@ -120,7 +120,7 @@ class NewsLanguageHandler {
             ->where('langID = ?')
             ->setParameter(0, $language->getLanguage())
             ->setParameter(1, $language->getShortcut())
-            ->setParameter(3, $language->getLanguageId());
+            ->setParameter(2, $language->getLanguageId());
 
         $queryBuilder->execute();
 

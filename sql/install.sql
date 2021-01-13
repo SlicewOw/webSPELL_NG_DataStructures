@@ -880,6 +880,45 @@ CREATE TABLE `ws_p40_news_languages` (
 
 ALTER TABLE `ws_p40_news_languages` ADD PRIMARY KEY (`langID`);
 ALTER TABLE `ws_p40_news_languages` MODIFY `langID` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `ws_p40_news_languages` ADD UNIQUE(`lang`);
+
+INSERT INTO `ws_p40_news_languages`
+(`language`, `lang`)
+VALUES
+('Deutsch', 'de'),
+('English', 'en'),
+('Francais', 'fr');
+
+--
+-- News
+--
+
+CREATE TABLE `ws_p40_news` (
+  `newsID` int(11) NOT NULL,
+  `date` int(11) NOT NULL DEFAULT 0,
+  `rubricID` int(11) NOT NULL DEFAULT 0,
+  `writer` int(11) NOT NULL,
+  `cwID` int(11) DEFAULT NULL,
+  `squadID` int(11) DEFAULT NULL,
+  `eventID` int(11) DEFAULT NULL,
+  `comments` int(1) NOT NULL DEFAULT 1,
+  `published` int(1) NOT NULL DEFAULT 0,
+  `internal` int(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `ws_p40_news` ADD PRIMARY KEY (`newsID`);
+ALTER TABLE `ws_p40_news` MODIFY `newsID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- News contents
+--
+
+CREATE TABLE `ws_p40_news_contents` (
+  `newsID` int(11) NOT NULL,
+  `language` varchar(2) NOT NULL,
+  `headline` varchar(255) NOT NULL,
+  `content` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- DONE :)
