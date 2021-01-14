@@ -147,10 +147,42 @@ CREATE TABLE `ws_p40_user_log` (
   `date` int(11) NOT NULL,
   `parent_id` int(11) NOT NULL,
   `action` varchar(255) COLLATE latin1_german1_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_german1_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `ws_p40_user_log` ADD KEY `FK_UserLog_UserId` (`userID`);
 ALTER TABLE `ws_p40_user_log` ADD CONSTRAINT `FK_UserLog_UserId` FOREIGN KEY (`userID`) REFERENCES `ws_p40_user` (`userID`) ON DELETE CASCADE;
+
+--
+-- User groups
+--
+
+CREATE TABLE `ws_p40_user_groups` (
+  `userID` int(11) NOT NULL DEFAULT 0,
+  `news` int(11) NOT NULL DEFAULT 0,
+  `news_writer` int(11) NOT NULL DEFAULT 0,
+  `newsletter` int(11) NOT NULL DEFAULT 0,
+  `polls` int(11) NOT NULL DEFAULT 0,
+  `forum` int(11) NOT NULL DEFAULT 0,
+  `moderator` int(11) NOT NULL DEFAULT 0,
+  `clanwars` int(11) NOT NULL DEFAULT 0,
+  `feedback` int(11) NOT NULL DEFAULT 0,
+  `user` int(11) NOT NULL DEFAULT 0,
+  `page` int(11) NOT NULL DEFAULT 0,
+  `files` int(11) NOT NULL DEFAULT 0,
+  `cash` int(11) NOT NULL DEFAULT 0,
+  `gallery` int(11) NOT NULL DEFAULT 0,
+  `cup` int(11) NOT NULL DEFAULT 0,
+  `radio` int(11) NOT NULL DEFAULT 0,
+  `tv` int(11) NOT NULL DEFAULT 0,
+  `dev` int(11) NOT NULL DEFAULT 0,
+  `super` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `ws_p40_user_groups` ADD UNIQUE KEY `userID` (`userID`);
+
+INSERT INTO `ws_p40_user_groups` (`userID`, `super`) VALUES (1, 1);
+
+ALTER TABLE `ws_p40_user_groups` ADD CONSTRAINT `FK_UserGroups_UserId` FOREIGN KEY (`userID`) REFERENCES `ws_p40_user` (`userID`) ON DELETE CASCADE;
 
 --
 -- Settings
