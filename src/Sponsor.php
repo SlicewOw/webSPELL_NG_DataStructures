@@ -7,7 +7,7 @@ use Respect\Validation\Validator;
 class Sponsor {
 
     /**
-     * @var int $sponsor_id
+     * @var ?int $sponsor_id
      */
     private $sponsor_id;
 
@@ -61,7 +61,7 @@ class Sponsor {
         $this->sponsor_id = $sponsor_id;
     }
 
-    public function getSponsorId(): int
+    public function getSponsorId(): ?int
     {
         return $this->sponsor_id;
     }

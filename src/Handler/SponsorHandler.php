@@ -11,6 +11,8 @@ use webspell_ng\Utils\DateUtils;
 
 class SponsorHandler {
 
+    private const DB_TABLE_NAME_SPONSORS = "sponsors";
+
     public static function getSponsorBySponsorId(int $sponsor_id): Sponsor
     {
 
@@ -21,7 +23,7 @@ class SponsorHandler {
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder
             ->select('*')
-            ->from(WebSpellDatabaseConnection::getTablePrefix() . 'sponsors')
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_SPONSORS)
             ->where('sponsorID = ?')
             ->setParameter(0, $sponsor_id);
 
@@ -35,7 +37,7 @@ class SponsorHandler {
         $sponsor = new Sponsor();
         $sponsor->setSponsorId($sponsor_result['sponsorID']);
         $sponsor->setName($sponsor_result['name']);
-        $sponsor->setHomepage($sponsor_result['url']);
+        $sponsor->setHomepage($sponsor_result['homepage']);
         $sponsor->setInfo($sponsor_result['info']);
         $sponsor->setBanner($sponsor_result['banner']);
         $sponsor->setBannerSmall($sponsor_result['banner_small']);
@@ -53,13 +55,26 @@ class SponsorHandler {
     public static function saveSponsor(Sponsor $sponsor): Sponsor
     {
 
+        if (is_null($sponsor->getSponsorId())) {
+            $sponsor = self::insertSponsor($sponsor);
+        } else {
+            self::updateSponsor($sponsor);
+        }
+
+        return self::getSponsorBySponsorId($sponsor->getSponsorId());
+
+    }
+
+    public static function insertSponsor(Sponsor $sponsor): Sponsor
+    {
+
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder
-            ->insert(WebSpellDatabaseConnection::getTablePrefix() . 'sponsors')
+            ->insert(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_SPONSORS)
             ->values(
                     [
                         'name' => '?',
-                        'url' => '?',
+                        'homepage' => '?',
                         'info' => '?',
                         'banner' => '?',
                         'banner_small' => '?',
@@ -90,6 +105,35 @@ class SponsorHandler {
         );
 
         return $sponsor;
+
+    }
+
+    public static function updateSponsor(Sponsor $sponsor): void
+    {
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->update(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_SPONSORS)
+            ->set('name', '?')
+            ->set('homepage', '?')
+            ->set('banner', '?')
+            ->set('banner_small', '?')
+            ->set('date', '?')
+            ->set('displayed', '?')
+            ->set('mainsponsor', '?')
+            ->set('sort', '?')
+            ->where('sponsorID = ?')
+            ->setParameter(0, $sponsor->getName())
+            ->setParameter(1, $sponsor->getHomepage())
+            ->setParameter(2, $sponsor->getBanner())
+            ->setParameter(3, $sponsor->getBannerSmall())
+            ->setParameter(4, $sponsor->getDate()->getTimestamp())
+            ->setParameter(5, $sponsor->isDisplayed() ? 1 : 0)
+            ->setParameter(6, $sponsor->isMainsponsor() ? 1 : 0)
+            ->setParameter(7, $sponsor->getSort())
+            ->setParameter(8, $sponsor->getSponsorId());
+
+        $queryBuilder->execute();
 
     }
 
