@@ -967,6 +967,24 @@ ALTER TABLE `ws_p40_news_sources` ADD PRIMARY KEY (`sourceID`);
 ALTER TABLE `ws_p40_news_sources` MODIFY `sourceID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- Partners
+--
+
+CREATE TABLE `ws_p40_partners` (
+  `partnerID` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `homepage` varchar(255) DEFAULT NULL,
+  `banner` varchar(255) DEFAULT NULL,
+  `date` int(11) NOT NULL,
+  `sort` int(11) NOT NULL DEFAULT 1,
+  `displayed` int(1) NOT NULL DEFAULT 1,
+  `hits` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `ws_p40_partners` ADD PRIMARY KEY (`partnerID`);
+ALTER TABLE `ws_p40_partners` MODIFY `partnerID` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- DONE :)
 --
 
