@@ -21,6 +21,11 @@ class Squad extends DataStatus {
     private $date;
 
     /**
+     * @var ?\DateTime $date_deleted
+     */
+    private $date_deleted;
+
+    /**
      * @var int $rubric
      */
     private $rubric = SquadEnums::SQUAD_RUBRIC_COMMUNITY;
@@ -29,6 +34,11 @@ class Squad extends DataStatus {
      * @var bool $is_game_squad
      */
     private $is_game_squad = true;
+
+    /**
+     * @var bool $is_console_squad
+     */
+    private $is_console_squad = false;
 
     /**
      * @var array<SquadMember> $members
@@ -70,6 +80,11 @@ class Squad extends DataStatus {
         $this->date = $date;
     }
 
+    public function setDateOfDeletion(?\DateTime $date_deleted): void
+    {
+        $this->date_deleted = $date_deleted;
+    }
+
     public function setRubric(int $rubric): void
     {
         $this->rubric = $rubric;
@@ -78,6 +93,11 @@ class Squad extends DataStatus {
     public function setIsGameSquad(bool $is_game_squad): void
     {
         $this->is_game_squad = $is_game_squad;
+    }
+
+    public function setIsConsoleSquad(bool $is_console_squad): void
+    {
+        $this->is_console_squad = $is_console_squad;
     }
 
     /**
@@ -133,6 +153,11 @@ class Squad extends DataStatus {
         return $this->is_game_squad;
     }
 
+    public function getIsConsoleSquad(): bool
+    {
+        return $this->is_console_squad;
+    }
+
     /**
      * @return array<SquadMember>
      */
@@ -144,6 +169,11 @@ class Squad extends DataStatus {
     public function getDate(): \DateTime
     {
         return $this->date;
+    }
+
+    public function getDateOfDeletion(): ?\DateTime
+    {
+        return $this->date_deleted;
     }
 
     public function getGame(): ?Game

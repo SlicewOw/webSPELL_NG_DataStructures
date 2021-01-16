@@ -320,6 +320,10 @@ final class ClanwarHandlerTest extends TestCase
 
         $this->assertEquals($future_date->getTimestamp(), $upcoming_clanwar->getDate()->getTimestamp(), "Timestamp of clanwar is set.");
 
+        foreach ($upcoming_matches as $upcoming_match) {
+            $this->assertEquals(self::$first_squad->getSquadId(), $upcoming_match->getSquad()->getSquadId(), "Upcoming match squad is expected.");
+        }
+
     }
 
     public function testIfInvalidArgumentExceptionIsThrownIfClanwarIdIsInvalid(): void

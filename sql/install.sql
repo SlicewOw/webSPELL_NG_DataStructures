@@ -636,14 +636,16 @@ CREATE TABLE `ws_p40_squads` (
   `date` int(11) NOT NULL,
   `gamesquad` int(11) NOT NULL DEFAULT 1,
   `rubric` int(3) NOT NULL DEFAULT 3,
-  `gameID` int(11) NOT NULL,
+  `console` int(1) NOT NULL DEFAULT 0,
+  `gameID` int(11) DEFAULT NULL,
   `icon` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `icon_small` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `info` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `sort` int(11) NOT NULL DEFAULT 0,
   `hits` int(11) NOT NULL DEFAULT 0,
   `active` int(1) NOT NULL DEFAULT 1,
-  `deleted` int(1) NOT NULL DEFAULT 0
+  `deleted` int(1) NOT NULL DEFAULT 0,
+  `date_deleted` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `ws_p40_squads` ADD PRIMARY KEY (`squadID`);

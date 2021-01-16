@@ -34,26 +34,38 @@ class SquadHandler {
             throw new \InvalidArgumentException('unknown_squad');
         }
 
-        $is_active = ($squad_result['active'] == 1);
         $is_gaming_squad = ($squad_result['gamesquad'] == 1);
 
         $squad = new Squad();
         $squad->setSquadId($squad_id);
         $squad->setIsGameSquad($is_gaming_squad);
+        $squad->setIsConsoleSquad(
+            ($squad_result['console'] == 1)
+        );
         $squad->setName($squad_result['name']);
         $squad->setRubric($squad_result['rubric']);
         $squad->setIcon($squad_result['icon']);
         $squad->setIconSmall($squad_result['icon_small']);
-        $squad->setIsActive($is_active);
+        $squad->setIsActive(
+            ($squad_result['active'] == 1)
+        );
         $squad->setSort($squad_result['sort']);
         $squad->setHits($squad_result['hits']);
-        $squad->setIsDeleted($squad_result['deleted']);
+        $squad->setIsDeleted(
+            ($squad_result['deleted'] == 1)
+        );
         $squad->setDate(
             DateUtils::getDateTimeByMktimeValue($squad_result['date'])
         );
         $squad->setMembers(
             SquadMemberHandler::getMembersOfSquad($squad_id)
         );
+
+        if (!is_null($squad_result['date_deleted'])) {
+            $squad->setDateOfDeletion(
+                DateUtils::getDateTimeByMktimeValue((int) $squad_result['date_deleted'])
+            );
+        }
 
         if (!is_null($squad_result['info'])) {
             $squad->setInfo($squad_result['info']);
@@ -78,7 +90,7 @@ class SquadHandler {
             self::updateSquad($squad);
         }
 
-        return $squad;
+        return self::getSquadBySquadId($squad->getSquadId());
 
     }
 
@@ -92,24 +104,28 @@ class SquadHandler {
                 array(
                     'date' => '?',
                     'gamesquad' => '?',
+                    'console' => '?',
                     'gameID' => '?',
                     'name' => '?',
                     'icon' => '?',
                     'icon_small' => '?',
                     'info' => '?',
                     'sort' => '?',
-                    'rubric' => '?'
+                    'rubric' => '?',
+                    'active' => '?'
                 )
             )
             ->setParameter(0, $squad->getDate()->getTimestamp())
             ->setParameter(1, $squad->getIsGameSquad() ? 1 : 0)
-            ->setParameter(2, $squad->getGame()->getGameId())
-            ->setParameter(3, $squad->getName())
-            ->setParameter(4, $squad->getIcon())
-            ->setParameter(5, $squad->getIconSmall())
-            ->setParameter(6, $squad->getInfo())
-            ->setParameter(7, $squad->getSort())
-            ->setParameter(8, $squad->getRubric());
+            ->setParameter(2, $squad->getIsConsoleSquad() ? 1 : 0)
+            ->setParameter(3, $squad->getGame()->getGameId())
+            ->setParameter(4, $squad->getName())
+            ->setParameter(5, $squad->getIcon())
+            ->setParameter(6, $squad->getIconSmall())
+            ->setParameter(7, $squad->getInfo())
+            ->setParameter(8, $squad->getSort())
+            ->setParameter(9, $squad->getRubric())
+            ->setParameter(10, $squad->getIsActive() ? 1 : 0);
 
         $queryBuilder->execute();
 
@@ -122,10 +138,13 @@ class SquadHandler {
     private static function updateSquad(Squad $squad): void
     {
 
+        $deletion_date = !is_null($squad->getDateOfDeletion()) ? $squad->getDateOfDeletion()->getTimestamp() : null;
+
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder
             ->update(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_SQUADS)
             ->set('gamesquad', '?')
+            ->set('console', '?')
             ->set('gameID', '?')
             ->set('name', '?')
             ->set('icon', '?')
@@ -133,18 +152,36 @@ class SquadHandler {
             ->set('info', '?')
             ->set('sort', '?')
             ->set('rubric', '?')
+            ->set('active', '?')
+            ->set('date_deleted', '?')
             ->where('squadID = ?')
             ->setParameter(0, $squad->getIsGameSquad() ? 1 : 0)
-            ->setParameter(1, $squad->getGame()->getGameId())
-            ->setParameter(2, $squad->getName())
-            ->setParameter(3, $squad->getIcon())
-            ->setParameter(4, $squad->getIconSmall())
-            ->setParameter(5, $squad->getInfo())
-            ->setParameter(6, $squad->getSort())
-            ->setParameter(7, $squad->getRubric())
-            ->setParameter(8, $squad->getSquadId());
+            ->setParameter(1, $squad->getIsConsoleSquad() ? 1 : 0)
+            ->setParameter(2, $squad->getGame()->getGameId())
+            ->setParameter(3, $squad->getName())
+            ->setParameter(4, $squad->getIcon())
+            ->setParameter(5, $squad->getIconSmall())
+            ->setParameter(6, $squad->getInfo())
+            ->setParameter(7, $squad->getSort())
+            ->setParameter(8, $squad->getRubric())
+            ->setParameter(9, $squad->getIsActive() ? 1 : 0)
+            ->setParameter(10, $deletion_date)
+            ->setParameter(11, $squad->getSquadId());
 
         $queryBuilder->execute();
+
+    }
+
+    public static function deleteSquad(Squad $squad): void
+    {
+
+        $squad->setIsActive(false);
+        $squad->setIsDeleted(true);
+        $squad->setDateOfDeletion(
+            new \DateTime("now")
+        );
+
+        self::updateSquad($squad);
 
     }
 
