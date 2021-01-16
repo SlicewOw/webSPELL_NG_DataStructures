@@ -40,6 +40,7 @@ final class SponsorHandlerTest extends TestCase
         $this->assertFalse($saved_sponsor->isMainsponsor(), "Sponsor is not a mainsponsor.");
         $this->assertEquals($date->getTimestamp(), $saved_sponsor->getDate()->getTimestamp(), "Sponsor date is saved.");
         $this->assertEquals($sort, $saved_sponsor->getSort(), "Sponsor sort is saved.");
+        $this->assertGreaterThan(0, count(SponsorHandler::getAllSponsors()), "Sponsor is returned.");
 
         $changed_sponsor_name = "Test Sponsor " . StringFormatterUtils::getRandomString(10);
 

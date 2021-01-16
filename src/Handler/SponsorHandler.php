@@ -41,14 +41,46 @@ class SponsorHandler {
         $sponsor->setInfo($sponsor_result['info']);
         $sponsor->setBanner($sponsor_result['banner']);
         $sponsor->setBannerSmall($sponsor_result['banner_small']);
-        $sponsor->setIsDisplayed($sponsor_result['displayed']);
-        $sponsor->setIsMainsponsor($sponsor_result['mainsponsor']);
+        $sponsor->setIsDisplayed(
+            ($sponsor_result['displayed'] == 1)
+        );
+        $sponsor->setIsMainsponsor(
+            ($sponsor_result['mainsponsor'] == 1)
+        );
         $sponsor->setDate(
             DateUtils::getDateTimeByMktimeValue($sponsor_result['date'])
         );
         $sponsor->setSort($sponsor_result['sort']);
 
         return $sponsor;
+
+    }
+
+    /**
+     * @return array<Sponsor>
+     */
+    public static function getAllSponsors(): array
+    {
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->select('sponsorID')
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_SPONSORS)
+            ->where('displayed = 1')
+            ->orderBy("mainsponsor", "DESC");
+
+        $sponsor_query = $queryBuilder->execute();
+
+        $sponsors = array();
+        while ($sponsor_result = $sponsor_query->fetch())
+        {
+            array_push(
+                $sponsors,
+                self::getSponsorBySponsorId((int) $sponsor_result['sponsorID'])
+            );
+        }
+
+        return $sponsors;
 
     }
 
