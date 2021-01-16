@@ -52,6 +52,34 @@ class PartnerHandler {
 
     }
 
+    /**
+     * @return array<Partner>
+     */
+    public static function getAllPartners(): array
+    {
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->select('partnerID')
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_PARTNERS)
+            ->where('displayed = 1')
+            ->orderBy("sort", "ASC");
+
+        $partner_query = $queryBuilder->execute();
+
+        $partners = array();
+        while ($partner_result = $partner_query->fetch())
+        {
+            array_push(
+                $partners,
+                self::getPartnerByPartnerId((int) $partner_result['partnerID'])
+            );
+        }
+
+        return $partners;
+
+    }
+
     public static function savePartner(Partner $partner): Partner
     {
 

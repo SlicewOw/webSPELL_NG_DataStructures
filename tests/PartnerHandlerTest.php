@@ -35,6 +35,7 @@ final class PartnerHandlerTest extends TestCase
         $this->assertEquals($date->getTimestamp(), $saved_partner->getDate()->getTimestamp(), "Partner date is saved.");
         $this->assertEquals($sort, $saved_partner->getSort(), "Partner sort is saved.");
         $this->assertEquals(0, $saved_partner->getHits(), "Partner hits is saved.");
+        $this->assertGreaterThan(0, count(PartnerHandler::getAllPartners()), "Partner is returned.");
 
         $changed_sponsor_name = "Test Partner " . StringFormatterUtils::getRandomString(10);
 
