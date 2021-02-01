@@ -88,7 +88,21 @@ class ClanwarHandler {
     /**
      * @return array<Clanwar>
      */
-    public static function getUpcomingMatchesOfSquad(Squad $squad): array
+    public static function getAllMatchesOfSquad(Squad $squad): array
+    {
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        return self::getMatchesByFilter(
+            $queryBuilder->expr()->and(
+                $queryBuilder->expr()->eq('squadID', $squad->getSquadId()),
+                $queryBuilder->expr()->eq('active', 1)
+            )
+        );
+    }
+
+    /**
+     * @return array<Clanwar>
+     */
+    public static function getUpcomingMatchesOfSquad(Squad $squad, int $limit = -1, int $start_value = -1): array
     {
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         return self::getMatchesByFilter(
@@ -96,14 +110,16 @@ class ClanwarHandler {
                 $queryBuilder->expr()->eq('squadID', $squad->getSquadId()),
                 $queryBuilder->expr()->eq('active', 1),
                 $queryBuilder->expr()->gt('date', time())
-            )
+            ),
+            $limit,
+            $start_value
         );
     }
 
     /**
      * @return array<Clanwar>
      */
-    public static function getRecentMatchesOfSquad(Squad $squad): array
+    public static function getRecentMatchesOfSquad(Squad $squad, int $limit = -1, int $start_value = -1): array
     {
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         return self::getMatchesByFilter(
@@ -111,14 +127,16 @@ class ClanwarHandler {
                 $queryBuilder->expr()->eq('squadID', $squad->getSquadId()),
                 $queryBuilder->expr()->eq('active', 1),
                 $queryBuilder->expr()->lte('date', time())
-            )
+            ),
+            $limit,
+            $start_value
         );
     }
 
     /**
      * @return array<Clanwar>
      */
-    private static function getMatchesByFilter(CompositeExpression $expression): array
+    private static function getMatchesByFilter(CompositeExpression $expression, int $limit = -1, int $start_value = -1): array
     {
 
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
@@ -127,6 +145,14 @@ class ClanwarHandler {
             ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_CLANWARS)
             ->where($expression)
             ->orderBy("date", "ASC");
+
+        if ($limit > 0) {
+            $queryBuilder->setMaxResults($limit);
+        }
+
+        if ($start_value > 0) {
+            $queryBuilder->setFirstResult($start_value);
+        }
 
         $clanwar_query = $queryBuilder->execute();
 

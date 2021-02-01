@@ -284,6 +284,14 @@ final class ClanwarHandlerTest extends TestCase
 
         $this->assertGreaterThan(0, ClanwarHandler::getCountOfPlayedMatches(self::$first_squad->getSquadId()), "Squad played matches.");
 
+        $all_matches = ClanwarHandler::getAllMatchesOfSquad(self::$first_squad);
+
+        $this->assertGreaterThan(0, count($all_matches), "Squad played matches.");
+
+        foreach ($all_matches as $match) {
+            $this->assertEquals(self::$first_squad->getSquadId(), $match->getSquad()->getSquadId(), "Squad ID is expected of match.");
+        }
+
         $recent_matches = ClanwarHandler::getRecentMatchesOfSquad(self::$first_squad);
 
         $this->assertGreaterThan(0, count($recent_matches), "Squad played matches recently.");
