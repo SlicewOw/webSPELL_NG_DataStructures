@@ -16,7 +16,7 @@ class NewsRubric {
     private $name;
 
     /**
-     * @var string $image
+     * @var ?string $image
      */
     private $image;
 
@@ -50,7 +50,7 @@ class NewsRubric {
         $this->image = $image;
     }
 
-    public function getImage(): string
+    public function getImage(): ?string
     {
         return $this->image;
     }

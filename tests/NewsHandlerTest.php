@@ -70,8 +70,10 @@ final class NewsHandlerTest extends TestCase
         $new_content->setContent($news_text);
         $new_content->setLanguage(self::$language);
 
+        $news_source_name = "myRisk Gaming e.V." . StringFormatterUtils::getRandomString(10);
+
         $new_source = new NewsSource();
-        $new_source->setName("myRisk Gaming e.V.");
+        $new_source->setName($news_source_name);
         $new_source->setHomepage("https://gaming.myrisk-ev.de");
 
         $new_news = new News();
@@ -104,7 +106,7 @@ final class NewsHandlerTest extends TestCase
         $news_source = $news_sources[0];
 
         $this->assertGreaterThan(0, $news_source->getSourceId(), "Source ID is set.");
-        $this->assertEquals("myRisk Gaming e.V.", $news_source->getName(), "Source name is set.");
+        $this->assertEquals($news_source_name, $news_source->getName(), "Source name is set.");
         $this->assertEquals("https://gaming.myrisk-ev.de", $news_source->getHomepage(), "Source homepage is set.");
 
         $new_news->setRubric(self::$second_rubric);
