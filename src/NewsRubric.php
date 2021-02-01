@@ -16,6 +16,11 @@ class NewsRubric {
     private $name;
 
     /**
+     * @var ?string $category
+     */
+    private $category;
+
+    /**
      * @var ?string $image
      */
     private $image;
@@ -43,6 +48,19 @@ class NewsRubric {
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function setCategory(string $category): void
+    {
+        $this->category = $category;
+    }
+
+    public function getCategory(): string
+    {
+        if (is_null($this->category)) {
+            return $this->getName();
+        }
+        return $this->category;
     }
 
     public function setImage(?string $image): void

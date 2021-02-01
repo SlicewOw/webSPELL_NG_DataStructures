@@ -23,17 +23,21 @@ final class NewsRubricHandlerTest extends TestCase
 
         $this->assertGreaterThan(0, $saved_rubric->getRubricId(), "Rubric ID is set.");
         $this->assertEquals($rubric_name, $saved_rubric->getName(), "Rubric name is set.");
+        $this->assertEquals($rubric_name, $saved_rubric->getCategory(), "Rubric category is set.");
         $this->assertEquals($rubric_image, $saved_rubric->getImage(), "Rubric image is set.");
         $this->assertTrue($saved_rubric->isActive(), "Rubric is active.");
 
         $changed_rubric_name = "Test rubric " . StringFormatterUtils::getRandomString(10);
+        $rubric_category = StringFormatterUtils::getRandomString(10);
 
         $saved_rubric->setName($changed_rubric_name);
+        $saved_rubric->setCategory($rubric_category);
 
         $updated_rubric = NewsRubricHandler::saveRubric($saved_rubric);
 
         $this->assertEquals($saved_rubric->getRubricId(), $updated_rubric->getRubricId(), "Rubric ID is set.");
         $this->assertEquals($changed_rubric_name, $updated_rubric->getName(), "Rubric name is set.");
+        $this->assertEquals($rubric_category, $saved_rubric->getCategory(), "Rubric category is set.");
         $this->assertEquals($rubric_image, $updated_rubric->getImage(), "Rubric image is set.");
         $this->assertTrue($updated_rubric->isActive(), "Rubric is active.");
 

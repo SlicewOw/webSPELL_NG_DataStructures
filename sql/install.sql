@@ -893,6 +893,7 @@ VALUES
 CREATE TABLE `ws_p40_news_rubrics` (
   `rubricID` int(11) NOT NULL,
   `rubric` varchar(255) NOT NULL,
+  `category` varchar(255) NOT NULL,
   `pic` varchar(255) DEFAULT NULL,
   `active` int(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

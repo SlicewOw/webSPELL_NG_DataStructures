@@ -36,6 +36,7 @@ class NewsRubricHandler {
         $rubric = new NewsRubric();
         $rubric->setRubricId((int) $rubric_result['rubricID']);
         $rubric->setName($rubric_result['rubric']);
+        $rubric->setCategory($rubric_result['category']);
         $rubric->setImage($rubric_result['pic']);
         $rubric->setIsActive(
             ($rubric_result['active'] == 1)
@@ -95,6 +96,7 @@ class NewsRubricHandler {
             ->values(
                     [
                         'rubric' => '?',
+                        'category' => '?',
                         'pic' => '?',
                         'active' => '?'
                     ]
@@ -102,8 +104,9 @@ class NewsRubricHandler {
             ->setParameters(
                     [
                         0 => $rubric->getName(),
-                        1 => $rubric->getImage(),
-                        2 => $rubric->isActive() ? 1 : 0
+                        1 => $rubric->getCategory(),
+                        2 => $rubric->getImage(),
+                        3 => $rubric->isActive() ? 1 : 0
                     ]
                 );
 
@@ -124,13 +127,15 @@ class NewsRubricHandler {
         $queryBuilder
             ->update(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_NEWS_RUBRICS)
             ->set('rubric', '?')
+            ->set('category', '?')
             ->set('pic', '?')
             ->set('active', '?')
             ->where('rubricID = ?')
             ->setParameter(0, $rubric->getName())
-            ->setParameter(1, $rubric->getImage())
-            ->setParameter(2, $rubric->isActive() ? 1 : 0)
-            ->setParameter(3, $rubric->getRubricId());
+            ->setParameter(1, $rubric->getCategory())
+            ->setParameter(2, $rubric->getImage())
+            ->setParameter(3, $rubric->isActive() ? 1 : 0)
+            ->setParameter(4, $rubric->getRubricId());
 
         $queryBuilder->execute();
 
