@@ -52,9 +52,12 @@ class NewsHandler {
         $news->setDate(
             DateUtils::getDateTimeByMktimeValue((int) $news_result['date'])
         );
-        $news->setRubric(
-            NewsRubricHandler::getRubricByRubricId((int) $news_result['rubricID'])
-        );
+
+        if (!is_null($news_result['rubricID'])) {
+            $news->setRubric(
+                NewsRubricHandler::getRubricByRubricId((int) $news_result['rubricID'])
+            );
+        }
 
         $news->setContent(
             NewsContentHandler::getContentsOfNews($news)
@@ -94,6 +97,8 @@ class NewsHandler {
     private static function insertNews(News $news): News
     {
 
+        $rubric_id = (!is_null($news->getRubric())) ? $news->getRubric()->getRubricId() : null;
+
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder
             ->insert(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_NEWS)
@@ -109,7 +114,7 @@ class NewsHandler {
             ->setParameters(
                     [
                         0 => $news->getDate()->getTimestamp(),
-                        1 => $news->getRubric()->getRubricId(),
+                        1 => $rubric_id,
                         2 => $news->getWriter()->getUserId(),
                         3 => $news->isPublished() ? 1 : 0,
                         4 => $news->isInternal() ? 1 : 0
@@ -129,6 +134,8 @@ class NewsHandler {
     private static function updateNews(News $news): void
     {
 
+        $rubric_id = (!is_null($news->getRubric())) ? $news->getRubric()->getRubricId() : null;
+
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder
             ->update(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_NEWS)
@@ -139,7 +146,7 @@ class NewsHandler {
             ->set('internal', '?')
             ->where('newsID = ?')
             ->setParameter(0, $news->getDate()->getTimestamp())
-            ->setParameter(1, $news->getRubric()->getRubricId())
+            ->setParameter(1, $rubric_id)
             ->setParameter(2, $news->getWriter()->getUserId())
             ->setParameter(3, $news->isPublished() ? 1 : 0)
             ->setParameter(4, $news->isInternal() ? 1 : 0)
@@ -151,6 +158,10 @@ class NewsHandler {
 
     public static function publishNews(News $news): void
     {
+
+        if (is_null($news->getRubric())) {
+            throw new \UnexpectedValueException("news_without_rubric_cannot_be_published");
+        }
 
         $news->setIsPublished(true);
 

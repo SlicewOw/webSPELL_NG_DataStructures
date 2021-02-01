@@ -76,14 +76,13 @@ final class NewsHandlerTest extends TestCase
 
         $new_news = new News();
         $new_news->setWriter(self::$user);
-        $new_news->setRubric(self::$first_rubric);
         $new_news->addContent($new_content);
         $new_news->addSource($new_source);
 
         $saved_news = NewsHandler::saveNews($new_news);
 
         $this->assertGreaterThan(0, $saved_news->getNewsId(), "News ID is set.");
-        $this->assertEquals(self::$first_rubric->getName(), $saved_news->getRubric()->getName(), "Rubric is set.");
+        $this->assertNull($saved_news->getRubric(), "Rubric is null.");
         $this->assertEquals(self::$user->getUserId(), $saved_news->getWriter()->getUserId(), "Writer is set.");
         $this->assertFalse($saved_news->isPublished(), "News is not published yet.");
         $this->assertFalse($saved_news->isInternal(), "News is not an internal news.");
@@ -151,6 +150,15 @@ final class NewsHandlerTest extends TestCase
         $unpublished_news = NewsHandler::getNewsByNewsId($news->getNewsId());
 
         $this->assertFalse($unpublished_news->isPublished(), "News is not published yet.");
+
+    }
+
+    public function testIfNewsWithoutRubricCannotBePusblished(): void
+    {
+
+        $this->expectException(UnexpectedValueException::class);
+
+        NewsHandler::publishNews(new News());
 
     }
 

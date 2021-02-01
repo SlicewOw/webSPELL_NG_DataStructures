@@ -928,7 +928,7 @@ VALUES
 CREATE TABLE `ws_p40_news` (
   `newsID` int(11) NOT NULL,
   `date` int(11) NOT NULL DEFAULT 0,
-  `rubricID` int(11) NOT NULL DEFAULT 0,
+  `rubricID` int(11) DEFAULT NULL,
   `writer` int(11) NOT NULL,
   `cwID` int(11) DEFAULT NULL,
   `squadID` int(11) DEFAULT NULL,

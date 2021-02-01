@@ -4,7 +4,7 @@ namespace webspell_ng;
 
 use webspell_ng\NewsContent;
 use webspell_ng\NewsRubric;
-use webspell_ng\NewsSourcec;
+use webspell_ng\NewsSource;
 use webspell_ng\User;
 
 
@@ -16,7 +16,7 @@ class News {
     private $news_id;
 
     /**
-     * @var NewsRubric $rubric
+     * @var ?NewsRubric $rubric
      */
     private $rubric;
 
@@ -65,7 +65,7 @@ class News {
         $this->rubric = $rubric;
     }
 
-    public function getRubric(): NewsRubric
+    public function getRubric(): ?NewsRubric
     {
         return $this->rubric;
     }
