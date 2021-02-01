@@ -13,7 +13,9 @@ class CountryHandler {
     public static function getCountryByCountryShortcut(string $country_shortcut): Country
     {
 
-        if (empty($country_shortcut) || (strlen($country_shortcut) > 3)) {
+        if (empty($country_shortcut)) {
+            throw new \InvalidArgumentException('country_shortcut_value_is_empty');
+        } else if (strlen($country_shortcut) > 3) {
             throw new \InvalidArgumentException('country_shortcut_value_is_invalid');
         }
 

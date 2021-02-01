@@ -7,7 +7,7 @@ use webspell_ng\Handler\CountryHandler;
 final class CountryHandlerTest extends TestCase
 {
 
-    public function testIfGameInstanceCanBeCreated(): void
+    public function testIfCountryInstanceIsReturned(): void
     {
 
         $country = CountryHandler::getCountryByCountryShortcut("de");
@@ -18,7 +18,7 @@ final class CountryHandlerTest extends TestCase
 
     }
 
-    public function testIfInvalidArgumentExceptionIsThrownIfGameIdIsInvalid(): void
+    public function testIfInvalidArgumentExceptionIsThrownIfCountryShortcutIsEmpty(): void
     {
 
         $this->expectException(InvalidArgumentException::class);
@@ -27,7 +27,16 @@ final class CountryHandlerTest extends TestCase
 
     }
 
-    public function testIfInvalidArgumentExceptionIsThrownIfGameDoesNotExist(): void
+    public function testIfInvalidArgumentExceptionIsThrownIfCountryShortcutIsTooLong(): void
+    {
+
+        $this->expectException(InvalidArgumentException::class);
+
+        CountryHandler::getCountryByCountryShortcut("abcd");
+
+    }
+
+    public function testIfInvalidArgumentExceptionIsThrownIfCountryDoesNotExist(): void
     {
 
         $this->expectException(UnexpectedValueException::class);
