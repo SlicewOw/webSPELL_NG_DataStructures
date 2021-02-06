@@ -16,8 +16,6 @@ class StringFormatterUtils {
             $output_string
         );
 
-        return $output_string;
-
     }
 
     public static function getInput(string $input_string, bool $onlyCharAllowed=false): string
