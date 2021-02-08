@@ -203,7 +203,7 @@ class Clanwar {
     public function setMatchURL(string $url): void
     {
 
-        if (empty($url) || !ValidationUtils::validateUrl($url)) {
+        if (!ValidationUtils::validateUrl($url)) {
             throw new \InvalidArgumentException('error_cw_url_format');
         }
 

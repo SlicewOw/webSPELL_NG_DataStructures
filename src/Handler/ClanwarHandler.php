@@ -73,7 +73,7 @@ class ClanwarHandler {
             $clanwar_result["report_uk"]
         );
 
-        if (!is_null($clanwar_result["homepage"])) {
+        if (!is_null($clanwar_result["homepage"]) && !empty($clanwar_result["homepage"])) {
             $clanwar->setMatchURL($clanwar_result["homepage"]);
         }
 
