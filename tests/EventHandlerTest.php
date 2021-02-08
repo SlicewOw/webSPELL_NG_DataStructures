@@ -80,6 +80,8 @@ final class EventHandlerTest extends TestCase
 
         $this->assertTrue(EventHandler::isExistingEvent($event->getEventId()), "Event is saved into database.");
 
+        $this->assertTrue(EventHandler::removeEventById($event->getEventId()), "Event is deleted.");
+
     }
 
     public function testIfFalseIsReturnedIfEventIdIsInvalid(): void

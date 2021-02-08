@@ -178,4 +178,23 @@ class EventHandler {
 
     }
 
+    public static function removeEventById(int $event_id): bool
+    {
+
+        if (!self::isExistingEvent($event_id)) {
+            return false;
+        }
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->delete(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_EVENTS)
+            ->where("eventID = ?")
+            ->setParameter(0, $event_id);
+
+        $queryBuilder->execute();
+
+        return !self::isExistingEvent($event_id);
+
+    }
+
 }
