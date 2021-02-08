@@ -63,7 +63,33 @@ class MapHandler {
         $map_query = $queryBuilder->execute();
 
         $maps = array();
+        while ($map_result = $map_query->fetch())
+        {
+            array_push(
+                $maps,
+                self::getMapByMapId((int) $map_result['mapID'])
+            );
+        }
 
+        return $maps;
+
+    }
+
+    /**
+     * @return array<Map>
+     */
+    public static function getAllMaps(): array
+    {
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->select('mapID')
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_CLANWARS_MAPS)
+            ->orderBy("gameID", "ASC");
+
+        $map_query = $queryBuilder->execute();
+
+        $maps = array();
         while ($map_result = $map_query->fetch())
         {
             array_push(

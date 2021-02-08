@@ -28,6 +28,13 @@ final class MapHandlerTest extends TestCase
 
     }
 
+    public function testIfAllMapsAreReturned(): void
+    {
+
+        $this->assertGreaterThan(0, count(MapHandler::getAllMaps()), "Maps are returned.");
+
+    }
+
     public function testIfInvalidArgumentExceptionIsThrownIfMapIdIsInvalid(): void
     {
         $this->expectException(InvalidArgumentException::class);
