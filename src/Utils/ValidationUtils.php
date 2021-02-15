@@ -38,7 +38,7 @@ class ValidationUtils {
             "/^(ht|f)tps?:\/\/([^:@]+:[^:@]+@)?(?!\.)(\.?(?!-)[0-9\p{L}-]+(?<!-))+(:[0-9]{2,5})?(\/[^#\?]*(\?[^#\?]*)?(#.*)?)?$/sui",
             // @codingStandardsIgnoreEnd
             $url
-        );
+        ) == 1;
     }
 
     public static function validateEmail(string $email): bool

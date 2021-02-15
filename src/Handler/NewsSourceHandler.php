@@ -11,6 +11,9 @@ class NewsSourceHandler {
 
     private const DB_TABLE_NAME_NEWS_SOURCES = "news_sources";
 
+    /**
+     * @return array<NewsSource>
+     */
     public static function getSourcesOfNews(News $news): array
     {
 

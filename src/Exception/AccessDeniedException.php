@@ -13,7 +13,7 @@ class AccessDeniedException extends \Exception
      */
     private $language;
 
-    public function __construct($message = '')
+    public function __construct(string $message = '')
     {
 
         $this->language = new Language();
