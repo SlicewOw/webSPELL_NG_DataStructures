@@ -4,7 +4,6 @@ namespace webspell_ng;
 
 use webspell_ng\Country;
 use webspell_ng\Enums\UserEnums;
-use webspell_ng\Utils\ValidationUtils;
 
 class User {
 
@@ -29,7 +28,7 @@ class User {
     private $lastname = null;
 
     /**
-     * @var string $email
+     * @var ?string $email
      */
     private $email = null;
 
@@ -98,16 +97,10 @@ class User {
 
     public function setEmail(string $email): void
     {
-
-        if (!ValidationUtils::validateEmail($email)) {
-            throw new \InvalidArgumentException('email_value_is_invalid');
-        }
-
         $this->email = $email;
-
     }
 
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }

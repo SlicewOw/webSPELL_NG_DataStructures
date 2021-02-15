@@ -9,7 +9,10 @@ class StringFormatterUtils {
     {
 
         $output_string = nl2br($input_string);
-        $output_string = htmlspecialchars_decode($output_string, ENT_QUOTES);
+        $output_string = htmlspecialchars_decode(
+            $output_string,
+            ENT_QUOTES
+        );
         return str_replace(
             array('&lt;', '&gt;'),
             array('<', '>'),
@@ -29,7 +32,11 @@ class StringFormatterUtils {
 
         $text = trim($text);
         $text = stripslashes($text);
-        $text = htmlspecialchars($text, ENT_QUOTES);
+        $text = htmlspecialchars(
+            $text,
+            ENT_QUOTES,
+            'UTF-8'
+        );
 
         if ($onlyCharAllowed) {
 
@@ -55,7 +62,12 @@ class StringFormatterUtils {
         $text = nl2br($input_string);
         $text = trim($text);
         $text = stripslashes($text);
-        $text = htmlspecialchars($text, ENT_QUOTES);
+        $text = htmlspecialchars(
+            $text,
+            ENT_QUOTES,
+            'UTF-8'
+        );
+
         return str_replace(
             array('&lt;', '&gt;'),
             array('<', '>'),
