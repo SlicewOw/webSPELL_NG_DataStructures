@@ -986,6 +986,19 @@ ALTER TABLE `ws_p40_partners` ADD PRIMARY KEY (`partnerID`);
 ALTER TABLE `ws_p40_partners` MODIFY `partnerID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- History
+--
+
+CREATE TABLE `ws_p40_history` (
+  `year` int(11) NOT NULL DEFAULT 2021,
+  `history` text COLLATE utf8_unicode_ci NOT NULL,
+  `date` int(11) DEFAULT NULL,
+  `public` int(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+ALTER TABLE `ws_p40_history` ADD UNIQUE KEY `year` (`year`);
+
+--
 -- DONE :)
 --
 
