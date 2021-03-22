@@ -1016,7 +1016,7 @@ CREATE TABLE `ws_p40_user_socials_types` (
 
 INSERT INTO `ws_p40_user_socials_types` (`typeID`, `name`, `icon_prefix`, `placeholder`, `placeholder_team`, `is_url`, `sort`) VALUES
 (1, 'Homepage', 'homepage', 'http://', NULL, 1, 1),
-(2, 'Skype', 'skype', '', NULL, 0, 6),
+(2, 'Skype', 'skype', NULL, NULL, 0, 6),
 (3, 'Facebook', 'facebook', 'https://facebook.com', NULL, 1, 2),
 (4, 'Twitter', 'twitter', 'https://twitter.com', NULL, 1, 3),
 (5, 'YouTube', 'youtube', 'https://www.youtube.com', 'https://www.youtube.com', 1, 4),
@@ -1026,6 +1026,9 @@ INSERT INTO `ws_p40_user_socials_types` (`typeID`, `name`, `icon_prefix`, `place
 (9, 'Instagram', 'instagram', 'https://www.instagram.com', NULL, 1, 5),
 (10, 'FaceIt', 'faceit', 'https://www.faceit.com/en/players/', 'https://www.faceit.com/en/teams/', 1, 10),
 (11, 'Steam', 'steam', 'https://steamcommunity.com/profiles/', NULL, 1, 11);
+
+ALTER TABLE `ws_p40_user_socials_types` ADD PRIMARY KEY (`typeID`);
+ALTER TABLE `ws_p40_user_socials_types` MODIFY `typeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- DONE :)
