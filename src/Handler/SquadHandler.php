@@ -125,7 +125,7 @@ class SquadHandler {
             ->setParameter(7, $squad->getInfo())
             ->setParameter(8, $squad->getSort())
             ->setParameter(9, $squad->getRubric())
-            ->setParameter(10, $squad->getIsActive() ? 1 : 0);
+            ->setParameter(10, $squad->isActive() ? 1 : 0);
 
         $queryBuilder->execute();
 
@@ -164,7 +164,7 @@ class SquadHandler {
             ->setParameter(6, $squad->getInfo())
             ->setParameter(7, $squad->getSort())
             ->setParameter(8, $squad->getRubric())
-            ->setParameter(9, $squad->getIsActive() ? 1 : 0)
+            ->setParameter(9, $squad->isActive() ? 1 : 0)
             ->setParameter(10, $deletion_date)
             ->setParameter(11, $squad->getSquadId());
 

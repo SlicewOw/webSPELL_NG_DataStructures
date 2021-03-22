@@ -30,7 +30,7 @@ class DataStatus {
         $this->is_active = $active;
     }
 
-    public function getIsActive(): bool
+    public function isActive(): bool
     {
         return $this->is_active;
     }
@@ -40,7 +40,7 @@ class DataStatus {
         $this->is_deleted = $deleted;
     }
 
-    public function getIsDeleted(): bool
+    public function isDeleted(): bool
     {
         return $this->is_deleted;
     }

@@ -107,7 +107,7 @@ class SquadMemberHandler {
     private static function insertSquadMember(Squad $squad, SquadMember $member): SquadMember
     {
 
-        $is_active = $member->getIsActive() ? 1 : 0;
+        $is_active = $member->isActive() ? 1 : 0;
 
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder
@@ -144,7 +144,7 @@ class SquadMemberHandler {
     private static function updateSquadMember(Squad $squad, SquadMember $member): void
     {
 
-        $is_active = $member->getIsActive() ? 1 : 0;
+        $is_active = $member->isActive() ? 1 : 0;
         $left_date = (!is_null($member->getLeftDate())) ? $member->getLeftDate()->getTimestamp() : null;
 
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();

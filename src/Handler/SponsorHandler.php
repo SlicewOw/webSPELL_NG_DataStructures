@@ -42,7 +42,7 @@ class SponsorHandler {
         $sponsor->setBanner($sponsor_result['banner']);
         $sponsor->setBannerSmall($sponsor_result['banner_small']);
         $sponsor->setHits((int) $sponsor_result['hits']);
-        $sponsor->setIsDisplayed(
+        $sponsor->setIsActive(
             ($sponsor_result['displayed'] == 1)
         );
         $sponsor->setIsMainsponsor(
@@ -149,7 +149,7 @@ class SponsorHandler {
                         2 => $sponsor->getInfo(),
                         3 => $sponsor->getBanner(),
                         4 => $sponsor->getBannerSmall(),
-                        5 => $sponsor->isDisplayed() ? 1 : 0,
+                        5 => $sponsor->isActive() ? 1 : 0,
                         6 => $sponsor->isMainsponsor() ? 1 : 0,
                         7 => $sponsor->getDate()->getTimestamp(),
                         8 => $sponsor->getSort()
@@ -186,7 +186,7 @@ class SponsorHandler {
             ->setParameter(2, $sponsor->getBanner())
             ->setParameter(3, $sponsor->getBannerSmall())
             ->setParameter(4, $sponsor->getDate()->getTimestamp())
-            ->setParameter(5, $sponsor->isDisplayed() ? 1 : 0)
+            ->setParameter(5, $sponsor->isActive() ? 1 : 0)
             ->setParameter(6, $sponsor->isMainsponsor() ? 1 : 0)
             ->setParameter(7, $sponsor->getSort())
             ->setParameter(8, $sponsor->getSponsorId());

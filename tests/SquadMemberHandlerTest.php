@@ -86,7 +86,7 @@ final class SquadMemberHandlerTest extends TestCase
         $member = $saved_squad->getMembers()[0];
         $this->assertEquals(1, $member->getUser()->getUserId(), "User data of member is set.");
         $this->assertGreaterThan(0, $member->getJoinDate()->getTimestamp(), "Join date is set.");
-        $this->assertTrue($member->getIsActive(), "Member is active.");
+        $this->assertTrue($member->isActive(), "Member is active.");
 
         SquadMemberHandler::kickSquadMember(self::$squad, $member);
 
@@ -96,7 +96,7 @@ final class SquadMemberHandlerTest extends TestCase
 
         $kicked_member = SquadMemberHandler::getSquadMemberById($member->getMemberId());
 
-        $this->assertFalse($kicked_member->getIsActive(), "Member is active.");
+        $this->assertFalse($kicked_member->isActive(), "Member is active.");
 
         $new_count_of_user_logs = UserLogHandler::getLogsOfUser(self::$user);
 

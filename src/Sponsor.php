@@ -2,6 +2,8 @@
 
 namespace webspell_ng;
 
+use webspell_ng\SocialNetwork;
+
 
 class Sponsor extends DataStatus {
 
@@ -36,13 +38,6 @@ class Sponsor extends DataStatus {
     private $banner_small;
 
     /**
-     * @var bool $is_displayed
-     *
-     * TODO: Remove this flag and use "active" from DataStatus instead!
-     */
-    private $is_displayed = false;
-
-    /**
      * @var bool $is_mainsponsor
      */
     private $is_mainsponsor = false;
@@ -51,6 +46,11 @@ class Sponsor extends DataStatus {
      * @var \DateTime $date
      */
     private $date;
+
+    /**
+     * @var array<SocialNetwork> $social_networks
+     */
+    private $social_networks = array();
 
     public function setSponsorId(int $sponsor_id): void
     {
@@ -112,16 +112,6 @@ class Sponsor extends DataStatus {
         return $this->banner_small;
     }
 
-    public function setIsDisplayed(bool $is_displayed): void
-    {
-        $this->is_displayed = $is_displayed;
-    }
-
-    public function isDisplayed(): bool
-    {
-        return $this->is_displayed;
-    }
-
     public function setIsMainsponsor(bool $is_mainsponsor): void
     {
         $this->is_mainsponsor = $is_mainsponsor;
@@ -140,6 +130,22 @@ class Sponsor extends DataStatus {
     public function getDate(): \DateTime
     {
         return $this->date;
+    }
+
+    /**
+     * @param array<SocialNetwork> $social_networks
+     */
+    public function setSocialNetworks(array $social_networks): void
+    {
+        $this->social_networks = $social_networks;
+    }
+
+    /**
+     * @return array<SocialNetwork>
+     */
+    public function getSocialNetworks(): array
+    {
+        return $this->social_networks;
     }
 
 }

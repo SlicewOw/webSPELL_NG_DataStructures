@@ -23,7 +23,7 @@ final class SponsorHandlerTest extends TestCase
         $new_sponsor->setInfo("Test Info");
         $new_sponsor->setBanner("https://images.myrisk-ev.de/logo.png");
         $new_sponsor->setBannerSmall("https://images.myrisk-ev.de/logo_small.png");
-        $new_sponsor->setIsDisplayed(true);
+        $new_sponsor->setIsActive(true);
         $new_sponsor->setIsMainsponsor(false);
         $new_sponsor->setDate($date);
         $new_sponsor->setSort($sort);
@@ -36,7 +36,7 @@ final class SponsorHandlerTest extends TestCase
         $this->assertEquals("Test Info", $saved_sponsor->getInfo(), "Sponsor info is set.");
         $this->assertEquals("https://images.myrisk-ev.de/logo.png", $saved_sponsor->getBanner(), "Sponsor banner is set.");
         $this->assertEquals("https://images.myrisk-ev.de/logo_small.png", $saved_sponsor->getBannerSmall(), "Sponsor banner small is set.");
-        $this->assertTrue($saved_sponsor->isDisplayed(), "Sponsor is displayed.");
+        $this->assertTrue($saved_sponsor->isActive(), "Sponsor is displayed.");
         $this->assertFalse($saved_sponsor->isMainsponsor(), "Sponsor is not a mainsponsor.");
         $this->assertEquals($date->getTimestamp(), $saved_sponsor->getDate()->getTimestamp(), "Sponsor date is saved.");
         $this->assertEquals($sort, $saved_sponsor->getSort(), "Sponsor sort is saved.");
@@ -44,7 +44,7 @@ final class SponsorHandlerTest extends TestCase
 
         $changed_sponsor_name = "Test Sponsor " . StringFormatterUtils::getRandomString(10);
 
-        $saved_sponsor->setIsDisplayed(false);
+        $saved_sponsor->setIsActive(false);
         $saved_sponsor->setName($changed_sponsor_name);
 
         $updated_sponsor = SponsorHandler::saveSponsor($saved_sponsor);
@@ -55,7 +55,7 @@ final class SponsorHandlerTest extends TestCase
         $this->assertEquals($saved_sponsor->getInfo(), $updated_sponsor->getInfo(), "Sponsor info is set.");
         $this->assertEquals($saved_sponsor->getBanner(), $updated_sponsor->getBanner(), "Sponsor banner is set.");
         $this->assertEquals($saved_sponsor->getBannerSmall(), $updated_sponsor->getBannerSmall(), "Sponsor banner small is set.");
-        $this->assertFalse($updated_sponsor->isDisplayed(), "Sponsor is displayed.");
+        $this->assertFalse($updated_sponsor->isActive(), "Sponsor is displayed.");
         $this->assertEquals($saved_sponsor->isMainsponsor(), $updated_sponsor->isMainsponsor(), "Sponsor is not a mainsponsor.");
         $this->assertEquals($saved_sponsor->getDate()->getTimestamp(), $updated_sponsor->getDate()->getTimestamp(), "Sponsor date is saved.");
         $this->assertEquals($saved_sponsor->getSort(), $updated_sponsor->getSort(), "Sponsor sort is saved.");
@@ -71,7 +71,7 @@ final class SponsorHandlerTest extends TestCase
 
         foreach ($active_sponsors as $sponsor) {
 
-            if (!$sponsor->isDisplayed()) {
+            if (!$sponsor->isActive()) {
                 $any_sponsor_is_hidden = true;
             }
 
@@ -92,7 +92,7 @@ final class SponsorHandlerTest extends TestCase
         $tmp_sort_value = -1;
         foreach ($all_sponsors as $sponsor) {
 
-            if ($sponsor->isDisplayed()) {
+            if ($sponsor->isActive()) {
                 $any_sponsor_is_hidden = true;
             }
 
@@ -102,6 +102,10 @@ final class SponsorHandlerTest extends TestCase
 
             $tmp_sort_value = $sponsor->getSort();
 
+        }
+
+        if (empty($all_sponsors)) {
+            $any_sponsor_is_hidden = true;
         }
 
         $this->assertTrue($any_sponsor_is_hidden, "Hidden sponsor is returned too.");
