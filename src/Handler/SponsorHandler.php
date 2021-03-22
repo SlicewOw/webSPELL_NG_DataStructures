@@ -48,6 +48,12 @@ class SponsorHandler {
         $sponsor->setIsMainsponsor(
             ($sponsor_result['mainsponsor'] == 1)
         );
+        $sponsor->setShowOnSubPagesOnly(
+            ($sponsor_result['subpage_only'] == 1)
+        );
+        $sponsor->setShowOnFrontPageOnly(
+            ($sponsor_result['frontpage_only'] == 1)
+        );
         $sponsor->setDate(
             DateUtils::getDateTimeByMktimeValue($sponsor_result['date'])
         );
@@ -139,7 +145,9 @@ class SponsorHandler {
                         'displayed' => '?',
                         'mainsponsor' => '?',
                         'date' => '?',
-                        'sort' => '?'
+                        'sort' => '?',
+                        'subpage_only' => '?',
+                        'frontpage_only' => '?'
                     ]
                 )
             ->setParameters(
@@ -152,7 +160,9 @@ class SponsorHandler {
                         5 => $sponsor->isActive() ? 1 : 0,
                         6 => $sponsor->isMainsponsor() ? 1 : 0,
                         7 => $sponsor->getDate()->getTimestamp(),
-                        8 => $sponsor->getSort()
+                        8 => $sponsor->getSort(),
+                        9 => $sponsor->showOnSubPagesOnly() ? 1 : 0,
+                        10 => $sponsor->showOnFrontPageOnly() ? 1 : 0
                     ]
                 );
 
@@ -180,6 +190,8 @@ class SponsorHandler {
             ->set('displayed', '?')
             ->set('mainsponsor', '?')
             ->set('sort', '?')
+            ->set('subpage_only', '?')
+            ->set('frontpage_only', '?')
             ->where('sponsorID = ?')
             ->setParameter(0, $sponsor->getName())
             ->setParameter(1, $sponsor->getHomepage())
@@ -189,7 +201,9 @@ class SponsorHandler {
             ->setParameter(5, $sponsor->isActive() ? 1 : 0)
             ->setParameter(6, $sponsor->isMainsponsor() ? 1 : 0)
             ->setParameter(7, $sponsor->getSort())
-            ->setParameter(8, $sponsor->getSponsorId());
+            ->setParameter(8, $sponsor->showOnSubPagesOnly() ? 1 : 0)
+            ->setParameter(9, $sponsor->showOnFrontPageOnly() ? 1 : 0)
+            ->setParameter(10, $sponsor->getSponsorId());
 
         $queryBuilder->execute();
 

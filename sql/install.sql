@@ -63,8 +63,10 @@ CREATE TABLE `ws_p40_sponsors` (
   `banner_small` varchar(255) DEFAULT NULL,
   `banner_white` varchar(100) DEFAULT NULL,
   `banner_small_white` varchar(100) DEFAULT NULL,
-  `displayed` int(11) NOT NULL DEFAULT 1,
-  `mainsponsor` int(11) NOT NULL DEFAULT 0,
+  `displayed` int(1) NOT NULL DEFAULT 1,
+  `mainsponsor` int(1) NOT NULL DEFAULT 0,
+  `subpage_only` int(1) NOT NULL DEFAULT 0,
+  `frontpage_only` int(1) NOT NULL DEFAULT 0,
   `sort` int(11) NOT NULL DEFAULT 1,
   `hits` int(11) DEFAULT 0,
   `date` int(11) NOT NULL DEFAULT 0

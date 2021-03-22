@@ -43,6 +43,16 @@ class Sponsor extends DataStatus {
     private $is_mainsponsor = false;
 
     /**
+     * @var bool $subpage_only
+     */
+    private $subpage_only = false;
+
+    /**
+     * @var bool $frontpage_only
+     */
+    private $frontpage_only = false;
+
+    /**
      * @var \DateTime $date
      */
     private $date;
@@ -120,6 +130,26 @@ class Sponsor extends DataStatus {
     public function isMainsponsor(): bool
     {
         return $this->is_mainsponsor;
+    }
+
+    public function setShowOnSubPagesOnly(bool $subpage_only): void
+    {
+        $this->subpage_only = $subpage_only;
+    }
+
+    public function showOnSubPagesOnly(): bool
+    {
+        return $this->subpage_only;
+    }
+
+    public function setShowOnFrontPageOnly(bool $frontpage_only): void
+    {
+        $this->frontpage_only = $frontpage_only;
+    }
+
+    public function showOnFrontPageOnly(): bool
+    {
+        return $this->frontpage_only;
     }
 
     public function setDate(\DateTime $date): void
