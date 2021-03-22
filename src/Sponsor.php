@@ -53,7 +53,7 @@ class Sponsor extends DataStatus {
     private $frontpage_only = false;
 
     /**
-     * @var \DateTime $date
+     * @var ?\DateTime $date
      */
     private $date;
 
@@ -159,6 +159,9 @@ class Sponsor extends DataStatus {
 
     public function getDate(): \DateTime
     {
+        if (is_null($this->date)) {
+            return new \DateTime("now");
+        }
         return $this->date;
     }
 
