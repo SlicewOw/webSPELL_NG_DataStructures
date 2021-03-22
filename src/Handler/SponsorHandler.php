@@ -41,6 +41,7 @@ class SponsorHandler {
         $sponsor->setInfo($sponsor_result['info']);
         $sponsor->setBanner($sponsor_result['banner']);
         $sponsor->setBannerSmall($sponsor_result['banner_small']);
+        $sponsor->setHits((int) $sponsor_result['hits']);
         $sponsor->setIsDisplayed(
             ($sponsor_result['displayed'] == 1)
         );
@@ -83,7 +84,8 @@ class SponsorHandler {
         $queryBuilder
             ->select('sponsorID')
             ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_SPONSORS)
-            ->orderBy("mainsponsor", "DESC");
+            ->orderBy("sort", "ASC")
+            ->addOrderBy("mainsponsor", "DESC");
 
         if ($displayed_sponsors_only) {
             $queryBuilder->where(

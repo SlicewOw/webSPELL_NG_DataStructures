@@ -55,7 +55,7 @@ final class SponsorHandlerTest extends TestCase
         $this->assertEquals($saved_sponsor->getInfo(), $updated_sponsor->getInfo(), "Sponsor info is set.");
         $this->assertEquals($saved_sponsor->getBanner(), $updated_sponsor->getBanner(), "Sponsor banner is set.");
         $this->assertEquals($saved_sponsor->getBannerSmall(), $updated_sponsor->getBannerSmall(), "Sponsor banner small is set.");
-        $this->assertFalse($saved_sponsor->isDisplayed(), "Sponsor is displayed.");
+        $this->assertFalse($updated_sponsor->isDisplayed(), "Sponsor is displayed.");
         $this->assertEquals($saved_sponsor->isMainsponsor(), $updated_sponsor->isMainsponsor(), "Sponsor is not a mainsponsor.");
         $this->assertEquals($saved_sponsor->getDate()->getTimestamp(), $updated_sponsor->getDate()->getTimestamp(), "Sponsor date is saved.");
         $this->assertEquals($saved_sponsor->getSort(), $updated_sponsor->getSort(), "Sponsor sort is saved.");
@@ -81,22 +81,31 @@ final class SponsorHandlerTest extends TestCase
 
     }
 
-    public function testIfVisibleSponsorsAreReturnedToo(): void
+    public function testIfHiddenSponsorsAreReturnedToo(): void
     {
 
         $all_sponsors = SponsorHandler::getAllSponsors();
 
         $any_sponsor_is_hidden = false;
+        $sponsors_are_sorted_in_ascending_order = true;
 
+        $tmp_sort_value = -1;
         foreach ($all_sponsors as $sponsor) {
 
             if ($sponsor->isDisplayed()) {
                 $any_sponsor_is_hidden = true;
             }
 
+            if ($sponsor->getSort() < $tmp_sort_value) {
+                $sponsors_are_sorted_in_ascending_order = false;
+            }
+
+            $tmp_sort_value = $sponsor->getSort();
+
         }
 
-        $this->assertTrue($any_sponsor_is_hidden, "Visible sponsor is returned.");
+        $this->assertTrue($any_sponsor_is_hidden, "Hidden sponsor is returned too.");
+        $this->assertTrue($sponsors_are_sorted_in_ascending_order, "Sponsors are sorted.");
 
     }
 

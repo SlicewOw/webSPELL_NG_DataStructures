@@ -2,9 +2,8 @@
 
 namespace webspell_ng;
 
-use Respect\Validation\Validator;
 
-class Sponsor {
+class Sponsor extends DataStatus {
 
     /**
      * @var ?int $sponsor_id
@@ -38,6 +37,8 @@ class Sponsor {
 
     /**
      * @var bool $is_displayed
+     *
+     * TODO: Remove this flag and use "active" from DataStatus instead!
      */
     private $is_displayed = false;
 
@@ -50,11 +51,6 @@ class Sponsor {
      * @var \DateTime $date
      */
     private $date;
-
-    /**
-     * @var int $sort
-     */
-    private $sort = 1;
 
     public function setSponsorId(int $sponsor_id): void
     {
@@ -144,18 +140,6 @@ class Sponsor {
     public function getDate(): \DateTime
     {
         return $this->date;
-    }
-
-    public function setSort(int $sort): void
-    {
-        if (Validator::numericVal()->min(1)->validate($sort)) {
-            $this->sort = $sort;
-        }
-    }
-
-    public function getSort(): int
-    {
-        return $this->sort;
     }
 
 }
