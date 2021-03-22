@@ -1001,6 +1001,33 @@ CREATE TABLE `ws_p40_history` (
 ALTER TABLE `ws_p40_history` ADD UNIQUE KEY `year` (`year`);
 
 --
+-- Social network types
+--
+
+CREATE TABLE `ws_p40_user_socials_types` (
+  `typeID` int(11) NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `icon_prefix` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `placeholder` varchar(100) DEFAULT NULL,
+  `placeholder_team` varchar(255) DEFAULT NULL,
+  `is_url` int(1) NOT NULL DEFAULT 0,
+  `sort` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO `ws_p40_user_socials_types` (`typeID`, `name`, `icon_prefix`, `placeholder`, `placeholder_team`, `is_url`, `sort`) VALUES
+(1, 'Homepage', 'homepage', 'http://', NULL, 1, 1),
+(2, 'Skype', 'skype', '', NULL, 0, 6),
+(3, 'Facebook', 'facebook', 'https://facebook.com', NULL, 1, 2),
+(4, 'Twitter', 'twitter', 'https://twitter.com', NULL, 1, 3),
+(5, 'YouTube', 'youtube', 'https://www.youtube.com', 'https://www.youtube.com', 1, 4),
+(6, 'Twitch', 'twitch', 'https://www.twitch.tv', NULL, 1, 7),
+(7, 'ESL', 'esl', 'https://play.eslgaming.com/player/', 'https://play.eslgaming.com/team/', 1, 8),
+(8, 'ESEA', 'esea', 'https://play.esea.net/users/', 'https://play.esea.net/teams/', 1, 9),
+(9, 'Instagram', 'instagram', 'https://www.instagram.com', NULL, 1, 5),
+(10, 'FaceIt', 'faceit', 'https://www.faceit.com/en/players/', 'https://www.faceit.com/en/teams/', 1, 10),
+(11, 'Steam', 'steam', 'https://steamcommunity.com/profiles/', NULL, 1, 11);
+
+--
 -- DONE :)
 --
 
