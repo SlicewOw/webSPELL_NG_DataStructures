@@ -59,15 +59,39 @@ class SponsorHandler {
     /**
      * @return array<Sponsor>
      */
+    public static function getAllActiveSponsors(): array
+    {
+        return self::getSponsorsByParameters(true);
+    }
+
+    /**
+     * @return array<Sponsor>
+     */
     public static function getAllSponsors(): array
+    {
+        return self::getSponsorsByParameters(false);
+    }
+
+    /**
+     * @return array<Sponsor>
+     */
+    private static function getSponsorsByParameters(bool $displayed_sponsors_only = true): array
     {
 
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+
         $queryBuilder
             ->select('sponsorID')
             ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_SPONSORS)
-            ->where('displayed = 1')
             ->orderBy("mainsponsor", "DESC");
+
+        if ($displayed_sponsors_only) {
+            $queryBuilder->where(
+                $queryBuilder->expr()->and(
+                    $queryBuilder->expr()->eq('displayed', '1')
+                )
+            );
+        }
 
         $sponsor_query = $queryBuilder->execute();
 

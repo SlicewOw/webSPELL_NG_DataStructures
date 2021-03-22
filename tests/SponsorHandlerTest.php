@@ -62,6 +62,44 @@ final class SponsorHandlerTest extends TestCase
 
     }
 
+    public function testIfActiveSponsorsAreReturnedOnly(): void
+    {
+
+        $active_sponsors = SponsorHandler::getAllActiveSponsors();
+
+        $any_sponsor_is_hidden = false;
+
+        foreach ($active_sponsors as $sponsor) {
+
+            if (!$sponsor->isDisplayed()) {
+                $any_sponsor_is_hidden = true;
+            }
+
+        }
+
+        $this->assertFalse($any_sponsor_is_hidden, "No sponsor is hidden.");
+
+    }
+
+    public function testIfVisibleSponsorsAreReturnedToo(): void
+    {
+
+        $all_sponsors = SponsorHandler::getAllSponsors();
+
+        $any_sponsor_is_hidden = false;
+
+        foreach ($all_sponsors as $sponsor) {
+
+            if ($sponsor->isDisplayed()) {
+                $any_sponsor_is_hidden = true;
+            }
+
+        }
+
+        $this->assertTrue($any_sponsor_is_hidden, "Visible sponsor is returned.");
+
+    }
+
     public function testIfInvalidArgumentExceptionIsThrownIfSponsorIdIsInvalid(): void
     {
 
