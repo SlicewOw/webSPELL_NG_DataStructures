@@ -70,7 +70,7 @@ class SocialNetworkType extends DataStatus {
         $this->placeholder_player = $placeholder_player;
     }
 
-    public function getPlaceholderPlayer(): string
+    public function getPlaceholderPlayer(): ?string
     {
         return $this->placeholder_player;
     }
@@ -80,7 +80,7 @@ class SocialNetworkType extends DataStatus {
         $this->placeholder_team = $placeholder_team;
     }
 
-    public function getPlaceholderTeam(): string
+    public function getPlaceholderTeam(): ?string
     {
         return $this->placeholder_team;
     }

@@ -30,7 +30,7 @@ class SocialNetworkTypeHandler {
         $social_network_result = $social_network_query->fetch();
 
         if (empty($social_network_result)) {
-            throw new \InvalidArgumentException('unknown_social_network');
+            throw new \UnexpectedValueException('unknown_social_network');
         }
 
         $social_network = new SocialNetworkType();
@@ -45,10 +45,35 @@ class SocialNetworkTypeHandler {
             $social_network->setPlaceholderPlayer($social_network_result["placeholder"]);
         }
         if (!is_null($social_network_result["placeholder_team"])) {
-            $social_network->setPlaceholderPlayer($social_network_result["placeholder_team"]);
+            $social_network->setPlaceholderTeam($social_network_result["placeholder_team"]);
         }
 
         return $social_network;
+
+    }
+
+    public static function getSocialNetworkTypeByName(string $social_network_name): SocialNetworkType
+    {
+
+        if (empty($social_network_name)) {
+            throw new \InvalidArgumentException('social_network_name_value_is_invalid');
+        }
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->select('typeID')
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_SOCIAL_NETWORKS)
+            ->where('name = ?')
+            ->setParameter(0, $social_network_name);
+
+        $social_network_query = $queryBuilder->execute();
+        $social_network_result = $social_network_query->fetch();
+
+        if (empty($social_network_result)) {
+            throw new \UnexpectedValueException('unknown_social_network');
+        }
+
+        return self::getSocialNetworkById((int) $social_network_result['typeID']);
 
     }
 
