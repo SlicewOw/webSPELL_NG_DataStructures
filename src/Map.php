@@ -2,7 +2,7 @@
 
 namespace webspell_ng;
 
-use \webspell_ng\Game;
+use webspell_ng\Game;
 
 
 class Map {
@@ -26,6 +26,11 @@ class Map {
      * @var Game $game
      */
     private $game = null;
+
+    /**
+     * @var bool $is_deleted
+     */
+    private $is_deleted = false;
 
     public function setMapId(int $map_id): void
     {
@@ -65,6 +70,16 @@ class Map {
     public function getGame(): ?Game
     {
         return $this->game;
+    }
+
+    public function setIsDeleted(bool $deleted): void
+    {
+        $this->is_deleted = $deleted;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->is_deleted;
     }
 
 }

@@ -84,6 +84,43 @@ final class MapHandlerTest extends TestCase
 
     }
 
+    public function testIfMapCanBeDeleted(): void
+    {
+
+        $new_map = new Map();
+        $new_map->setName("Test Map " . StringFormatterUtils::getRandomString(10));
+        $new_map->setIcon(StringFormatterUtils::getRandomString(10) . ".png");
+        $new_map->setGame(
+            GameHandler::getGameByGameId(1)
+        );
+
+        $saved_map = MapHandler::saveMap($new_map);
+
+        $this->assertGreaterThan(0, $saved_map->getMapId(), "Map ID is set.");
+
+        MapHandler::deleteMap($saved_map);
+
+        $all_maps = MapHandler::getAllMaps();
+
+        $map_is_deleted_successfully = true;
+
+        foreach ($all_maps as $map) {
+
+            if ($map->getName() == $new_map->getName()) {
+                $map_is_deleted_successfully = false;
+            }
+
+        }
+
+        $this->assertTrue($map_is_deleted_successfully, "Map is deleted successfully.");
+
+        $deleted_map = MapHandler::getMapByMapId($saved_map->getMapId());
+
+        $this->assertEquals($new_map->getName(), $deleted_map->getName(), "Map name is set.");
+        $this->assertTrue($deleted_map->isDeleted(), "Map is deleted.");
+
+    }
+
     public function testIfInvalidArgumentExceptionIsThrownIfMapIdIsInvalid(): void
     {
 

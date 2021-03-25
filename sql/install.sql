@@ -749,7 +749,8 @@ CREATE TABLE `ws_p40_clanwars_maps` (
   `mapID` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `gameID` int(11) NOT NULL,
-  `pic` varchar(255) COLLATE utf8_unicode_ci NOT NULL
+  `pic` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `deleted` int(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `ws_p40_clanwars_maps` ADD PRIMARY KEY (`mapID`), ADD UNIQUE KEY `mapID` (`mapID`);

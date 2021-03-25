@@ -84,6 +84,25 @@ final class SponsorHandlerTest extends TestCase
     public function testIfHiddenSponsorsAreReturnedToo(): void
     {
 
+        $new_sponsor = new Sponsor();
+        $new_sponsor->setName(
+            "Test Sponsor " . StringFormatterUtils::getRandomString(10)
+        );
+        $new_sponsor->setHomepage("https://gaming.myrisk-ev.de");
+        $new_sponsor->setInfo("Test Info");
+        $new_sponsor->setBanner("https://images.myrisk-ev.de/logo.png");
+        $new_sponsor->setBannerSmall("https://images.myrisk-ev.de/logo_small.png");
+        $new_sponsor->setIsActive(false);
+        $new_sponsor->setIsMainsponsor(false);
+        $new_sponsor->setDate(
+            new \DateTime("5 minutes ago")
+        );
+        $new_sponsor->setSort(
+            rand(1, 999999)
+        );
+
+        SponsorHandler::saveSponsor($new_sponsor);
+
         $all_sponsors = SponsorHandler::getAllSponsors();
 
         $any_sponsor_is_hidden = false;

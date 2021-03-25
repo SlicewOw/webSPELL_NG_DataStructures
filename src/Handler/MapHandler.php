@@ -41,6 +41,9 @@ class MapHandler {
         $clanwar_map->setGame(
             GameHandler::getGameByGameId((int) $clanwar_map_result['gameID'])
         );
+        $clanwar_map->setIsDeleted(
+            ($clanwar_map_result['deleted'] == 1)
+        );
 
         return $clanwar_map;
 
@@ -56,8 +59,9 @@ class MapHandler {
         $queryBuilder
             ->select('mapID')
             ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_CLANWARS_MAPS)
-            ->where('gameID = ?')
+            ->where('gameID = ?', 'deleted = ?')
             ->setParameter(0, $game->getGameId())
+            ->setParameter(1, 0)
             ->orderBy("name", "ASC");
 
         $map_query = $queryBuilder->execute();
@@ -83,8 +87,9 @@ class MapHandler {
 
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder
-            ->select('mapID')
+            ->select("mapID")
             ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_CLANWARS_MAPS)
+            ->where("deleted = 0")
             ->orderBy("gameID", "ASC");
 
         $map_query = $queryBuilder->execute();
@@ -129,12 +134,14 @@ class MapHandler {
                 array(
                     'name' => '?',
                     'gameID' => '?',
-                    'pic' => '?'
+                    'pic' => '?',
+                    'deleted' => '?'
                 )
             )
             ->setParameter(0, $map->getName())
             ->setParameter(1, $map->getGame()->getGameId())
-            ->setParameter(2, $map->getIcon());
+            ->setParameter(2, $map->getIcon())
+            ->setParameter(3, $map->isDeleted() ? 1 : 0);
 
         $queryBuilder->execute();
 
@@ -156,13 +163,24 @@ class MapHandler {
             ->set('name', '?')
             ->set('gameID', '?')
             ->set('pic', '?')
+            ->set('deleted', '?')
             ->where('mapID = ?')
             ->setParameter(0, $map->getName())
             ->setParameter(1, $map->getGame()->getGameId())
             ->setParameter(2, $map->getIcon())
-            ->setParameter(3, $map->getMapId());
+            ->setParameter(3, $map->isDeleted() ? 1 : 0)
+            ->setParameter(4, $map->getMapId());
 
         $queryBuilder->execute();
+
+    }
+
+    public static function deleteMap(Map $map): void
+    {
+
+        $map->setIsDeleted(true);
+
+        self::updateMap($map);
 
     }
 
