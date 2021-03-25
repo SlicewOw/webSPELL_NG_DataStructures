@@ -131,7 +131,7 @@ class SquadHandler {
 
         $squad_id = (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId();
 
-        return self::getSquadBySquadId($squad_id );
+        return self::getSquadBySquadId($squad_id);
 
     }
 

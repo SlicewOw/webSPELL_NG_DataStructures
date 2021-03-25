@@ -102,4 +102,68 @@ class MapHandler {
 
     }
 
+    public static function saveMap(Map $map): Map
+    {
+
+        if (is_null($map->getGame())) {
+            throw new \UnexpectedValueException("game_of_map_is_not_set_yet");
+        }
+
+        if (is_null($map->getMapId())) {
+            $map = self::insertMap($map);
+        } else {
+            self::updateMap($map);
+        }
+
+        return self::getMapByMapId($map->getMapId());
+
+    }
+
+    private static function insertMap(Map $map): Map
+    {
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->insert(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_CLANWARS_MAPS)
+            ->values(
+                array(
+                    'name' => '?',
+                    'gameID' => '?',
+                    'pic' => '?'
+                )
+            )
+            ->setParameter(0, $map->getName())
+            ->setParameter(1, $map->getGame()->getGameId())
+            ->setParameter(2, $map->getIcon());
+
+        $queryBuilder->execute();
+
+        $map->setMapId(
+            (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId()
+        );
+
+        return $map;
+
+    }
+
+    private static function updateMap(Map $map): void
+    {
+
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->update(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_CLANWARS_MAPS)
+            ->set('name', '?')
+            ->set('gameID', '?')
+            ->set('pic', '?')
+            ->where('mapID = ?')
+            ->setParameter(0, $map->getName())
+            ->setParameter(1, $map->getGame()->getGameId())
+            ->setParameter(2, $map->getIcon())
+            ->setParameter(3, $map->getMapId());
+
+        $queryBuilder->execute();
+
+    }
+
 }
