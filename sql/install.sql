@@ -72,20 +72,6 @@ ALTER TABLE `ws_p40_sponsors` ADD PRIMARY KEY (`sponsorID`);
 ALTER TABLE `ws_p40_sponsors` MODIFY `sponsorID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 --
--- Sponsor social networks
---
-
-CREATE TABLE `ws_p40_sponsors_social_network` (
-  `sponsorID` int(11) NOT NULL,
-  `social_network_id` int(11) NOT NULL,
-  `value` VARCHAR(255) NOT NULL
-);
-
-ALTER TABLE `ws_p40_sponsors_social_network` ADD UNIQUE KEY `unique_sponsor_social_network` (`sponsorID`,`social_network_id`);
-ALTER TABLE `ws_p40_sponsors_social_network` ADD CONSTRAINT `FK_Sponsors_SC_SponsorID` FOREIGN KEY (`sponsorID`) REFERENCES `ws_p40_sponsors`(`sponsorID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
-ALTER TABLE `ws_p40_sponsors_social_network` ADD CONSTRAINT `FK_Sponsors_SC_SocialNetworkID` FOREIGN KEY (`social_network_id`) REFERENCES `ws_p40_user_socials_types`(`typeID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
-
---
 -- User
 --
 
@@ -1040,6 +1026,20 @@ INSERT INTO `ws_p40_user_socials_types` (`typeID`, `name`, `icon_prefix`, `place
 
 ALTER TABLE `ws_p40_user_socials_types` ADD PRIMARY KEY (`typeID`);
 ALTER TABLE `ws_p40_user_socials_types` MODIFY `typeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- Sponsor social networks
+--
+
+CREATE TABLE `ws_p40_sponsors_social_network` (
+  `sponsorID` int(11) NOT NULL,
+  `social_network_id` int(11) NOT NULL,
+  `value` VARCHAR(255) NOT NULL
+);
+
+ALTER TABLE `ws_p40_sponsors_social_network` ADD UNIQUE KEY `unique_sponsor_social_network` (`sponsorID`,`social_network_id`);
+ALTER TABLE `ws_p40_sponsors_social_network` ADD CONSTRAINT `FK_Sponsors_SC_SponsorID` FOREIGN KEY (`sponsorID`) REFERENCES `ws_p40_sponsors`(`sponsorID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `ws_p40_sponsors_social_network` ADD CONSTRAINT `FK_Sponsors_SC_SocialNetworkID` FOREIGN KEY (`social_network_id`) REFERENCES `ws_p40_user_socials_types`(`typeID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- DONE :)
