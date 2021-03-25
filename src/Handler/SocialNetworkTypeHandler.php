@@ -8,7 +8,7 @@ use webspell_ng\SocialNetworkType;
 use webspell_ng\WebSpellDatabaseConnection;
 
 
-class SocialNetworkHandler {
+class SocialNetworkTypeHandler {
 
     private const DB_TABLE_NAME_SOCIAL_NETWORKS = "user_socials_types";
 
@@ -37,12 +37,16 @@ class SocialNetworkHandler {
         $social_network->setSocialNetworkId((int) $social_network_result["typeID"]);
         $social_network->setName($social_network_result["name"]);
         $social_network->setIconPrefix($social_network_result["icon_prefix"]);
-        $social_network->setPlaceholderPlayer($social_network_result["placeholder"]);
-        $social_network->setPlaceholderTeam($social_network_result["placeholder_team"]);
         $social_network->setSort((int) $social_network_result["sort"]);
         $social_network->setIsHomepage(
             ($social_network_result["is_url"] == 1)
         );
+        if (!is_null($social_network_result["placeholder"])) {
+            $social_network->setPlaceholderPlayer($social_network_result["placeholder"]);
+        }
+        if (!is_null($social_network_result["placeholder_team"])) {
+            $social_network->setPlaceholderPlayer($social_network_result["placeholder_team"]);
+        }
 
         return $social_network;
 

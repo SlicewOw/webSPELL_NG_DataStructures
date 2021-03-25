@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
-
+use webspell_ng\Handler\SocialNetworkTypeHandler;
+use webspell_ng\SocialNetwork;
 use webspell_ng\Sponsor;
 use webspell_ng\Handler\SponsorHandler;
 use webspell_ng\Utils\StringFormatterUtils;
@@ -16,6 +17,13 @@ final class SponsorHandlerTest extends TestCase
         $date = new \DateTime("now");
 
         $sort = rand(100, 9999);
+        $social_network_type_id = rand(1, 10);
+
+        $social_network_01 = new SocialNetwork();
+        $social_network_01->setSocialNetworkType(
+            SocialNetworkTypeHandler::getSocialNetworkById($social_network_type_id)
+        );
+        $social_network_01->setValue("https://gaming.myrisk-ev.de");
 
         $new_sponsor = new Sponsor();
         $new_sponsor->setName($sponsor_name);
@@ -27,6 +35,7 @@ final class SponsorHandlerTest extends TestCase
         $new_sponsor->setIsMainsponsor(false);
         $new_sponsor->setDate($date);
         $new_sponsor->setSort($sort);
+        $new_sponsor->addSocialNetwork($social_network_01);
 
         $saved_sponsor = SponsorHandler::saveSponsor($new_sponsor);
 
@@ -40,6 +49,7 @@ final class SponsorHandlerTest extends TestCase
         $this->assertFalse($saved_sponsor->isMainsponsor(), "Sponsor is not a mainsponsor.");
         $this->assertEquals($date->getTimestamp(), $saved_sponsor->getDate()->getTimestamp(), "Sponsor date is saved.");
         $this->assertEquals($sort, $saved_sponsor->getSort(), "Sponsor sort is saved.");
+        $this->assertEquals(1, count($saved_sponsor->getSocialNetworks()), "Social network of sponsor is saved.");
         $this->assertGreaterThan(0, count(SponsorHandler::getAllSponsors()), "Sponsor is returned.");
 
         $changed_sponsor_name = "Test Sponsor " . StringFormatterUtils::getRandomString(10);

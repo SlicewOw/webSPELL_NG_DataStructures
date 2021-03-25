@@ -55,10 +55,6 @@ CREATE TABLE `ws_p40_sponsors` (
   `name` varchar(255) NOT NULL DEFAULT '',
   `homepage` varchar(255) NOT NULL DEFAULT '',
   `info` text NOT NULL,
-  `facebook` varchar(255) DEFAULT NULL,
-  `twitter` varchar(255) DEFAULT NULL,
-  `youtube` varchar(255) DEFAULT NULL,
-  `google` varchar(255) DEFAULT NULL,
   `banner` varchar(255) DEFAULT NULL,
   `banner_small` varchar(255) DEFAULT NULL,
   `banner_white` varchar(100) DEFAULT NULL,
@@ -74,6 +70,20 @@ CREATE TABLE `ws_p40_sponsors` (
 
 ALTER TABLE `ws_p40_sponsors` ADD PRIMARY KEY (`sponsorID`);
 ALTER TABLE `ws_p40_sponsors` MODIFY `sponsorID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+--
+-- Sponsor social networks
+--
+
+CREATE TABLE `ws_p40_sponsors_social_network` (
+  `sponsorID` int(11) NOT NULL,
+  `social_network_id` int(11) NOT NULL,
+  `value` VARCHAR(255) NOT NULL
+);
+
+ALTER TABLE `ws_p40_sponsors_social_network` ADD UNIQUE KEY `unique_sponsor_social_network` (`sponsorID`,`social_network_id`);
+ALTER TABLE `ws_p40_sponsors_social_network` ADD CONSTRAINT `FK_Sponsors_SC_SponsorID` FOREIGN KEY (`sponsorID`) REFERENCES `ws_p40_sponsors`(`sponsorID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+ALTER TABLE `ws_p40_sponsors_social_network` ADD CONSTRAINT `FK_Sponsors_SC_SocialNetworkID` FOREIGN KEY (`social_network_id`) REFERENCES `ws_p40_user_socials_types`(`typeID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
 -- User

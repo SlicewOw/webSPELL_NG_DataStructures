@@ -6,6 +6,7 @@ use Respect\Validation\Validator;
 
 use webspell_ng\Sponsor;
 use webspell_ng\WebSpellDatabaseConnection;
+use webspell_ng\Handler\SponsorSocialNetworkHandler;
 use webspell_ng\Utils\DateUtils;
 
 
@@ -35,13 +36,14 @@ class SponsorHandler {
         }
 
         $sponsor = new Sponsor();
-        $sponsor->setSponsorId($sponsor_result['sponsorID']);
+        $sponsor->setSponsorId((int) $sponsor_result['sponsorID']);
         $sponsor->setName($sponsor_result['name']);
         $sponsor->setHomepage($sponsor_result['homepage']);
         $sponsor->setInfo($sponsor_result['info']);
         $sponsor->setBanner($sponsor_result['banner']);
         $sponsor->setBannerSmall($sponsor_result['banner_small']);
         $sponsor->setHits((int) $sponsor_result['hits']);
+        $sponsor->setSort((int) $sponsor_result['sort']);
         $sponsor->setIsActive(
             ($sponsor_result['displayed'] == 1)
         );
@@ -57,7 +59,10 @@ class SponsorHandler {
         $sponsor->setDate(
             DateUtils::getDateTimeByMktimeValue($sponsor_result['date'])
         );
-        $sponsor->setSort($sponsor_result['sort']);
+
+        $sponsor->setSocialNetworks(
+            SponsorSocialNetworkHandler::getSocialNetworksOfSponsor($sponsor)
+        );
 
         return $sponsor;
 
@@ -124,6 +129,8 @@ class SponsorHandler {
         } else {
             self::updateSponsor($sponsor);
         }
+
+        SponsorSocialNetworkHandler::saveSocialNetworksOfSponsor($sponsor);
 
         return self::getSponsorBySponsorId($sponsor->getSponsorId());
 

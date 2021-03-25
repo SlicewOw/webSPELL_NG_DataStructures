@@ -173,6 +173,14 @@ class Sponsor extends DataStatus {
         $this->social_networks = $social_networks;
     }
 
+    public function addSocialNetwork(SocialNetwork $social_network): void
+    {
+        array_push(
+            $this->social_networks,
+            $social_network
+        );
+    }
+
     /**
      * @return array<SocialNetwork>
      */
