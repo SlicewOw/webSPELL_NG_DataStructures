@@ -111,7 +111,7 @@ final class SponsorHandlerTest extends TestCase
         $tmp_sort_value = -1;
         foreach ($all_sponsors as $sponsor) {
 
-            if ($sponsor->isActive()) {
+            if (!$sponsor->isActive()) {
                 $any_sponsor_is_hidden = true;
             }
 
@@ -121,10 +121,6 @@ final class SponsorHandlerTest extends TestCase
 
             $tmp_sort_value = $sponsor->getSort();
 
-        }
-
-        if (empty($all_sponsors)) {
-            $any_sponsor_is_hidden = true;
         }
 
         $this->assertTrue($any_sponsor_is_hidden, "Hidden sponsor is returned too.");
