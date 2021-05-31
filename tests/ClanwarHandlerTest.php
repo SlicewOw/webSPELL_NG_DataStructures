@@ -220,6 +220,10 @@ final class ClanwarHandlerTest extends TestCase
         $this->assertInstanceOf(Event::class, $clanwar_from_database->getEvent(), "Event is set!");
         $this->assertEquals(1, $clanwar_from_database->getEventId(), "Event ID is expected.");
 
+        $recent_clanwars = ClanwarHandler::getRecentMatches(1);
+
+        $this->assertCount(1, $recent_clanwars, "Recent clanwars are returned.");
+
     }
 
     public function testIfDefaultLossIsSavedToClanwar(): void
@@ -337,6 +341,10 @@ final class ClanwarHandlerTest extends TestCase
         foreach ($upcoming_matches as $upcoming_match) {
             $this->assertEquals(self::$first_squad->getSquadId(), $upcoming_match->getSquad()->getSquadId(), "Upcoming match squad is expected.");
         }
+
+        $upcoming_clanwars = ClanwarHandler::getUpcomingMatches(1);
+
+        $this->assertCount(1, $upcoming_clanwars, "Upcoming clanwars are returned.");
 
     }
 

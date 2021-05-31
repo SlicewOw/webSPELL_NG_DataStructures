@@ -119,6 +119,38 @@ class ClanwarHandler {
     /**
      * @return array<Clanwar>
      */
+    public static function getRecentMatches(int $max_clanwars = 20): array
+    {
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        return self::getMatchesByFilter(
+            $queryBuilder->expr()->and(
+                $queryBuilder->expr()->eq('active', 1),
+                $queryBuilder->expr()->lte('date', time())
+            ),
+            $max_clanwars,
+            0
+        );
+    }
+
+    /**
+     * @return array<Clanwar>
+     */
+    public static function getUpcomingMatches(int $max_clanwars = 1): array
+    {
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        return self::getMatchesByFilter(
+            $queryBuilder->expr()->and(
+                $queryBuilder->expr()->eq('active', 1),
+                $queryBuilder->expr()->gt('date', time())
+            ),
+            $max_clanwars,
+            0
+        );
+    }
+
+    /**
+     * @return array<Clanwar>
+     */
     public static function getRecentMatchesOfSquad(Squad $squad, int $limit = -1, int $start_value = -1): array
     {
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
