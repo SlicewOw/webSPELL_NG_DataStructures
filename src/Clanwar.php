@@ -171,6 +171,26 @@ class Clanwar {
         return $this->maps;
     }
 
+    public function getResult(): string
+    {
+
+        $home_score = 0;
+        $opponent_score = 0;
+
+        foreach ($this->maps as $map) {
+
+            if ($map->getScoreHome() < $map->getScoreOpponent()) {
+                $opponent_score++;
+            } else if ($map->getScoreHome() > $map->getScoreOpponent()) {
+                $home_score++;
+            }
+
+        }
+
+        return $home_score . ' : ' . $opponent_score;
+
+    }
+
     /**
      * @param array<int> $players
      */

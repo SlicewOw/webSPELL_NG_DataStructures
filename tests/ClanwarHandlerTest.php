@@ -158,6 +158,7 @@ final class ClanwarHandlerTest extends TestCase
         $this->assertEquals("https://cup.myrisk-ev.de", $clanwar->getMatchHomepage(), "Match URL of clanwar is set.");
         $this->assertFalse($clanwar->getIsDefaultWin(), "Match is a default win.");
         $this->assertFalse($clanwar->getIsDefaultLoss(), "Match is not a default loss.");
+        $this->assertEquals("1 : 2", $clanwar->getResult(), "Clanwar result is returned.");
 
         $this->assertNotNull($clanwar->getGame(), "Game of clanwar is not null");
         $this->assertInstanceOf(Game::class, $clanwar->getGame(), "Game is set!");
