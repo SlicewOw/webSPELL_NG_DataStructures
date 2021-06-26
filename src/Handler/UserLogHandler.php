@@ -26,10 +26,10 @@ class UserLogHandler {
             ->setParameter(0, $user->getUserId())
             ->orderBy("date", "ASC");
 
-        $log_query = $queryBuilder->execute();
+        $log_query = $queryBuilder->executeQuery();
 
         $logs = array();
-        while ($log_result = $log_query->fetch())
+        while ($log_result = $log_query->fetchAssociative())
         {
 
             $log = new UserLog();
@@ -69,7 +69,7 @@ class UserLogHandler {
             ->setParameter(3, $log->getParentId())
             ->setParameter(4, $log->getInfo());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 

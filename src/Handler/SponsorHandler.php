@@ -28,8 +28,8 @@ class SponsorHandler {
             ->where('sponsorID = ?')
             ->setParameter(0, $sponsor_id);
 
-        $sponsor_query = $queryBuilder->execute();
-        $sponsor_result = $sponsor_query->fetch();
+        $sponsor_query = $queryBuilder->executeQuery();
+        $sponsor_result = $sponsor_query->fetchAssociative();
 
         if (empty($sponsor_result)) {
             throw new \InvalidArgumentException('unknown_sponsor');
@@ -106,10 +106,10 @@ class SponsorHandler {
             );
         }
 
-        $sponsor_query = $queryBuilder->execute();
+        $sponsor_query = $queryBuilder->executeQuery();
 
         $sponsors = array();
-        while ($sponsor_result = $sponsor_query->fetch())
+        while ($sponsor_result = $sponsor_query->fetchAssociative())
         {
             array_push(
                 $sponsors,
@@ -131,6 +131,10 @@ class SponsorHandler {
         }
 
         SponsorSocialNetworkHandler::saveSocialNetworksOfSponsor($sponsor);
+
+        if (is_null($sponsor->getSponsorId())) {
+            throw new \UnexpectedValueException("sponsor_id_is_not_set");
+        }
 
         return self::getSponsorBySponsorId($sponsor->getSponsorId());
 
@@ -173,7 +177,7 @@ class SponsorHandler {
                     ]
                 );
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
         $sponsor->setSponsorId(
             (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId()
@@ -212,7 +216,7 @@ class SponsorHandler {
             ->setParameter(9, $sponsor->showOnFrontPageOnly() ? 1 : 0)
             ->setParameter(10, $sponsor->getSponsorId());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 

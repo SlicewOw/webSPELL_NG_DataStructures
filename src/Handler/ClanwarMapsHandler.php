@@ -29,8 +29,8 @@ class ClanwarMapsHandler {
 
         $clanwar_maps = array();
 
-        $clanwar_map_query = $queryBuilder->execute();
-        while ($clanwar_map_result = $clanwar_map_query->fetch()) {
+        $clanwar_map_query = $queryBuilder->executeQuery();
+        while ($clanwar_map_result = $clanwar_map_query->fetchAssociative()) {
 
             $clanwar_map = new ClanwarMap();
             $clanwar_map->setMappingId((int) $clanwar_map_result['mappingID']);
@@ -91,7 +91,7 @@ class ClanwarMapsHandler {
                         ]
                     );
 
-            $queryBuilder->execute();
+            $queryBuilder->executeQuery();
 
         }
 
@@ -111,8 +111,8 @@ class ClanwarMapsHandler {
             ->where(self::DB_TABLE_COLUMN_NAME_CLANWAR_ID . ' = ?')
             ->setParameter(0, $clanwar_id);
 
-        $clanwar_map_query = $queryBuilder->execute();
-        $clanwar_map_result = $clanwar_map_query->fetch();
+        $clanwar_map_query = $queryBuilder->executeQuery();
+        $clanwar_map_result = $clanwar_map_query->fetchAssociative();
 
         return !empty($clanwar_map_result);
 

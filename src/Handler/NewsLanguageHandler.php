@@ -24,8 +24,8 @@ class NewsLanguageHandler {
             ->where('lang = ?')
             ->setParameter(0, $shortcut);
 
-        $language_query = $queryBuilder->execute();
-        $language_result = $language_query->fetch();
+        $language_query = $queryBuilder->executeQuery();
+        $language_result = $language_query->fetchAssociative();
 
         if (empty($language_result)) {
             throw new \UnexpectedValueException('unknown_news_language');
@@ -52,10 +52,10 @@ class NewsLanguageHandler {
             ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_NEWS_LANGUAGES)
             ->orderBy("lang", "ASC");
 
-        $language_query = $queryBuilder->execute();
+        $language_query = $queryBuilder->executeQuery();
 
         $news_languages = array();
-        while ($language_result = $language_query->fetch())
+        while ($language_result = $language_query->fetchAssociative())
         {
             array_push(
                 $news_languages,
@@ -99,7 +99,7 @@ class NewsLanguageHandler {
                     ]
                 );
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
         $language->setLanguageId(
             (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId()
@@ -122,7 +122,7 @@ class NewsLanguageHandler {
             ->setParameter(1, $language->getShortcut())
             ->setParameter(2, $language->getLanguageId());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 

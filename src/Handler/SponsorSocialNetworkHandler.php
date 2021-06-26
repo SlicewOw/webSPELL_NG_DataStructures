@@ -27,10 +27,10 @@ class SponsorSocialNetworkHandler {
             ->where('sponsorID = ?')
             ->setParameter(0, $sponsor->getSponsorId());
 
-        $social_network_query = $queryBuilder->execute();
+        $social_network_query = $queryBuilder->executeQuery();
 
         $social_networks = array();
-        while ($social_network_result = $social_network_query->fetch())
+        while ($social_network_result = $social_network_query->fetchAssociative())
         {
 
             $social_network = new SocialNetwork();
@@ -81,8 +81,8 @@ class SponsorSocialNetworkHandler {
             ->setParameter(0, $sponsor->getSponsorId())
             ->setParameter(1, $social_network->getSocialNetworkType()->getSocialNetworkId());
 
-        $social_network_query = $queryBuilder->execute();
-        $social_network_result = $social_network_query->fetch();
+        $social_network_query = $queryBuilder->executeQuery();
+        $social_network_result = $social_network_query->fetchAssociative();
 
         return !empty($social_network_result);
 
@@ -109,7 +109,7 @@ class SponsorSocialNetworkHandler {
                     ]
                 );
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 
@@ -125,7 +125,7 @@ class SponsorSocialNetworkHandler {
             ->setParameter(1, $sponsor->getSponsorId())
             ->setParameter(2, $social_network->getSocialNetworkType()->getSocialNetworkId());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 

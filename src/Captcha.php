@@ -109,8 +109,8 @@ class Captcha
             ->select('captcha_math', 'captcha_bgcol', 'captcha_fontcol', 'captcha_type', 'captcha_noise', 'captcha_linenoise')
             ->from(WebSpellDatabaseConnection::getTablePrefix() . 'settings');
 
-        $settings_query = $queryBuilder->execute();
-        $ds = $settings_query->fetch();
+        $settings_query = $queryBuilder->executeQuery();
+        $ds = $settings_query->fetchAssociative();
 
         if (empty($ds)) {
             throw new \InvalidArgumentException('unknown_settings');
@@ -287,7 +287,7 @@ class Captcha
             ->setParameter(1, '0')
             ->setParameter(2, (time() + ($this->valide_time * 60)));
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
         return true;
 
@@ -310,8 +310,8 @@ class Captcha
             ->setParameter(0, $input)
             ->setParameter(1, $hash);
 
-        $settings_query = $queryBuilder->execute();
-        $ds = $settings_query->fetch();
+        $settings_query = $queryBuilder->executeQuery();
+        $ds = $settings_query->fetchAssociative();
 
         if (isset($ds['hash']) && !empty($ds['hash'])) {
 
@@ -323,7 +323,7 @@ class Captcha
                 ->setParameter(0, $input)
                 ->setParameter(1, $hash);
 
-            $deleteQueryBuilder->execute();
+            $deleteQueryBuilder->executeQuery();
 
             $tmp_file_path = __DIR__ . '/tmp/' . $ds['hash'] . '.jpg';
             if (file_exists($tmp_file_path)) {
@@ -349,8 +349,8 @@ class Captcha
             ->where('deltime < ?')
             ->setParameter(0, $time);
 
-        $settings_query = $queryBuilder->execute();
-        while ($ds = $settings_query->fetch()) {
+        $settings_query = $queryBuilder->executeQuery();
+        while ($ds = $settings_query->fetchAssociative()) {
 
             $tmp_file_path = __DIR__ . '/tmp/' . $ds['hash'] . '.jpg';
             if (file_exists($tmp_file_path)) {
@@ -365,7 +365,7 @@ class Captcha
             ->where('deltime < ?')
             ->setParameter(0, $time);
 
-        $deleteQueryBuilder->execute();
+        $deleteQueryBuilder->executeQuery();
 
     }
 

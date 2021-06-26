@@ -26,8 +26,8 @@ class GameHandler {
             ->where('gameID = ?')
             ->setParameter(0, $game_id);
 
-        $game_query = $queryBuilder->execute();
-        $game_result = $game_query->fetch();
+        $game_query = $queryBuilder->executeQuery();
+        $game_result = $game_query->fetchAssociative();
 
         if (empty($game_result)) {
             throw new \InvalidArgumentException('unknown_game');
@@ -54,8 +54,8 @@ class GameHandler {
             ->where('tag = ?')
             ->setParameter(0, $game_tag);
 
-        $game_query = $queryBuilder->execute();
-        $game_result = $game_query->fetch();
+        $game_query = $queryBuilder->executeQuery();
+        $game_result = $game_query->fetchAssociative();
 
         if (empty($game_result)) {
             throw new \InvalidArgumentException('unknown_game');

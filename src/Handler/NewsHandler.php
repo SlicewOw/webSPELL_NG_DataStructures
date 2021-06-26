@@ -31,8 +31,8 @@ class NewsHandler {
             ->where('newsID = ?')
             ->setParameter(0, $news_id);
 
-        $news_query = $queryBuilder->execute();
-        $news_result = $news_query->fetch();
+        $news_query = $queryBuilder->executeQuery();
+        $news_result = $news_query->fetchAssociative();
 
         if (empty($news_result)) {
             throw new \UnexpectedValueException('unknown_news');
@@ -90,6 +90,10 @@ class NewsHandler {
             NewsSourceHandler::saveSource($news, $news_source);
         }
 
+        if (is_null($news->getNewsId())) {
+            throw new \UnexpectedValueException("news_id_is_not_set");
+        }
+
         return self::getNewsByNewsId($news->getNewsId());
 
     }
@@ -121,7 +125,7 @@ class NewsHandler {
                     ]
                 );
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
         $news->setNewsId(
             (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId()
@@ -152,7 +156,7 @@ class NewsHandler {
             ->setParameter(4, $news->isInternal() ? 1 : 0)
             ->setParameter(5, $news->getNewsId());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 

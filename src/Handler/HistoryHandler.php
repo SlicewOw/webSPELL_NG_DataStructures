@@ -25,11 +25,11 @@ class HistoryHandler {
             ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_HISTORY)
             ->orderBy('year', $sort_order);
 
-        $history_query = $queryBuilder->execute();
+        $history_query = $queryBuilder->executeQuery();
 
         $history_array = array();
 
-        while ($history_result = $history_query->fetch())
+        while ($history_result = $history_query->fetchAssociative())
         {
 
             $history = new History();
@@ -63,8 +63,8 @@ class HistoryHandler {
             ->where('year = ?')
             ->setParameter(0, $history->getYear());
 
-        $history_query = $queryBuilder->execute();
-        $history_result = $history_query->fetch();
+        $history_query = $queryBuilder->executeQuery();
+        $history_result = $history_query->fetchAssociative();
 
         return !empty($history_result);
 
@@ -108,7 +108,7 @@ class HistoryHandler {
                     ]
                 );
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 
@@ -127,7 +127,7 @@ class HistoryHandler {
             ->setParameter(2, ($history->isPublished()) ? 1 : 0)
             ->setParameter(3, $history->getYear());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 

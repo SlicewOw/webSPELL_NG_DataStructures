@@ -26,8 +26,8 @@ class NewsRubricHandler {
             ->where('rubricID = ?')
             ->setParameter(0, $rubric_id);
 
-        $rubric_query = $queryBuilder->execute();
-        $rubric_result = $rubric_query->fetch();
+        $rubric_query = $queryBuilder->executeQuery();
+        $rubric_result = $rubric_query->fetchAssociative();
 
         if (empty($rubric_result)) {
             throw new \UnexpectedValueException('unknown_news_rubric');
@@ -59,10 +59,10 @@ class NewsRubricHandler {
             ->where("active = 1")
             ->orderBy("rubric", "ASC");
 
-        $rubric_query = $queryBuilder->execute();
+        $rubric_query = $queryBuilder->executeQuery();
 
         $rubrics = array();
-        while ($rubric_result = $rubric_query->fetch())
+        while ($rubric_result = $rubric_query->fetchAssociative())
         {
             array_push(
                 $rubrics,
@@ -81,6 +81,10 @@ class NewsRubricHandler {
             $rubric = self::insertRubric($rubric);
         } else {
             self::updateRubric($rubric);
+        }
+
+        if (is_null($rubric->getRubricId())) {
+            throw new \UnexpectedValueException("news_rubric_id_is_not_set");
         }
 
         return self::getRubricByRubricId($rubric->getRubricId());
@@ -110,7 +114,7 @@ class NewsRubricHandler {
                     ]
                 );
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
         $rubric->setRubricId(
             (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId()
@@ -137,7 +141,7 @@ class NewsRubricHandler {
             ->setParameter(3, $rubric->isActive() ? 1 : 0)
             ->setParameter(4, $rubric->getRubricId());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 

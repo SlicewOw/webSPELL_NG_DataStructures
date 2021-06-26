@@ -26,8 +26,8 @@ class SocialNetworkTypeHandler {
             ->where('typeID = ?')
             ->setParameter(0, $social_network_id);
 
-        $social_network_query = $queryBuilder->execute();
-        $social_network_result = $social_network_query->fetch();
+        $social_network_query = $queryBuilder->executeQuery();
+        $social_network_result = $social_network_query->fetchAssociative();
 
         if (empty($social_network_result)) {
             throw new \UnexpectedValueException('unknown_social_network');
@@ -66,8 +66,8 @@ class SocialNetworkTypeHandler {
             ->where('name = ?')
             ->setParameter(0, $social_network_name);
 
-        $social_network_query = $queryBuilder->execute();
-        $social_network_result = $social_network_query->fetch();
+        $social_network_query = $queryBuilder->executeQuery();
+        $social_network_result = $social_network_query->fetchAssociative();
 
         if (empty($social_network_result)) {
             throw new \UnexpectedValueException('unknown_social_network');
@@ -84,6 +84,10 @@ class SocialNetworkTypeHandler {
             $social_network_type = self::insertSocialNetworkType($social_network_type);
         } else {
             self::updateSocialNetworkType($social_network_type);
+        }
+
+        if (is_null($social_network_type->getSocialNetworkId())) {
+            throw new \UnexpectedValueException("social_network_id_is_not_set");
         }
 
         return self::getSocialNetworkById($social_network_type->getSocialNetworkId());
@@ -117,7 +121,7 @@ class SocialNetworkTypeHandler {
                     ]
                 );
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
         $social_network_type->setSocialNetworkId(
             (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId()
@@ -148,7 +152,7 @@ class SocialNetworkTypeHandler {
             ->setParameter(5, $social_network_type->getSort())
             ->setParameter(6, $social_network_type->getSocialNetworkId());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 

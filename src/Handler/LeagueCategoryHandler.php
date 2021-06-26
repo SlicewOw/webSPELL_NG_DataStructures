@@ -79,7 +79,7 @@ class LeagueCategoryHandler {
             ->setParameter(0, $category)
             ->setParameter(1, $parent_id);
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
         return $category;
 

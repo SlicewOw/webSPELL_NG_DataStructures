@@ -153,11 +153,6 @@ class Clanwar {
         return $this->league;
     }
 
-    public function getEventId(): ?int
-    {
-        return $this->getEvent()->getEventId();
-    }
-
     public function getOpponent(): ?Clan
     {
         return $this->opponent_clan;

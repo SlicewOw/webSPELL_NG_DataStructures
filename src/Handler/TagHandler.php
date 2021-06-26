@@ -74,7 +74,7 @@ class TagHandler
                 ->setParameter(1, $related_type)
                 ->setParameter(2, $related_id);
 
-            $queryBuilder->execute();
+            $queryBuilder->executeQuery();
 
         }
 
@@ -111,8 +111,8 @@ class TagHandler
             ->from(WebSpellDatabaseConnection::getTablePrefix() . 'tags')
             ->where(self::getTagConditionToBeUsedInQueryBuilder($queryBuilder, $related_type, $related_id));
 
-        $tag_query = $queryBuilder->execute();
-        while ($get = $tag_query->fetch()) {
+        $tag_query = $queryBuilder->executeQuery();
+        while ($get = $tag_query->fetchAssociative()) {
             $tags[] = $get['tag'];
         }
 
@@ -142,8 +142,8 @@ class TagHandler
             ->distinct()
             ->from(WebSpellDatabaseConnection::getTablePrefix() . 'tags');
 
-        $tag_query = $queryBuilder->execute();
-        while ($get = $tag_query->fetch()) {
+        $tag_query = $queryBuilder->executeQuery();
+        while ($get = $tag_query->fetchAssociative()) {
             if (!empty($get['tag'])) {
                 $tags[] = $get['tag'];
             }
@@ -172,8 +172,8 @@ class TagHandler
         $data['max'] = 0;
         $data['tags'] = array();
 
-        $tag_query = $queryBuilder->execute();
-        while ($get = $tag_query->fetch()) {
+        $tag_query = $queryBuilder->executeQuery();
+        while ($get = $tag_query->fetchAssociative()) {
             $data['tags'][] = array(
                 'name' => (string)$get['tag'],
                 'count' => (int)$get['count']
@@ -194,7 +194,7 @@ class TagHandler
             ->delete(WebSpellDatabaseConnection::getTablePrefix() . "tags")
             ->where(self::getTagConditionToBeUsedInQueryBuilder($queryBuilder, $related_type, $related_id));
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 

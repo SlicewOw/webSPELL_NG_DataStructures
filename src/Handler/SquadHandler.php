@@ -27,8 +27,8 @@ class SquadHandler {
             ->where('squadID = ?')
             ->setParameter(0, $squad_id);
 
-        $squad_query = $queryBuilder->execute();
-        $squad_result = $squad_query->fetch();
+        $squad_query = $queryBuilder->executeQuery();
+        $squad_result = $squad_query->fetchAssociative();
 
         if (empty($squad_result)) {
             throw new \InvalidArgumentException('unknown_squad');
@@ -127,7 +127,7 @@ class SquadHandler {
             ->setParameter(9, $squad->getRubric())
             ->setParameter(10, $squad->isActive() ? 1 : 0);
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
         $squad_id = (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId();
 
@@ -168,7 +168,7 @@ class SquadHandler {
             ->setParameter(10, $deletion_date)
             ->setParameter(11, $squad->getSquadId());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 

@@ -33,8 +33,8 @@ class ClanwarHandler {
             ->where('cwID = ?')
             ->setParameter(0, $clanwar_id);
 
-        $clanwar_query = $queryBuilder->execute();
-        $clanwar_result = $clanwar_query->fetch();
+        $clanwar_query = $queryBuilder->executeQuery();
+        $clanwar_result = $clanwar_query->fetchAssociative();
 
         if (empty($clanwar_result)) {
             throw new \UnexpectedValueException("unknown_clanwar");
@@ -186,11 +186,11 @@ class ClanwarHandler {
             $queryBuilder->setFirstResult($start_value);
         }
 
-        $clanwar_query = $queryBuilder->execute();
+        $clanwar_query = $queryBuilder->executeQuery();
 
         $matches = array();
 
-        while ($clanwar_result = $clanwar_query->fetch())
+        while ($clanwar_result = $clanwar_query->fetchAssociative())
         {
             array_push(
                 $matches,
@@ -246,7 +246,7 @@ class ClanwarHandler {
                         0 => $clanwar->getDate()->getTimestamp(),
                         1 => $clanwar->getSquadId(),
                         2 => $clanwar->getGame()->getGameId(),
-                        3 => $clanwar->getEventId(),
+                        3 => $clanwar->getEvent()->getEventId(),
                         4 => $clanwar->getOpponent()->getClanId(),
                         5 => $clanwar->getMatchHomepage(),
                         6 => $home_string,
@@ -258,7 +258,7 @@ class ClanwarHandler {
                     ]
                 );
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
         $clanwar->setClanwarId(
             (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId()
@@ -292,7 +292,7 @@ class ClanwarHandler {
             ->setParameter(0, $clanwar->getDate()->getTimestamp())
             ->setParameter(1, $clanwar->getSquadId())
             ->setParameter(2, $clanwar->getGame()->getGameId())
-            ->setParameter(3, $clanwar->getEventId())
+            ->setParameter(3, $clanwar->getEvent()->getEventId())
             ->setParameter(4, $clanwar->getOpponent()->getClanId())
             ->setParameter(5, $clanwar->getMatchHomepage())
             ->setParameter(6, $home_string)
@@ -303,7 +303,7 @@ class ClanwarHandler {
             ->setParameter(11, 1)
             ->setParameter(12, $clanwar->getClanwarId());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 
@@ -345,8 +345,8 @@ class ClanwarHandler {
             )
             ->setParameter(0, $squad_id);
 
-        $stats_query = $queryBuilder->execute();
-        $stats_result = $stats_query->fetch();
+        $stats_query = $queryBuilder->executeQuery();
+        $stats_result = $stats_query->fetchAssociative();
 
         return (int) $stats_result['clanwars_played'];
 

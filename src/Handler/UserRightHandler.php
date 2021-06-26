@@ -265,9 +265,9 @@ class UserRightHandler {
             $queryBuilder->andWhere($where_clause);
         }
 
-        $event_query = $queryBuilder->execute();
+        $event_query = $queryBuilder->executeQuery();
 
-        return !empty($event_query->fetch());
+        return !empty($event_query->fetchAllAssociative());
 
     }
 

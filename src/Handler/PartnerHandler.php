@@ -27,8 +27,8 @@ class PartnerHandler {
             ->where('partnerID = ?')
             ->setParameter(0, $partner_id);
 
-        $partner_query = $queryBuilder->execute();
-        $partner_result = $partner_query->fetch();
+        $partner_query = $queryBuilder->executeQuery();
+        $partner_result = $partner_query->fetchAssociative();
 
         if (empty($partner_result)) {
             throw new \InvalidArgumentException('unknown_partner');
@@ -65,10 +65,10 @@ class PartnerHandler {
             ->where('displayed = 1')
             ->orderBy("sort", "ASC");
 
-        $partner_query = $queryBuilder->execute();
+        $partner_query = $queryBuilder->executeQuery();
 
         $partners = array();
-        while ($partner_result = $partner_query->fetch())
+        while ($partner_result = $partner_query->fetchAssociative())
         {
             array_push(
                 $partners,
@@ -87,6 +87,10 @@ class PartnerHandler {
             $partner = self::insertPartner($partner);
         } else {
             self::updatePartner($partner);
+        }
+
+        if (is_null($partner->getPartnerId())) {
+            throw new \UnexpectedValueException("partner_id_is_not_set");
         }
 
         return self::getPartnerByPartnerId($partner->getPartnerId());
@@ -120,7 +124,7 @@ class PartnerHandler {
                     ]
                 );
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
         $partner->setPartnerId(
             (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId()
@@ -151,7 +155,7 @@ class PartnerHandler {
             ->setParameter(5, $partner->getSort())
             ->setParameter(6, $partner->getPartnerId());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 

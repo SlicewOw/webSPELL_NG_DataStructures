@@ -24,8 +24,8 @@ class ContactMailReceiverHandler {
             ->where('contactID = ?')
             ->setParameter(0, $receiver_id);
 
-        $receiver_query = $queryBuilder->execute();
-        $receiver_result = $receiver_query->fetch();
+        $receiver_query = $queryBuilder->executeQuery();
+        $receiver_result = $receiver_query->fetchAssociative();
 
         if (empty($receiver_result)) {
             throw new \UnexpectedValueException("unknown_receiver");
@@ -75,7 +75,7 @@ class ContactMailReceiverHandler {
                     ]
                 );
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
         $receiver->setReceiverId(
             (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId()
@@ -100,7 +100,7 @@ class ContactMailReceiverHandler {
             ->setParameter(2, $receiver->getSort())
             ->setParameter(3, $receiver->getReceiverId());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 

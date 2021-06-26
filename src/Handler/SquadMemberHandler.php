@@ -36,8 +36,8 @@ class SquadMemberHandler {
             )
             ->setParameter(0, $squad_id);
 
-        $member_query = $queryBuilder->execute();
-        while ($member_result = $member_query->fetch())
+        $member_query = $queryBuilder->executeQuery();
+        while ($member_result = $member_query->fetchAssociative())
         {
             array_push($members, self::getSquadMemberById($member_result['sqmID']));
         }
@@ -60,8 +60,8 @@ class SquadMemberHandler {
             ->where('sqmID = ?')
             ->setParameter(0, $member_id);
 
-        $member_query = $queryBuilder->execute();
-        $member_result = $member_query->fetch();
+        $member_query = $queryBuilder->executeQuery();
+        $member_result = $member_query->fetchAssociative();
 
         if (empty($member_result)) {
             throw new \UnexpectedValueException('unknown_member');
@@ -129,7 +129,7 @@ class SquadMemberHandler {
             ->setParameter(4, $is_active)
             ->setParameter(5, $member->getSort());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
         $member->setMemberId(
             (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId()
@@ -165,7 +165,7 @@ class SquadMemberHandler {
             ->setParameter(5, $member->getSort())
             ->setParameter(6, $member->getMemberId());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 

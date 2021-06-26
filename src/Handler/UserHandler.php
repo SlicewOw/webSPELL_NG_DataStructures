@@ -31,8 +31,8 @@ class UserHandler {
             ->where('userID = ?')
             ->setParameter(0, $user_id);
 
-        $user_query = $queryBuilder->execute();
-        $user_result = $user_query->fetch();
+        $user_query = $queryBuilder->executeQuery();
+        $user_result = $user_query->fetchAssociative();
 
         if (empty($user_result)) {
             throw new \InvalidArgumentException('unknown_user');
@@ -71,6 +71,10 @@ class UserHandler {
             self::updateUser($user);
         }
 
+        if (is_null($user->getUserId())) {
+            throw new \UnexpectedValueException("user_id_is_not_set");
+        }
+
         return self::getUserByUserId($user->getUserId());
 
     }
@@ -104,7 +108,7 @@ class UserHandler {
             ->setParameter(7, $user->getTown())
             ->setParameter(8, time());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
         $user->setUserId(
             (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId()
@@ -141,21 +145,25 @@ class UserHandler {
             ->setParameter(7, $user->getTown())
             ->setParameter(8, $user->getUserId());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 
     private static function saveUserLogNewUser(User $user): void
     {
 
-        $log = new UserLog();
-        $log->setInfo("user_registered");
-        $log->setParentId($user->getUserId());
+        if (!is_null($user->getUserId())) {
 
-        UserLogHandler::saveUserLog(
-            $user,
-            $log
-        );
+            $log = new UserLog();
+            $log->setInfo("user_registered");
+            $log->setParentId($user->getUserId());
+
+            UserLogHandler::saveUserLog(
+                $user,
+                $log
+            );
+
+        }
 
     }
 

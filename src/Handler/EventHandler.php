@@ -29,8 +29,8 @@ class EventHandler {
             ->where('eventID = ?')
             ->setParameter(0, $event_id);
 
-        $event_query = $queryBuilder->execute();
-        $event_result = $event_query->fetch();
+        $event_query = $queryBuilder->executeQuery();
+        $event_result = $event_query->fetchAssociative();
 
         return !empty($event_result);
 
@@ -54,8 +54,8 @@ class EventHandler {
             ->where('eventID = ?')
             ->setParameter(0, $event_id);
 
-        $event_query = $queryBuilder->execute();
-        $event_result = $event_query->fetch();
+        $event_query = $queryBuilder->executeQuery();
+        $event_result = $event_query->fetchAssociative();
 
         $event = new Event();
         $event->setEventId($event_id);
@@ -89,10 +89,10 @@ class EventHandler {
                 )
             );
 
-        $event_query = $queryBuilder->execute();
+        $event_query = $queryBuilder->executeQuery();
 
         $events = array();
-        while ($event_result = $event_query->fetch())
+        while ($event_result = $event_query->fetchAssociative())
         {
             array_push($events, self::getEventById($event_result['eventID']));
         }
@@ -145,7 +145,7 @@ class EventHandler {
                     ]
                 );
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
         $event->setEventId(
             (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId()
@@ -174,7 +174,7 @@ class EventHandler {
             ->setParameter(4, $event->getIsOffline() ? 1 : 0)
             ->setParameter(5, $event->getEventId());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 
@@ -191,7 +191,7 @@ class EventHandler {
             ->where("eventID = ?")
             ->setParameter(0, $event_id);
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
         return !self::isExistingEvent($event_id);
 

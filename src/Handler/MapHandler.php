@@ -27,8 +27,8 @@ class MapHandler {
             ->where('mapID = ?')
             ->setParameter(0, $map_id);
 
-        $clanwar_map_query = $queryBuilder->execute();
-        $clanwar_map_result = $clanwar_map_query->fetch();
+        $clanwar_map_query = $queryBuilder->executeQuery();
+        $clanwar_map_result = $clanwar_map_query->fetchAssociative();
 
         if (empty($clanwar_map_result)) {
             throw new \UnexpectedValueException("unknown_clanwar_map");
@@ -64,10 +64,10 @@ class MapHandler {
             ->setParameter(1, 0)
             ->orderBy("name", "ASC");
 
-        $map_query = $queryBuilder->execute();
+        $map_query = $queryBuilder->executeQuery();
 
         $maps = array();
-        while ($map_result = $map_query->fetch())
+        while ($map_result = $map_query->fetchAssociative())
         {
             array_push(
                 $maps,
@@ -92,10 +92,10 @@ class MapHandler {
             ->where("deleted = 0")
             ->orderBy("gameID", "ASC");
 
-        $map_query = $queryBuilder->execute();
+        $map_query = $queryBuilder->executeQuery();
 
         $maps = array();
-        while ($map_result = $map_query->fetch())
+        while ($map_result = $map_query->fetchAssociative())
         {
             array_push(
                 $maps,
@@ -143,7 +143,7 @@ class MapHandler {
             ->setParameter(2, $map->getIcon())
             ->setParameter(3, $map->isDeleted() ? 1 : 0);
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
         $map->setMapId(
             (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId()
@@ -171,7 +171,7 @@ class MapHandler {
             ->setParameter(3, $map->isDeleted() ? 1 : 0)
             ->setParameter(4, $map->getMapId());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 

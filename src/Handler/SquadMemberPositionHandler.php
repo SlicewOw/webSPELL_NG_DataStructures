@@ -26,8 +26,8 @@ class SquadMemberPositionHandler {
             ->where('positionID = ?')
             ->setParameter(0, $position_id);
 
-        $position_query = $queryBuilder->execute();
-        $position_result = $position_query->fetch();
+        $position_query = $queryBuilder->executeQuery();
+        $position_result = $position_query->fetchAssociative();
 
         if (empty($position_result)) {
             throw new \UnexpectedValueException('unknown_member_position');
@@ -85,7 +85,7 @@ class SquadMemberPositionHandler {
             ->setParameter(2, $position->getSort())
             ->setParameter(3, $game_id);
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
         $position_id = (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId();
 
@@ -115,7 +115,7 @@ class SquadMemberPositionHandler {
             ->setParameter(3, $game_id)
             ->setParameter(4, $position->getPositionId());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 

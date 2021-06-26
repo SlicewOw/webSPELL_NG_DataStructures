@@ -24,10 +24,10 @@ class NewsContentHandler {
             ->where('newsID = ?')
             ->setParameter(0, $news->getNewsId());
 
-        $content_query = $queryBuilder->execute();
+        $content_query = $queryBuilder->executeQuery();
 
         $news_contents = array();
-        while ($content_result = $content_query->fetch())
+        while ($content_result = $content_query->fetchAssociative())
         {
 
             $content = new NewsContent();
@@ -70,9 +70,9 @@ class NewsContentHandler {
             ->setParameter(0, $news->getNewsId())
             ->setParameter(1, $content->getLanguage()->getShortcut());
 
-        $content_query = $queryBuilder->execute();
+        $content_query = $queryBuilder->executeQuery();
 
-        return !empty($content_query->fetch());
+        return !empty($content_query->fetchAssociative());
 
     }
 
@@ -99,7 +99,7 @@ class NewsContentHandler {
                     ]
                 );
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 
@@ -117,7 +117,7 @@ class NewsContentHandler {
             ->setParameter(2, $news->getNewsId())
             ->setParameter(3, $content->getLanguage()->getShortcut());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 

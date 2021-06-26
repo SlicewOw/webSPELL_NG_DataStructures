@@ -29,6 +29,9 @@ namespace webspell_ng;
 
 use webspell_ng\Language;
 
+use Noodlehaus\Exception\FileNotFoundException;
+
+
 class Template
 {
 
@@ -88,7 +91,13 @@ class Template
             $file = $this->defaultFolder . "/error.html";
         }
 
-        return file_get_contents($file);
+        $loaded_file = @file_get_contents($file);
+
+        if (is_bool($loaded_file)) {
+            throw new FileNotFoundException("Cannot find template by name: " . $template);
+        }
+
+        return (string) $loaded_file;
 
     }
 

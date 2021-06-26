@@ -29,8 +29,8 @@ class AwardHandler {
             ->where('awardID = ?')
             ->setParameter(0, $award_id);
 
-        $award_query = $queryBuilder->execute();
-        $award_result = $award_query->fetch();
+        $award_query = $queryBuilder->executeQuery();
+        $award_result = $award_query->fetchAssociative();
 
         if (empty($award_result)) {
             throw new \UnexpectedValueException("unknown_award");
@@ -81,10 +81,10 @@ class AwardHandler {
                 )
             );
 
-        $award_query = $queryBuilder->execute();
+        $award_query = $queryBuilder->executeQuery();
 
         $awards = array();
-        while ($award_result = $award_query->fetch())
+        while ($award_result = $award_query->fetchAssociative())
         {
             array_push($awards, self::getAwardById($award_result['awardID']));
         }
@@ -167,7 +167,7 @@ class AwardHandler {
                     ]
                 );
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
         $award->setAwardId(
             (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId()
@@ -200,7 +200,7 @@ class AwardHandler {
             ->setParameter(6, $award->getOffline() ? 1 : 0)
             ->setParameter(7, $award->getAwardId());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 

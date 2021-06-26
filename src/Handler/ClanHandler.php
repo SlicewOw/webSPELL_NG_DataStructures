@@ -27,8 +27,8 @@ class ClanHandler {
             ->where('clanID = ?')
             ->setParameter(0, $clan_id);
 
-        $clan_query = $queryBuilder->execute();
-        $clan_result = $clan_query->fetch();
+        $clan_query = $queryBuilder->executeQuery();
+        $clan_result = $clan_query->fetchAssociative();
 
         if (empty($clan_result)) {
             throw new \UnexpectedValueException('unknown_clan');
@@ -59,8 +59,8 @@ class ClanHandler {
             ->where('name = ?')
             ->setParameter(0, StringFormatterUtils::getTextFormattedForDatabase($clan_name));
 
-        $clan_query = $queryBuilder->execute();
-        $clan_result = $clan_query->fetch();
+        $clan_query = $queryBuilder->executeQuery();
+        $clan_result = $clan_query->fetchAssociative();
 
         return !empty($clan_result);
 
@@ -102,7 +102,7 @@ class ClanHandler {
                     ]
                 );
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
         $clan->setClanId(
             (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId()
@@ -127,7 +127,7 @@ class ClanHandler {
             ->setParameter(2, $clan->getHomepage())
             ->setParameter(3, $clan->getClanId());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 

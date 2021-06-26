@@ -171,8 +171,8 @@ class Email
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder->select('*')->from(WebSpellDatabaseConnection::getTablePrefix() . 'email');
 
-        $email_query = $queryBuilder->execute();
-        $get = $email_query->fetch();
+        $email_query = $queryBuilder->executeQuery();
+        $get = $email_query->fetchAssociative();
 
         if (!Validator::arrayType()->validate($get)) {
             throw new \InvalidArgumentException("email_settings_cannot_be_set");

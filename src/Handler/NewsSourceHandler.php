@@ -24,10 +24,10 @@ class NewsSourceHandler {
             ->where('newsID = ?')
             ->setParameter(0, $news->getNewsId());
 
-        $source_query = $queryBuilder->execute();
+        $source_query = $queryBuilder->executeQuery();
 
         $sources = array();
-        while ($source_result = $source_query->fetch())
+        while ($source_result = $source_query->fetchAssociative())
         {
 
             $source = new NewsSource();
@@ -80,7 +80,7 @@ class NewsSourceHandler {
                     ]
                 );
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
         $source->setSourceId(
             (int) WebSpellDatabaseConnection::getDatabaseConnection()->lastInsertId()
@@ -105,7 +105,7 @@ class NewsSourceHandler {
             ->setParameter(2, $source->getHomepage())
             ->setParameter(3, $source->getSourceId());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 

@@ -170,7 +170,7 @@ final class ClanwarHandlerTest extends TestCase
         $this->assertEquals(self::$clan->getClanId(), $clanwar->getOpponent()->getClanId(), "Opponent is expected.");
 
         $this->assertInstanceOf(Event::class, $clanwar->getEvent(), "Event is set!");
-        $this->assertEquals(1, $clanwar->getEventId(), "Event ID is expected.");
+        $this->assertEquals(1, $clanwar->getEvent()->getEventId(), "Event ID is expected.");
 
         $changed_clanwar = $clanwar;
         $changed_clanwar->setDate(self::$new_date);
@@ -200,7 +200,7 @@ final class ClanwarHandlerTest extends TestCase
         $this->assertEquals(self::$clan->getClanId(), $updated_clanwar->getOpponent()->getClanId(), "Opponent is expected.");
 
         $this->assertInstanceOf(Event::class, $updated_clanwar->getEvent(), "Event is set!");
-        $this->assertEquals(1, $updated_clanwar->getEventId(), "Event ID is expected.");
+        $this->assertEquals(1, $updated_clanwar->getEvent()->getEventId(), "Event ID is expected.");
 
         $clanwar_from_database = ClanwarHandler::getClanwarByClanwarId($updated_clanwar->getClanwarId());
 
@@ -219,7 +219,7 @@ final class ClanwarHandlerTest extends TestCase
         $this->assertEquals(self::$clan->getClanId(), $clanwar_from_database->getOpponent()->getClanId(), "Opponent is expected.");
 
         $this->assertInstanceOf(Event::class, $clanwar_from_database->getEvent(), "Event is set!");
-        $this->assertEquals(1, $clanwar_from_database->getEventId(), "Event ID is expected.");
+        $this->assertEquals(1, $clanwar_from_database->getEvent()->getEventId(), "Event ID is expected.");
 
         $recent_clanwars = ClanwarHandler::getRecentMatches(1);
 
@@ -265,7 +265,7 @@ final class ClanwarHandlerTest extends TestCase
         $this->assertEquals(self::$clan->getClanId(), $clanwar->getOpponent()->getClanId(), "Opponent is expected.");
 
         $this->assertInstanceOf(Event::class, $clanwar->getEvent(), "Event is set!");
-        $this->assertEquals(1, $clanwar->getEventId(), "Event ID is expected.");
+        $this->assertEquals(1, $clanwar->getEvent()->getEventId(), "Event ID is expected.");
 
         $clanwar_from_database = ClanwarHandler::getClanwarByClanwarId($clanwar->getClanwarId());
 
@@ -285,7 +285,7 @@ final class ClanwarHandlerTest extends TestCase
         $this->assertEquals(self::$clan->getClanId(), $clanwar_from_database->getOpponent()->getClanId(), "Opponent is expected.");
 
         $this->assertInstanceOf(Event::class, $clanwar_from_database->getEvent(), "Event is set!");
-        $this->assertEquals(1, $clanwar_from_database->getEventId(), "Event ID is expected.");
+        $this->assertEquals(1, $clanwar_from_database->getEvent()->getEventId(), "Event ID is expected.");
 
         $this->assertGreaterThan(0, ClanwarHandler::getCountOfPlayedMatches(self::$first_squad->getSquadId()), "Squad played matches.");
 

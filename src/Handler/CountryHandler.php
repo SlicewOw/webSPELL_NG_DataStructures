@@ -26,8 +26,8 @@ class CountryHandler {
             ->where('short = ?')
             ->setParameter(0, $country_shortcut);
 
-        $country_query = $queryBuilder->execute();
-        $country_result = $country_query->fetch();
+        $country_query = $queryBuilder->executeQuery();
+        $country_result = $country_query->fetchAssociative();
 
         if (empty($country_result)) {
             throw new \UnexpectedValueException('unknown_country');

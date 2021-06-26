@@ -24,8 +24,8 @@ class PageDataHandler {
             ->where('page = ?')
             ->setParameter(0, $page);
 
-        $page_data_query = $queryBuilder->execute();
-        $page_data_result = $page_data_query->fetch();
+        $page_data_query = $queryBuilder->executeQuery();
+        $page_data_result = $page_data_query->fetchAssociative();
 
         if (empty($page_data_result)) {
             return self::getPageDataByTableAndPage($table, PageEnums::POLICY_DEFAULT);
@@ -54,11 +54,11 @@ class PageDataHandler {
             ->from(WebSpellDatabaseConnection::getTablePrefix() . $table)
             ->orderBy("date", "ASC");
 
-        $page_data_query = $queryBuilder->execute();
+        $page_data_query = $queryBuilder->executeQuery();
 
         $page_data_array = array();
 
-        while ($page_data_result = $page_data_query->fetch())
+        while ($page_data_result = $page_data_query->fetchAssociative())
         {
             array_push(
                 $page_data_array,
@@ -102,7 +102,7 @@ class PageDataHandler {
                     ]
                 );
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 
@@ -119,7 +119,7 @@ class PageDataHandler {
             ->setParameter(1, time())
             ->setParameter(2, $page_data->getPage());
 
-        $queryBuilder->execute();
+        $queryBuilder->executeQuery();
 
     }
 
@@ -137,8 +137,8 @@ class PageDataHandler {
             ->where('page = ?')
             ->setParameter(0, $page_data->getPage());
 
-        $page_data_query = $queryBuilder->execute();
-        $page_data_result = $page_data_query->fetch();
+        $page_data_query = $queryBuilder->executeQuery();
+        $page_data_result = $page_data_query->fetchAssociative();
 
         return !(empty($page_data_result));
 
