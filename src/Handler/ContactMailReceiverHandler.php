@@ -50,7 +50,11 @@ class ContactMailReceiverHandler {
             self::updateContactReceiver($receiver);
         }
 
-        return $receiver;
+        if (is_null($receiver->getReceiverId())) {
+            throw new \UnexpectedValueException("receiver_id_is_invalid");
+        }
+
+        return self::getContactReceiverById($receiver->getReceiverId());
 
     }
 

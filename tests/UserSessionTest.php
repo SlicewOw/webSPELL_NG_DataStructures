@@ -3,7 +3,7 @@
 use PHPUnit\Framework\TestCase;
 
 use webspell_ng\UserSession;
-
+use webspell_ng\UserSettings;
 
 final class UserSessionTest extends TestCase
 {
@@ -76,6 +76,9 @@ final class UserSessionTest extends TestCase
         $this->assertTrue(UserSession::isTvAdmin());
         $this->assertTrue(UserSession::isGalleryAdmin());
         $this->assertTrue(UserSession::isSuperAdmin());
+
+        $this->assertNotEmpty(UserSettings::getDateFormat(), "Date format is returned.");
+        $this->assertNotEmpty(UserSettings::getTimeFormat(), "Time format is returned.");
 
     }
 

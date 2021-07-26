@@ -14,7 +14,7 @@ final class SponsorHandlerTest extends TestCase
     {
 
         $sponsor_name = "Test Sponsor " . StringFormatterUtils::getRandomString(10);
-        $date = new \DateTime("now");
+        $date = new \DateTime("1 minute ago");
 
         $sort = rand(100, 9999);
         $social_network_type_id = rand(1, 10);
@@ -33,7 +33,6 @@ final class SponsorHandlerTest extends TestCase
         $new_sponsor->setBannerSmall("https://images.myrisk-ev.de/logo_small.png");
         $new_sponsor->setIsActive(true);
         $new_sponsor->setIsMainsponsor(false);
-        $new_sponsor->setDate($date);
         $new_sponsor->setSort($sort);
         $new_sponsor->addSocialNetwork($social_network_01);
 
@@ -47,7 +46,7 @@ final class SponsorHandlerTest extends TestCase
         $this->assertEquals("https://images.myrisk-ev.de/logo_small.png", $saved_sponsor->getBannerSmall(), "Sponsor banner small is set.");
         $this->assertTrue($saved_sponsor->isActive(), "Sponsor is displayed.");
         $this->assertFalse($saved_sponsor->isMainsponsor(), "Sponsor is not a mainsponsor.");
-        $this->assertEquals($date->getTimestamp(), $saved_sponsor->getDate()->getTimestamp(), "Sponsor date is saved.");
+        $this->assertGreaterThan($date->getTimestamp(), $saved_sponsor->getDate()->getTimestamp(), "Sponsor date is saved.");
         $this->assertEquals($sort, $saved_sponsor->getSort(), "Sponsor sort is saved.");
         $this->assertEquals(1, count($saved_sponsor->getSocialNetworks()), "Social network of sponsor is saved.");
         $this->assertGreaterThan(0, count(SponsorHandler::getAllSponsors()), "Sponsor is returned.");

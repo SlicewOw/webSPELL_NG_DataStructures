@@ -5,3 +5,5 @@
 
 /tests/tmp/
 .phpunit.result.cache
+
+mailoutput/

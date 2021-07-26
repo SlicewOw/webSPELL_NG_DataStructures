@@ -39,6 +39,7 @@ final class UserHandlerTest extends TestCase
         $this->assertEmpty($saved_user->getLastname(), "Lastname is set as empty.");
         $this->assertEquals("United Kingdom", $saved_user->getCountry()->getName(), "Country name of user is set.");
         $this->assertEquals("uk", $saved_user->getCountry()->getShortcut(), "Country shortcut of user is set.");
+        $this->assertGreaterThan(new \DateTime("5 minutes ago"), $saved_user->getRegistrationDate(), "Registration date is set.");
         $this->assertNull($saved_user->getFirstLoginDate(), "First login date is NULL per default.");
         $this->assertNull($saved_user->getLastLoginDate(), "Last login date is NULL per default.");
 
@@ -57,6 +58,7 @@ final class UserHandlerTest extends TestCase
         $this->assertEquals($changed_lastname, $updated_user->getLastname(), "Lastname is set.");
         $this->assertEquals("United Kingdom", $updated_user->getCountry()->getName(), "Country name of user is set.");
         $this->assertEquals("uk", $updated_user->getCountry()->getShortcut(), "Country shortcut of user is set.");
+        $this->assertEquals($saved_user->getRegistrationDate(), $updated_user->getRegistrationDate(), "Registration date is set.");
         $this->assertNull($updated_user->getFirstLoginDate(), "First login date is NULL per default.");
         $this->assertNull($updated_user->getLastLoginDate(), "Last login date is NULL per default.");
 

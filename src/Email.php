@@ -31,45 +31,58 @@ namespace webspell_ng;
 use Respect\Validation\Validator;
 
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\POP3;
 
+use webspell_ng\Enums\EmailEnums;
 use webspell_ng\Handler\SettingsHandler;
 use webspell_ng\WebSpellDatabaseConnection;
 
 class Email
 {
 
-    /** @var string $host */
+    /**
+     * @var string $host
+     */
     private static $host;
 
-    /** @var string $user */
+    /**
+     * @var string $user
+     */
     private static $user;
 
-    /** @var string $password */
+    /**
+     * @var string $password
+     */
     private static $password;
 
     /** @var int $port */
     private static $port;
 
-    /** @var bool $auth */
+    /**
+     * @var bool $auth
+     */
     private static $auth;
 
-    /** @var bool $html */
+    /**
+     * @var bool $html
+     */
     private static $html;
 
-    /** @var int $smtp */
+    /**
+     * @var int $smtp
+     */
     private static $smtp;
 
-    /** @var int $secure */
+    /**
+     * @var int $secure
+     */
     private static $secure;
 
-    /** @var int $debug */
+    /**
+     * @var int $debug
+     */
     private static $debug = 0;
 
-    /**
-     * @return array{result: string, error: ?string, debug: ?string}
-     */
-    public static function sendEmail(string $from, string $module, string $to, string $subject, string $message): array
+    public static function sendEmail(string $from, string $module, string $to, string $subject, string $message): EmailResponse
     {
 
         self::setMailSettings();
@@ -97,19 +110,20 @@ class Email
             $mail->AltBody = $plain;
         }
 
+        $email_response = new EmailResponse();
+
         if (!$mail->send()) {
-            if (!self::$debug) {
-                return array("result" => "fail", "error" => $mail->ErrorInfo, "debug" => null);
-            } else {
-                return array("result" => "fail", "error" => $mail->ErrorInfo, "debug" => $GLOBALS['mail_debug']);
-            }
+            $email_response->setResult(EmailEnums::MAIL_RESULT_FAIL);
+            $email_response->setError($mail->ErrorInfo);
         } else {
-            if (!self::$debug) {
-                return array("result" => "done", "error" => null, "debug" => null);
-            } else {
-                return array("result" => "done", "error" => null, "debug" => $GLOBALS['mail_debug']);
-            }
+            $email_response->setResult(EmailEnums::MAIL_RESULT_DONE);
         }
+
+        if (self::$debug) {
+            $email_response->setDebugMessage($GLOBALS['mail_debug']);
+        }
+
+        return $email_response;
 
     }
 

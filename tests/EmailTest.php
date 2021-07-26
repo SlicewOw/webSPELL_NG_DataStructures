@@ -10,7 +10,7 @@ final class EmailTest extends TestCase
     public function testIfEmailCanBeSend(): void
     {
 
-        $mail_status_array = Email::sendEmail(
+        $email_response = Email::sendEmail(
             "slicewow@myrisk-ev.de",
             "Test Mail Module",
             "me@slicewow.de",
@@ -19,9 +19,10 @@ final class EmailTest extends TestCase
             false
         );
 
-        $this->assertEquals("fail", $mail_status_array["result"]);
-        $this->assertEquals("Could not instantiate mail function.", $mail_status_array["error"]);
-        $this->assertEquals(null, $mail_status_array["debug"]);
+        $this->assertFalse($email_response->isFailed(), "Email response is expected.");
+        $this->assertTrue($email_response->isSuccess(), "Email response is expected.");
+        $this->assertNull($email_response->getError(), "Error message is NOT set.");
+        $this->assertNull($email_response->getDebugMessage(), "Debug message is NOT set.");
 
     }
 

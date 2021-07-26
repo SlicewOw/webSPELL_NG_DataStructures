@@ -91,13 +91,7 @@ class Template
             $file = $this->defaultFolder . "/error.html";
         }
 
-        $loaded_file = @file_get_contents($file);
-
-        if (is_bool($loaded_file)) {
-            throw new FileNotFoundException("Cannot find template by name: " . $template);
-        }
-
-        return (string) $loaded_file;
+        return (string) @file_get_contents($file);
 
     }
 

@@ -213,7 +213,11 @@ class ClanwarHandler {
 
         ClanwarMapsHandler::saveMapsOfClanwar($clanwar);
 
-        return $clanwar;
+        if (is_null($clanwar->getClanwarId())) {
+            throw new \UnexpectedValueException("clanwar_id_is_invalid");
+        }
+
+        return self::getClanwarByClanwarId($clanwar->getClanwarId());
 
     }
 

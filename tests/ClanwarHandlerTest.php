@@ -172,6 +172,11 @@ final class ClanwarHandlerTest extends TestCase
         $this->assertInstanceOf(Event::class, $clanwar->getEvent(), "Event is set!");
         $this->assertEquals(1, $clanwar->getEvent()->getEventId(), "Event ID is expected.");
 
+        $this->assertEquals(3, count($clanwar->getMaps()), "Clanwar maps are returned.");
+        foreach ($clanwar->getMaps() as $clanwar_map) {
+            $this->assertGreaterThan(0, $clanwar_map->getMappingId(), "Mapping ID is set.");
+        }
+
         $changed_clanwar = $clanwar;
         $changed_clanwar->setDate(self::$new_date);
         $changed_clanwar->setStatus(ClanwarEnums::CLANWAR_STATUS_DEFAULT_WIN);
@@ -179,7 +184,7 @@ final class ClanwarHandlerTest extends TestCase
             self::$second_squad,
             array(3)
         );
-        $new_clanwar->setMatchURL("https://tv.myrisk-ev.de");
+        $changed_clanwar->setMatchURL("https://tv.myrisk-ev.de");
 
         $updated_clanwar = ClanwarHandler::saveMatch($changed_clanwar);
 
@@ -201,6 +206,11 @@ final class ClanwarHandlerTest extends TestCase
 
         $this->assertInstanceOf(Event::class, $updated_clanwar->getEvent(), "Event is set!");
         $this->assertEquals(1, $updated_clanwar->getEvent()->getEventId(), "Event ID is expected.");
+
+        $this->assertEquals(3, count($updated_clanwar->getMaps()), "Clanwar maps are returned.");
+        foreach ($updated_clanwar->getMaps() as $index => $clanwar_map) {
+            $this->assertEquals($clanwar->getMaps()[$index]->getMappingId(), $clanwar_map->getMappingId(), "Mapping ID is set.");
+        }
 
         $clanwar_from_database = ClanwarHandler::getClanwarByClanwarId($updated_clanwar->getClanwarId());
 
@@ -224,6 +234,13 @@ final class ClanwarHandlerTest extends TestCase
         $recent_clanwars = ClanwarHandler::getRecentMatches(1);
 
         $this->assertCount(1, $recent_clanwars, "Recent clanwars are returned.");
+
+        $recent_clanwar = $recent_clanwars[0];
+
+        $this->assertEquals(3, count($recent_clanwar->getMaps()), "Clanwar maps are returned.");
+
+        $first_clanwar_map = $recent_clanwar->getMaps()[0];
+        $this->assertGreaterThan(0, $first_clanwar_map->getMappingId(), "Mapping ID is set.");
 
     }
 
