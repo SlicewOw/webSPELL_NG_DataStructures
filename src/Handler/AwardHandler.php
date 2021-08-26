@@ -99,7 +99,7 @@ class AwardHandler {
     private static function checkAwardVariables(Award $award): bool
     {
 
-        if (is_null($award->getSquad()) || !ValidationUtils::validateInteger($award->getSquadId(), true)) {
+        if (is_null($award->getSquad()) || !ValidationUtils::validateInteger($award->getSquad()->getSquadId(), true)) {
             throw new \UnexpectedValueException('enter_squad');
         }
 
@@ -137,6 +137,10 @@ class AwardHandler {
     private static function insertAward(Award $award): Award
     {
 
+        if (is_null($award->getSquad())) {
+            throw new \UnexpectedValueException('squad_is_not_set');
+        }
+
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder
             ->insert(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_AWARDS)
@@ -157,7 +161,7 @@ class AwardHandler {
                     [
                         0 => $award->getDate()->getTimestamp(),
                         1 => $award->getName(),
-                        2 => $award->getSquadId(),
+                        2 => $award->getSquad()->getSquadId(),
                         3 => $award->getEventId(),
                         4 => $award->getHomepage(),
                         5 => $award->getRank(),
@@ -180,6 +184,10 @@ class AwardHandler {
     private static function updateAward(Award $award): void
     {
 
+        if (is_null($award->getSquad())) {
+            throw new \UnexpectedValueException('squad_is_not_set');
+        }
+
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder
             ->update(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_AWARDS)
@@ -193,7 +201,7 @@ class AwardHandler {
             ->where('awardID = ?')
             ->setParameter(0, $award->getDate()->getTimestamp())
             ->setParameter(1, $award->getName())
-            ->setParameter(2, $award->getSquadId())
+            ->setParameter(2, $award->getSquad()->getSquadId())
             ->setParameter(3, $award->getEventId())
             ->setParameter(4, $award->getHomepage())
             ->setParameter(5, $award->getRank())

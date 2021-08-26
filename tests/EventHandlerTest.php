@@ -101,7 +101,7 @@ final class EventHandlerTest extends TestCase
     public function testIfUnexpectedValueExceptionIsRaisedIfParentIdIsInvalid(): void
     {
 
-        $this->expectException(TypeError::class);
+        $this->expectException(UnexpectedValueException::class);
 
         LeagueCategoryHandler::setEventLeagueCategory(new Event());
 

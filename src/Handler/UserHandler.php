@@ -58,6 +58,31 @@ class UserHandler {
 
     }
 
+    public static function getDataOfUserByUserId(int $user_id, string $column_name): ?string
+    {
+
+        if (!Validator::numericVal()->min(1)->validate($user_id)) {
+            return null;
+        }
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->select('*')
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_USER)
+            ->where('userID = ?')
+            ->setParameter(0, $user_id);
+
+        $user_query = $queryBuilder->executeQuery();
+        $user_result = $user_query->fetchAssociative();
+
+        if (empty($user_result)) {
+            throw new \InvalidArgumentException('unknown_user');
+        }
+
+        return (isset($user_result[$column_name])) ? $user_result[$column_name] : null;
+
+    }
+
     public static function saveUser(User $user): User
     {
 

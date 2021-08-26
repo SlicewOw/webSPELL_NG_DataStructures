@@ -55,17 +55,20 @@ class ClanwarMapsHandler {
             throw new \UnexpectedValueException('unknown_clanwar');
         }
 
-        $mapsArray = $clanwar->getMaps();
+        $clanwar_maps = $clanwar->getMaps();
 
-        $anzMaps = count($mapsArray);
-        if ($anzMaps < 1) {
+        if (empty($clanwar_maps)) {
             return;
         }
 
         self::removeExistingMapMappingsOfClanwar($clanwar);
 
         $map_index = 1;
-        foreach ($mapsArray as $map) {
+        foreach ($clanwar_maps as $clanwar_map) {
+
+            if (is_null($clanwar_map->getMap())) {
+                throw new \UnexpectedValueException("map_of_clanwar_map_is_not_set_yet");
+            }
 
             $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
             $queryBuilder
@@ -83,10 +86,10 @@ class ClanwarMapsHandler {
                 ->setParameters(
                         [
                             0 => $clanwar->getClanwarId(),
-                            1 => $map->getMap()->getMapId(),
-                            2 => $map->getMap()->getName(),
-                            3 => $map->getScoreHome(),
-                            4 => $map->getScoreOpponent(),
+                            1 => $clanwar_map->getMap()->getMapId(),
+                            2 => $clanwar_map->getMap()->getName(),
+                            3 => $clanwar_map->getScoreHome(),
+                            4 => $clanwar_map->getScoreOpponent(),
                             5 => $map_index++
                         ]
                     );

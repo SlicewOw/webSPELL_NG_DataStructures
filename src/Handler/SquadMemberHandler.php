@@ -137,6 +137,10 @@ class SquadMemberHandler {
 
         self::saveUserLogNewSquadMember($squad, $member);
 
+        if (is_null($member->getMemberId())) {
+            throw new \UnexpectedValueException("squad_member_id_is_not_set_yet");
+        }
+
         return self::getSquadMemberById($member->getMemberId());
 
     }
@@ -201,10 +205,16 @@ class SquadMemberHandler {
 
     private static function getSquadMemberUserLog(Squad $squad, string $info): UserLog
     {
+
+        if (is_null($squad->getSquadId())) {
+            throw new \UnexpectedValueException("squad_id_is_not_set_yet");
+        }
+
         $log = new UserLog();
         $log->setInfo($info);
         $log->setParentId($squad->getSquadId());
         return $log;
+
     }
 
 }

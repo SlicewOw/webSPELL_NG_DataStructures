@@ -48,15 +48,6 @@ final class AwardTest extends TestCase
 
     }
 
-    public function testIfNullIsReturndIfSquadIsNotSet(): void
-    {
-
-        $award = new Award();
-
-        $this->assertNull($award->getSquadId(), "Squad ID is null if squad is not set.");
-
-    }
-
     public function testIfEmptyInfoIsSetIfStringIsEmpty(): void
     {
 

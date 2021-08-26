@@ -110,14 +110,14 @@ class MapHandler {
     public static function saveMap(Map $map): Map
     {
 
-        if (is_null($map->getGame())) {
-            throw new \UnexpectedValueException("game_of_map_is_not_set_yet");
-        }
-
         if (is_null($map->getMapId())) {
             $map = self::insertMap($map);
         } else {
             self::updateMap($map);
+        }
+
+        if (is_null($map->getMapId())) {
+            throw new \UnexpectedValueException("map_id_is_not_set");
         }
 
         return self::getMapByMapId($map->getMapId());
@@ -126,6 +126,10 @@ class MapHandler {
 
     private static function insertMap(Map $map): Map
     {
+
+        if (is_null($map->getGame())) {
+            throw new \UnexpectedValueException("game_of_map_is_not_set_yet");
+        }
 
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder
@@ -156,6 +160,9 @@ class MapHandler {
     private static function updateMap(Map $map): void
     {
 
+        if (is_null($map->getGame())) {
+            throw new \UnexpectedValueException("game_of_map_is_not_set_yet");
+        }
 
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder

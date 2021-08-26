@@ -119,7 +119,7 @@ final class AwardHandlerTest extends TestCase
         $this->assertEquals(1, $award->getRank(), "Rank des Awards ist editiert!");
         $this->assertEquals($award->getHomepage(), self::$CONST_MYRISK_GAMING_URL, "Homepage des Awards ist editiert!");
         $this->assertFalse($award->getOffline(), "Der Award wurde online erspielt!");
-        $this->assertEquals(1, $award->getSquadId(), "Ein Squad hat den Award erspielt!");
+        $this->assertEquals(1, $award->getSquad()->getSquadId(), "Ein Squad hat den Award erspielt!");
         $this->assertEquals($date, $award->getDate(), "Date is set.");
         $this->assertEquals("gaming.myrisk-ev", $award->getLeagueCategory(), "League category is set.");
 
@@ -166,7 +166,7 @@ final class AwardHandlerTest extends TestCase
         $this->assertEquals(1, $award->getRank(), "Rank des Awards ist editiert!");
         $this->assertEquals(self::$CONST_MYRISK_GAMING_URL, $award->getHomepage(), "Homepage des Awards ist editiert!");
         $this->assertTrue($award->getOffline(), "Der Award wurde offline erspielt!");
-        $this->assertEquals(1, $award->getSquadId(), "Squad wurde gesetzt, welches den Award erspielt hat!");
+        $this->assertEquals(1, $award->getSquad()->getSquadId(), "Squad wurde gesetzt, welches den Award erspielt hat!");
         $this->assertEquals("Dies ist eine Beschreibung des Awards", $award->getDescription(), "Award Beschreibung wurde gespeichert!");
         $this->assertEquals($event->getEventId(), $award->getEventId(), "Event wurde gesetzt, welches den Award erspielt hat!");
         $this->assertEquals($award_date, $award->getDate(), "Date is set.");
@@ -209,7 +209,7 @@ final class AwardHandlerTest extends TestCase
         $this->assertEquals(2, $award->getRank(), "Rank des Awards ist editiert!");
         $this->assertEquals(self::$CONST_MYRISK_CUP_URL, $award->getHomepage(), "Homepage des Awards ist editiert!");
         $this->assertFalse($award->getOffline(), "Der Award wurde online erspielt!");
-        $this->assertEquals(1, $award->getSquadId(), "Squad wurde gesetzt, welches den Award erspielt hat!");
+        $this->assertEquals(1, $award->getSquad()->getSquadId(), "Squad wurde gesetzt, welches den Award erspielt hat!");
         $this->assertEquals($changed_date, $award->getDate(), "Date is set.");
 
     }

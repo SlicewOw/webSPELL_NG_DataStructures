@@ -220,6 +220,14 @@ class ClanwarHandler {
     private static function insertClanwar(Clanwar $clanwar): Clanwar
     {
 
+        if (is_null($clanwar->getGame())) {
+            throw new \UnexpectedValueException("game_of_clanwar_is_not_set");
+        } else if (is_null($clanwar->getEvent())) {
+            throw new \UnexpectedValueException("event_of_clanwar_is_not_set");
+        } else if (is_null($clanwar->getOpponent())) {
+            throw new \UnexpectedValueException("opponent_of_clanwar_is_not_set");
+        }
+
         $home_string = serialize($clanwar->getHometeam());
 
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
@@ -270,6 +278,14 @@ class ClanwarHandler {
 
     private static function updateClanwar(Clanwar $clanwar): void
     {
+
+        if (is_null($clanwar->getGame())) {
+            throw new \UnexpectedValueException("game_of_clanwar_is_not_set");
+        } else if (is_null($clanwar->getEvent())) {
+            throw new \UnexpectedValueException("event_of_clanwar_is_not_set");
+        } else if (is_null($clanwar->getOpponent())) {
+            throw new \UnexpectedValueException("opponent_of_clanwar_is_not_set");
+        }
 
         $home_string = serialize($clanwar->getHometeam());
 
@@ -348,7 +364,7 @@ class ClanwarHandler {
         $stats_query = $queryBuilder->executeQuery();
         $stats_result = $stats_query->fetchAssociative();
 
-        return (int) $stats_result['clanwars_played'];
+        return isset($stats_result['clanwars_played']) ? (int) $stats_result['clanwars_played'] : 0;
 
     }
 

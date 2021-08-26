@@ -154,7 +154,7 @@ class TagHandler
     }
 
     /**
-     * @return array{min: int, max: int, tags: array{array{name: string, count: int}}}
+     * @return array{min: int, max: int, tags: array<int, array{name: string, count: int}>}
      */
     public static function getTagCloud(): array
     {

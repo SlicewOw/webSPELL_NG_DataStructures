@@ -187,17 +187,6 @@ class Award {
 		return $this->squad;
 	}
 
-	public function getSquadId(): ?int
-	{
-
-		if (is_null($this->getSquad())) {
-			return null;
-		}
-
-		return $this->getSquad()->getSquadId();
-
-	}
-
 	public function getRank(): ?int
 	{
 		return $this->rank;

@@ -24,11 +24,11 @@ class LeagueCategoryHandler {
         return $event;
     }
 
-    private static function setLeagueCategory(string $homepage, int $parent_id, string $table, string $parent_id_column): string
+    private static function setLeagueCategory(?string $homepage, ?int $parent_id, string $table, string $parent_id_column): string
     {
 
-        if (empty($homepage)) {
-            throw new \UnexpectedValueException('unknown_parameter_homepage');
+        if (empty($homepage) || is_null($parent_id)) {
+            throw new \UnexpectedValueException('invalid_parameters');
         }
 
         $categoryArray = array();

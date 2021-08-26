@@ -90,12 +90,20 @@ class SquadHandler {
             self::updateSquad($squad);
         }
 
+        if (is_null($squad->getSquadId())) {
+            throw new \UnexpectedValueException("squad_id_is_not_set");
+        }
+
         return self::getSquadBySquadId($squad->getSquadId());
 
     }
 
     private static function insertSquad(Squad $squad): Squad
     {
+
+        if (is_null($squad->getGame())) {
+            throw new \UnexpectedValueException("game_of_squad_is_not_set_yet");
+        }
 
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder
@@ -137,6 +145,10 @@ class SquadHandler {
 
     private static function updateSquad(Squad $squad): void
     {
+
+        if (is_null($squad->getGame())) {
+            throw new \UnexpectedValueException("game_of_squad_is_not_set_yet");
+        }
 
         $deletion_date = !is_null($squad->getDateOfDeletion()) ? $squad->getDateOfDeletion()->getTimestamp() : null;
 

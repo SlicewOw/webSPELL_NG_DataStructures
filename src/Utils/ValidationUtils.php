@@ -2,7 +2,7 @@
 
 namespace webspell_ng\Utils;
 
-use \webspell_ng\Utils\TrashmailUtils;
+use webspell_ng\Utils\TrashmailUtils;
 
 class ValidationUtils {
 
@@ -20,10 +20,10 @@ class ValidationUtils {
 
     }
 
-    public static function validateInteger(int $integer_value, bool $checkIfValueIsLessThenOne=true): bool
+    public static function validateInteger(?int $integer_value, bool $checkIfValueIsLessThenOne=true): bool
     {
 
-        if ((!is_numeric($integer_value)) || ($checkIfValueIsLessThenOne && ($integer_value < 1))) {
+        if (is_null($integer_value) || (!is_numeric($integer_value)) || ($checkIfValueIsLessThenOne && ($integer_value < 1))) {
             return FALSE;
         }
 

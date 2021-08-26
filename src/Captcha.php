@@ -1,34 +1,6 @@
 <?php
 
-/*
-##########################################################################
-#                                                                        #
-#           Version 4       /                        /   /               #
-#          -----------__---/__---__------__----__---/---/-               #
-#           | /| /  /___) /   ) (_ `   /   ) /___) /   /                 #
-#          _|/_|/__(___ _(___/_(__)___/___/_(___ _/___/___               #
-#                       Free Content / Management System                 #
-#                                   /                                    #
-#                                                                        #
-#                                                                        #
-#   Copyright 2005-2015 by webspell.org                                  #
-#                                                                        #
-#   visit webSPELL.org, webspell.info to get webSPELL for free           #
-#   - Script runs under the GNU GENERAL PUBLIC LICENSE                   #
-#   - It's NOT allowed to remove this copyright-tag                      #
-#   -- http://www.fsf.org/licensing/licenses/gpl.html                    #
-#                                                                        #
-#   Code based on WebSPELL Clanpackage (Michael Gruber - webspell.at),   #
-#   Far Development by Development Team - webspell.org                   #
-#                                                                        #
-#   visit webspell.org                                                   #
-#                                                                        #
-##########################################################################
-*/
-
 namespace webspell_ng;
-
-use Respect\Validation\Validator;
 
 use webspell_ng\Language;
 use webspell_ng\WebSpellDatabaseConnection;
@@ -116,11 +88,11 @@ class Captcha
             throw new \InvalidArgumentException('unknown_settings');
         }
 
-        if (mb_strlen($ds[ 'captcha_bgcol' ]) == 7) {
+        if (mb_strlen((string) $ds[ 'captcha_bgcol' ]) == 7) {
             $this->bgcol = $this->hex2rgb($ds[ 'captcha_bgcol' ]);
         }
 
-        if (mb_strlen($ds[ 'captcha_fontcol' ]) == 7) {
+        if (mb_strlen((string) $ds[ 'captcha_fontcol' ]) == 7) {
             $this->fontcol = $this->hex2rgb($ds[ 'captcha_fontcol' ]);
         }
 
@@ -161,20 +133,20 @@ class Captcha
             $this->length = 6;
             $first = rand(1, $this->math_max);
             $catpcha_result = $first;
-            while (mb_strlen($first) < mb_strlen((string) $this->math_max)) {
+            while (mb_strlen((string) $first) < mb_strlen((string) $this->math_max)) {
                 $first = ' ' . $first;
             }
-            $captcha_shown = (string)$first;
+            $captcha_shown = (string) $first;
             if (rand(0, 1)) {
                 $captcha_shown .= "+";
                 $next = rand(1, $this->math_max);
                 $catpcha_result += $next;
             } else {
                 $captcha_shown .= "-";
-                $next = rand(1, $first - 1);
+                $next = rand(1, (int) $first - 1);
                 $catpcha_result -= $next;
             }
-            while (mb_strlen($next) < mb_strlen((string) $this->math_max)) {
+            while (mb_strlen((string) $next) < mb_strlen((string) $this->math_max)) {
                 $next = ' ' . $next;
             }
             $captcha_shown .= $next;
@@ -186,15 +158,30 @@ class Captcha
             }
             $catpcha_result = $captcha_shown;
         }
-        return array('text' => $captcha_shown, 'result' => $catpcha_result);
+        return array('text' => $captcha_shown, 'result' => (string) $catpcha_result);
     }
 
     private function createCatpchaImage(string $text): string
     {
 
         $imgziel = imagecreatetruecolor(($this->length * 15) + 10, 25);
+
+        if (is_bool($imgziel)) {
+            throw new \InvalidArgumentException("cannot_create_image_true_color");
+        }
+
         $bgcolor = imagecolorallocate($imgziel, $this->bgcol[ 'r' ], $this->bgcol[ 'g' ], $this->bgcol[ 'b' ]);
+
+        if (is_bool($bgcolor)) {
+            throw new \InvalidArgumentException("cannot_create_background_color");
+        }
+
         $fontcolor = imagecolorallocate($imgziel, $this->fontcol[ 'r' ], $this->fontcol[ 'g' ], $this->fontcol[ 'b' ]);
+
+        if (is_bool($fontcolor)) {
+            throw new \InvalidArgumentException("cannot_create_font_color");
+        }
+
         $xziel = imagesx($imgziel); // get image width
         $yziel = imagesy($imgziel); // get image height
         imagefilledrectangle($imgziel, 0, 0, $xziel, $yziel, $bgcolor);
@@ -202,7 +189,7 @@ class Captcha
         // add line and point noise
         for ($i = 0; $i < $this->linenoise; $i++) {
             $color = imagecolorallocate($imgziel, rand(0, 255), rand(0, 255), rand(0, 255));
-            imageline($imgziel, rand(0, $xziel), rand(0, $yziel), rand(0, $xziel), rand(0, $yziel), $color);
+            imageline($imgziel, rand(0, $xziel), rand(0, $yziel), rand(0, $xziel), rand(0, $yziel), (int) $color);
         }
 
         for ($i = 0; $i < $this->noise; $i++) {
@@ -301,7 +288,9 @@ class Captcha
     public function checkCaptcha(int $input, string $hash): bool
     {
 
-        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $connection = WebSpellDatabaseConnection::getDatabaseConnection();
+
+        $queryBuilder = $connection->createQueryBuilder();
         $queryBuilder
             ->select('hash')
             ->from(WebSpellDatabaseConnection::getTablePrefix() . 'captcha')
@@ -313,9 +302,9 @@ class Captcha
         $settings_query = $queryBuilder->executeQuery();
         $ds = $settings_query->fetchAssociative();
 
-        if (isset($ds['hash']) && !empty($ds['hash'])) {
+        if (!empty($ds) && isset($ds['hash']) && !empty($ds['hash'])) {
 
-            $deleteQueryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+            $deleteQueryBuilder = $connection->createQueryBuilder();
             $deleteQueryBuilder
                 ->delete(WebSpellDatabaseConnection::getTablePrefix() . 'captcha')
                 ->where('captcha = ?')
