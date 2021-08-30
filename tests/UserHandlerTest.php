@@ -39,6 +39,8 @@ final class UserHandlerTest extends TestCase
         $this->assertEmpty($saved_user->getLastname(), "Lastname is set as empty.");
         $this->assertEquals("United Kingdom", $saved_user->getCountry()->getName(), "Country name of user is set.");
         $this->assertEquals("uk", $saved_user->getCountry()->getShortcut(), "Country shortcut of user is set.");
+        $this->assertNull($saved_user->getFirstLoginDate(), "First login date is NULL per default.");
+        $this->assertNull($saved_user->getLastLoginDate(), "Last login date is NULL per default.");
 
         $changed_lastname = StringFormatterUtils::getRandomString(10);
 
@@ -55,6 +57,20 @@ final class UserHandlerTest extends TestCase
         $this->assertEquals($changed_lastname, $updated_user->getLastname(), "Lastname is set.");
         $this->assertEquals("United Kingdom", $updated_user->getCountry()->getName(), "Country name of user is set.");
         $this->assertEquals("uk", $updated_user->getCountry()->getShortcut(), "Country shortcut of user is set.");
+        $this->assertNull($updated_user->getFirstLoginDate(), "First login date is NULL per default.");
+        $this->assertNull($updated_user->getLastLoginDate(), "Last login date is NULL per default.");
+
+        $logged_in_user = UserHandler::loginUser($updated_user);
+
+        $this->assertNotNull($logged_in_user->getFirstLoginDate(), "First login date is set.");
+        $this->assertNotNull($logged_in_user->getLastLoginDate(), "Last login date is set.");
+
+        $second_login_of_user = UserHandler::loginUser($logged_in_user);
+
+        $this->assertNotNull($second_login_of_user->getFirstLoginDate(), "First login date is NULL per default.");
+        $this->assertEquals($logged_in_user->getFirstLoginDate(), $second_login_of_user->getFirstLoginDate(), "First login date is equal.");
+        $this->assertNotNull($second_login_of_user->getLastLoginDate(), "Last login date is set.");
+        $this->assertGreaterThan($logged_in_user->getLastLoginDate(), $second_login_of_user->getLastLoginDate(), "Last login date is newer than before.");
 
     }
 

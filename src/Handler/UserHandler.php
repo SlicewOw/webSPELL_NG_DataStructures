@@ -49,10 +49,21 @@ class UserHandler {
             CountryHandler::getCountryByCountryShortcut($user_result['country'])
         );
         $user->setBirthday(
-            DateUtils::getDateTimeByMktimeValue(
-                strtotime($user_result['birthday'])
-            )
+            new \DateTime($user_result['birthday'])
         );
+        $user->setRegistrationDate(
+            new \DateTime($user_result['registerdate'])
+        );
+        if (!is_null($user_result['firstlogin'])) {
+            $user->setFirstLoginDate(
+                new \DateTime($user_result['firstlogin'])
+            );
+        }
+        if (!is_null($user_result['lastlogin'])) {
+            $user->setLastLoginDate(
+                new \DateTime($user_result['lastlogin'])
+            );
+        }
 
         return $user;
 
@@ -104,8 +115,27 @@ class UserHandler {
 
     }
 
+    public static function loginUser(User $user): User
+    {
+
+        if (is_null($user->getFirstLoginDate())) {
+            $user->setFirstLoginDate(
+                new \DateTime("now")
+            );
+        }
+        $user->setLastLoginDate(
+            new \DateTime("now")
+        );
+
+        return self::saveUser($user);
+
+    }
+
     private static function insertUser(User $user): User
     {
+
+        $first_login_date = !is_null($user->getFirstLoginDate()) ? $user->getFirstLoginDate()->format("Y-m-d H:i:s") : null;
+        $last_login_date = !is_null($user->getLastLoginDate()) ? $user->getLastLoginDate()->format("Y-m-d H:i:s") : null;
 
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder
@@ -120,7 +150,9 @@ class UserHandler {
                     'birthday' => '?',
                     'country' => '?',
                     'town' => '?',
-                    'registerdate' => '?'
+                    'registerdate' => '?',
+                    'firstlogin' => '?',
+                    'lastlogin' => '?'
                 )
             )
             ->setParameter(0, $user->getUsername())
@@ -131,7 +163,9 @@ class UserHandler {
             ->setParameter(5, $user->getBirthday()->format("Y-m-d H:i:s"))
             ->setParameter(6, $user->getCountry()->getShortcut())
             ->setParameter(7, $user->getTown())
-            ->setParameter(8, time());
+            ->setParameter(8, $user->getRegistrationDate()->format("Y-m-d H:i:s"))
+            ->setParameter(9, $first_login_date)
+            ->setParameter(10, $last_login_date);
 
         $queryBuilder->executeQuery();
 
@@ -148,6 +182,9 @@ class UserHandler {
     private static function updateUser(User $user): void
     {
 
+        $first_login_date = !is_null($user->getFirstLoginDate()) ? $user->getFirstLoginDate()->format("Y-m-d H:i:s") : null;
+        $last_login_date = !is_null($user->getLastLoginDate()) ? $user->getLastLoginDate()->format("Y-m-d H:i:s") : null;
+
         $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
         $queryBuilder
             ->update(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_USER)
@@ -159,6 +196,8 @@ class UserHandler {
             ->set("birthday", "?")
             ->set("country", "?")
             ->set("town", "?")
+            ->set("firstlogin", "?")
+            ->set("lastlogin", "?")
             ->where("userID = ?")
             ->setParameter(0, $user->getUsername())
             ->setParameter(1, $user->getEmail())
@@ -168,7 +207,9 @@ class UserHandler {
             ->setParameter(5, $user->getBirthday()->format("Y-m-d H:i:s"))
             ->setParameter(6, $user->getCountry()->getShortcut())
             ->setParameter(7, $user->getTown())
-            ->setParameter(8, $user->getUserId());
+            ->setParameter(8, $first_login_date)
+            ->setParameter(9, $last_login_date)
+            ->setParameter(10, $user->getUserId());
 
         $queryBuilder->executeQuery();
 
