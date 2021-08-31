@@ -53,7 +53,7 @@ class User {
     private $birthday = null;
 
     /**
-     * @var \DateTime $registration_date
+     * @var ?\DateTime $registration_date
      */
     private $registration_date = null;
 

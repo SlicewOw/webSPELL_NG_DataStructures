@@ -77,7 +77,7 @@ ALTER TABLE `ws_p40_sponsors` MODIFY `sponsorID` int(11) NOT NULL AUTO_INCREMENT
 
 CREATE TABLE `ws_p40_user` (
   `userID` int(11) NOT NULL,
-  `registerdate` datetime NOT NULL,
+  `registerdate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `firstlogin` datetime DEFAULT NULL,
   `lastlogin` datetime DEFAULT NULL,
   `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,

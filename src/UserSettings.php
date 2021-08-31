@@ -8,7 +8,14 @@ use webspell_ng\UserSession;
 
 class UserSettings {
 
+    /**
+     * @var string $DEFAULT_DATE_FORMAT
+     */
     private static $DEFAULT_DATE_FORMAT = "Y-m-d";
+
+    /**
+     * @var string $DEFAULT_TIME_FORMAT
+     */
     private static $DEFAULT_TIME_FORMAT = "H:i:s";
 
     public static function getDateFormat(): string

@@ -6,6 +6,10 @@ use webspell_ng\UserSettings;
 
 class DateUtils {
 
+    /**
+     * TODO: Make this function obsolete by switching database columns to type datetime instead of int(11)
+     * @deprecated
+     */
     public static function getDateTimeByMktimeValue(int $mktime_value): \DateTime
     {
         return new \DateTime(
@@ -13,6 +17,10 @@ class DateUtils {
         );
     }
 
+    /**
+     * TODO: Make this function obsolete by switching database columns to type datetime instead of int(11)
+     * @deprecated
+     */
     public static function daysSinceTimestamp(int $time): int
     {
 

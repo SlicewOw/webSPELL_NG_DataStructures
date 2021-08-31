@@ -9,7 +9,6 @@ use webspell_ng\UserLog;
 use webspell_ng\WebSpellDatabaseConnection;
 use webspell_ng\Handler\CountryHandler;
 use webspell_ng\Handler\UserLogHandler;
-use webspell_ng\Utils\DateUtils;
 use webspell_ng\Utils\ValidationUtils;
 
 
