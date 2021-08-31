@@ -57,6 +57,28 @@ jobs:
     - name: Create MySQL tables
       run: mysql --host=127.0.0.1 --port=8888 --user=root --password=webspell --protocol=tcp webspell_ng < sql/install.sql
 
+    # Install postfix and automatically retry if the install failed, which happens reguarly.
+    # @link https://github.com/marketplace/actions/retry-step
+    - name: Install postfix
+      uses: nick-invision/retry@v2
+      with:
+        timeout_minutes: 2
+        max_attempts: 3
+        retry_wait_seconds: 5
+        command: |
+          sudo apt-get install -y -qq postfix qmail
+          sudo service postfix stop
+
+    - name: Set up sendmail
+      run: |
+        smtp-sink -d "%d.%H.%M.%S" localhost:2500 1000 &
+        mkdir -p build/logs
+        sudo cp test/testbootstrap-dist.php test/testbootstrap.php
+        sudo chmod +x test/fakesendmail.sh
+        sudo mkdir -p /var/qmail/bin
+        sudo cp test/fakesendmail.sh /var/qmail/bin/sendmail
+        sudo cp test/fakesendmail.sh /usr/sbin/sendmail
+
     - name: Run test suite
       env:
         DB_HOST: 127.0.0.1
