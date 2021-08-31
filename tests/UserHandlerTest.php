@@ -50,7 +50,7 @@ final class UserHandlerTest extends TestCase
         $updated_user = UserHandler::saveUser($changed_user);
 
         $this->assertEquals(User::class, get_class($updated_user), "Instance of class 'User' is returned.");
-        $this->assertGreaterThan(0, $updated_user->getUserId(), "User ID is set.");
+        $this->assertEquals($saved_user->getUserId(), $updated_user->getUserId(), "User ID is set.");
         $this->assertEquals($saved_user->getUserId(), $updated_user->getUserId(), "User ID is expected.");
         $this->assertEquals($username, $updated_user->getUsername(), "Username is set.");
         $this->assertEquals($firstname, $updated_user->getFirstname(), "Firstname is set.");
@@ -62,15 +62,25 @@ final class UserHandlerTest extends TestCase
 
         $logged_in_user = UserHandler::loginUser($updated_user);
 
+        $this->assertEquals($saved_user->getUserId(), $logged_in_user->getUserId(), "User ID is set.");
         $this->assertNotNull($logged_in_user->getFirstLoginDate(), "First login date is set.");
         $this->assertNotNull($logged_in_user->getLastLoginDate(), "Last login date is set.");
 
-        $second_login_of_user = UserHandler::loginUser($logged_in_user);
+        $last_login_datetime = new \DateTime("now");
+        $last_login_datetime->add(
+            new \DateInterval("PT5M")
+        );
 
-        $this->assertNotNull($second_login_of_user->getFirstLoginDate(), "First login date is NULL per default.");
-        $this->assertEquals($logged_in_user->getFirstLoginDate(), $second_login_of_user->getFirstLoginDate(), "First login date is equal.");
-        $this->assertNotNull($second_login_of_user->getLastLoginDate(), "Last login date is set.");
-        $this->assertGreaterThan($logged_in_user->getLastLoginDate(), $second_login_of_user->getLastLoginDate(), "Last login date is newer than before.");
+        $second_update_of_user = clone $logged_in_user;
+        $second_update_of_user->setLastLoginDate($last_login_datetime);
+
+        $custom_datetime_objects_of_user = UserHandler::saveUser($second_update_of_user);
+
+        $this->assertEquals($saved_user->getUserId(), $custom_datetime_objects_of_user->getUserId(), "User ID is set.");
+        $this->assertNotNull($custom_datetime_objects_of_user->getFirstLoginDate(), "First login date is NULL per default.");
+        $this->assertEquals($logged_in_user->getFirstLoginDate(), $custom_datetime_objects_of_user->getFirstLoginDate(), "First login date is equal.");
+        $this->assertNotNull($custom_datetime_objects_of_user->getLastLoginDate(), "Last login date is set.");
+        $this->assertGreaterThan($logged_in_user->getLastLoginDate(), $custom_datetime_objects_of_user->getLastLoginDate(), "Last login date is newer than before.");
 
     }
 
