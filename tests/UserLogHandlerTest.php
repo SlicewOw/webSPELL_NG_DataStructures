@@ -16,10 +16,14 @@ final class UserLogHandlerTest extends TestCase
     {
 
         $username = "Test User " . StringFormatterUtils::getRandomString(10);
+        $password = StringFormatterUtils::generateHashedPassword(
+            StringFormatterUtils::getRandomString(20)
+        );
         $old_date = new \DateTime("1 minute ago");
 
         $new_user = new User();
         $new_user->setUsername($username);
+        $new_user->setPassword($password);
         $new_user->setFirstname(StringFormatterUtils::getRandomString(10));
         $new_user->setLastname(StringFormatterUtils::getRandomString(10));
         $new_user->setEmail(StringFormatterUtils::getRandomString(10) . "@webspell-ng.de");

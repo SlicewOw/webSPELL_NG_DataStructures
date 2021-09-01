@@ -9,6 +9,7 @@ use webspell_ng\UserLog;
 use webspell_ng\WebSpellDatabaseConnection;
 use webspell_ng\Handler\CountryHandler;
 use webspell_ng\Handler\UserLogHandler;
+use webspell_ng\Utils\StringFormatterUtils;
 use webspell_ng\Utils\ValidationUtils;
 
 
@@ -38,12 +39,14 @@ class UserHandler {
         }
 
         $user = new User();
-        $user->setUserId($user_result['userID']);
+        $user->setUserId((int) $user_result['userID']);
         $user->setUsername($user_result['username']);
         $user->setFirstname($user_result['firstname']);
         $user->setLastname($user_result['lastname']);
         $user->setEmail($user_result['email']);
+        $user->setPassword($user_result['password']);
         $user->setTown($user_result['town']);
+        $user->setActivationKey($user_result['activated']);
         $user->setCountry(
             CountryHandler::getCountryByCountryShortcut($user_result['country'])
         );
@@ -133,6 +136,10 @@ class UserHandler {
     private static function insertUser(User $user): User
     {
 
+        if (is_null($user->getPassword())) {
+            throw new \InvalidArgumentException("password_of_user_is_not_set");
+        }
+
         $first_login_date = !is_null($user->getFirstLoginDate()) ? $user->getFirstLoginDate()->format("Y-m-d H:i:s") : null;
         $last_login_date = !is_null($user->getLastLoginDate()) ? $user->getLastLoginDate()->format("Y-m-d H:i:s") : null;
 
@@ -143,6 +150,7 @@ class UserHandler {
                 array(
                     'username' => '?',
                     'email' => '?',
+                    'password' => '?',
                     'firstname' => '?',
                     'lastname' => '?',
                     'sex' => '?',
@@ -151,20 +159,23 @@ class UserHandler {
                     'town' => '?',
                     'registerdate' => '?',
                     'firstlogin' => '?',
-                    'lastlogin' => '?'
+                    'lastlogin' => '?',
+                    'activated' => '?'
                 )
             )
             ->setParameter(0, $user->getUsername())
             ->setParameter(1, $user->getEmail())
-            ->setParameter(2, $user->getFirstname())
-            ->setParameter(3, $user->getLastname())
-            ->setParameter(4, $user->getSex())
-            ->setParameter(5, $user->getBirthday()->format("Y-m-d H:i:s"))
-            ->setParameter(6, $user->getCountry()->getShortcut())
-            ->setParameter(7, $user->getTown())
-            ->setParameter(8, $user->getRegistrationDate()->format("Y-m-d H:i:s"))
-            ->setParameter(9, $first_login_date)
-            ->setParameter(10, $last_login_date);
+            ->setParameter(2, $user->getPassword())
+            ->setParameter(3, $user->getFirstname())
+            ->setParameter(4, $user->getLastname())
+            ->setParameter(5, $user->getSex())
+            ->setParameter(6, $user->getBirthday()->format("Y-m-d H:i:s"))
+            ->setParameter(7, $user->getCountry()->getShortcut())
+            ->setParameter(8, $user->getTown())
+            ->setParameter(9, $user->getRegistrationDate()->format("Y-m-d H:i:s"))
+            ->setParameter(10, $first_login_date)
+            ->setParameter(11, $last_login_date)
+            ->setParameter(12, StringFormatterUtils::getRandomString(20));
 
         $queryBuilder->executeQuery();
 
@@ -181,6 +192,10 @@ class UserHandler {
     private static function updateUser(User $user): void
     {
 
+        if (is_null($user->getPassword())) {
+            throw new \InvalidArgumentException("password_of_user_is_not_set");
+        }
+
         $first_login_date = !is_null($user->getFirstLoginDate()) ? $user->getFirstLoginDate()->format("Y-m-d H:i:s") : null;
         $last_login_date = !is_null($user->getLastLoginDate()) ? $user->getLastLoginDate()->format("Y-m-d H:i:s") : null;
 
@@ -189,6 +204,7 @@ class UserHandler {
             ->update(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_USER)
             ->set("username", "?")
             ->set("email", "?")
+            ->set("password", "?")
             ->set("firstname", "?")
             ->set("lastname", "?")
             ->set("sex", "?")
@@ -197,18 +213,21 @@ class UserHandler {
             ->set("town", "?")
             ->set("firstlogin", "?")
             ->set("lastlogin", "?")
+            ->set("activated", "?")
             ->where("userID = ?")
             ->setParameter(0, $user->getUsername())
             ->setParameter(1, $user->getEmail())
-            ->setParameter(2, $user->getFirstname())
-            ->setParameter(3, $user->getLastname())
-            ->setParameter(4, $user->getSex())
-            ->setParameter(5, $user->getBirthday()->format("Y-m-d H:i:s"))
-            ->setParameter(6, $user->getCountry()->getShortcut())
-            ->setParameter(7, $user->getTown())
-            ->setParameter(8, $first_login_date)
-            ->setParameter(9, $last_login_date)
-            ->setParameter(10, $user->getUserId());
+            ->setParameter(2, $user->getPassword())
+            ->setParameter(3, $user->getFirstname())
+            ->setParameter(4, $user->getLastname())
+            ->setParameter(5, $user->getSex())
+            ->setParameter(6, $user->getBirthday()->format("Y-m-d H:i:s"))
+            ->setParameter(7, $user->getCountry()->getShortcut())
+            ->setParameter(8, $user->getTown())
+            ->setParameter(9, $first_login_date)
+            ->setParameter(10, $last_login_date)
+            ->setParameter(11, $user->getActivationKey())
+            ->setParameter(12, $user->getUserId());
 
         $queryBuilder->executeQuery();
 

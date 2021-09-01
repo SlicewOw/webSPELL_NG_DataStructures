@@ -81,8 +81,8 @@ CREATE TABLE `ws_p40_user` (
   `firstlogin` datetime DEFAULT NULL,
   `lastlogin` datetime DEFAULT NULL,
   `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `password_check` int(11) NOT NULL DEFAULT 0,
+  `password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `password_check` int(1) NOT NULL DEFAULT 0,
   `confirm` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `delete_confirm` varchar(12) COLLATE utf8_unicode_ci DEFAULT NULL,
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
@@ -99,7 +99,7 @@ CREATE TABLE `ws_p40_user` (
   `avatar` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `usertext` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `userpic` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `newsletter` int(11) NOT NULL DEFAULT 1,
+  `newsletter` int(1) NOT NULL DEFAULT 1,
   `about` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `pmgot` int(11) NOT NULL DEFAULT 0,
   `pmsent` int(11) NOT NULL DEFAULT 0,
@@ -112,7 +112,7 @@ CREATE TABLE `ws_p40_user` (
   `demos` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `files` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `gallery_pictures` text COLLATE utf8_unicode_ci DEFAULT NULL,
-  `mailonpm` int(11) NOT NULL DEFAULT 0,
+  `mailonpm` int(1) NOT NULL DEFAULT 0,
   `userdescription` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `activated` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '1',
   `language` varchar(2) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'de',
@@ -123,7 +123,7 @@ CREATE TABLE `ws_p40_user` (
   `special_rank` int(11) NOT NULL DEFAULT 0,
   `date_format` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'd.m.Y',
   `time_format` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'H:i',
-  `overview_redirect` int(11) NOT NULL DEFAULT 0,
+  `overview_redirect` int(1) NOT NULL DEFAULT 0,
   `hits` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

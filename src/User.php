@@ -33,6 +33,11 @@ class User {
     private $email = null;
 
     /**
+     * @var ?string $password
+     */
+    private $password = null;
+
+    /**
      * @var string $sex
      */
     private $sex = UserEnums::SEXUALITY_MAN;
@@ -66,6 +71,11 @@ class User {
      * @var ?\DateTime $last_login_date
      */
     private $last_login_date = null;
+
+    /**
+     * @var bool $is_activated
+     */
+    private $is_activated = false;
 
     public function setUserId(int $user_id): void
     {
@@ -120,6 +130,19 @@ class User {
         return $this->email;
     }
 
+    /**
+     * The password needs to be hashed already!
+     */
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
     public function setSex(string $sex): void
     {
         $allowed_options = array(
@@ -167,6 +190,11 @@ class User {
         return $this->birthday;
     }
 
+    public function getAge(): int
+    {
+        return $this->getBirthday()->diff(new \DateTime("now"))->y;
+    }
+
     public function setRegistrationDate(\DateTime $registration_date): void
     {
         $this->registration_date = $registration_date;
@@ -199,5 +227,21 @@ class User {
     {
         return $this->last_login_date;
     }
+
+    public function setActivationKey(string $activation_key): void
+    {
+        $this->activation_key = $activation_key;
+    }
+
+    public function getActivationKey(): string
+    {
+        return $this->activation_key;
+    }
+
+    public function isActivated(): bool
+    {
+        return $this->getActivationKey() == "1";
+    }
+
 
 }
