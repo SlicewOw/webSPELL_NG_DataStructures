@@ -114,7 +114,7 @@ CREATE TABLE `ws_p40_user` (
   `gallery_pictures` text COLLATE utf8_unicode_ci DEFAULT NULL,
   `mailonpm` int(1) NOT NULL DEFAULT 0,
   `userdescription` text COLLATE utf8_unicode_ci DEFAULT NULL,
-  `activated` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '1',
+  `activated` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `language` varchar(2) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'de',
   `activity` int(11) NOT NULL DEFAULT 0,
   `activityID` int(11) NOT NULL DEFAULT 0,
@@ -130,8 +130,8 @@ CREATE TABLE `ws_p40_user` (
 ALTER TABLE `ws_p40_user` ADD PRIMARY KEY (`userID`), ADD UNIQUE KEY `username` (`username`);
 ALTER TABLE `ws_p40_user` MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT;
 
-INSERT INTO `ws_p40_user` (`username`, `firstname`, `email`, `birthday`, `country`) VALUES
-('Test User', 'Firstname', 'info@webspell-ng.de', '2020-09-04 00:00:00', 'eu');
+INSERT INTO `ws_p40_user` (`username`, `password`, `firstname`, `email`, `birthday`, `country`, `activated`) VALUES
+('Test User', 'de33018dfe7f5cfd9791ad42fc519372254330c3831e33f0728be35affdae067b2b725d627c5d89535841f7e91af40ef9cabc5db995cdcdd45dde7dd432272ed', 'Firstname', 'info@webspell-ng.de', '2020-09-04 00:00:00', 'eu', '4330c3831e33f0728be35affd');
 
 --
 -- User Log
