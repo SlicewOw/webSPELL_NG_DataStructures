@@ -73,9 +73,9 @@ class User {
     private $last_login_date = null;
 
     /**
-     * @var bool $is_activated
+     * @var string $activation_key
      */
-    private $is_activated = false;
+    private $activation_key;
 
     public function setUserId(int $user_id): void
     {
