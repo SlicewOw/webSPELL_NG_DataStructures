@@ -841,7 +841,7 @@ ALTER TABLE `ws_p40_squads_members`
 CREATE TABLE `ws_p40_privacy_policy` (
   `page` varchar(255) NOT NULL,
   `description` text NOT NULL,
-  `date` INT(11) NOT NULL
+  `date` datetime
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `ws_p40_privacy_policy` ADD UNIQUE KEY (`page`);
@@ -849,7 +849,7 @@ ALTER TABLE `ws_p40_privacy_policy` ADD UNIQUE KEY (`page`);
 INSERT INTO `ws_p40_privacy_policy`
 (`page`, `description`, `date`)
 VALUES
-('default', 'To be continued ...', 1610438176);
+('default', 'To be continued ...', "2020-01-01 13:37:00");
 
 --
 -- Imprint
@@ -858,7 +858,7 @@ VALUES
 CREATE TABLE `ws_p40_imprint` (
   `page` varchar(255) NOT NULL,
   `description` text NOT NULL,
-  `date` INT(11) NOT NULL
+  `date` datetime
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `ws_p40_imprint` ADD UNIQUE KEY (`page`);
@@ -866,16 +866,16 @@ ALTER TABLE `ws_p40_imprint` ADD UNIQUE KEY (`page`);
 INSERT INTO `ws_p40_imprint`
 (`page`, `description`, `date`)
 VALUES
-('default', 'all rights reserved', 1610438176);
+('default', 'all rights reserved', "2020-01-01 13:37:00");
 
 --
--- Imprint
+-- About Us
 --
 
 CREATE TABLE `ws_p40_about` (
   `page` varchar(255) NOT NULL,
   `description` text NOT NULL,
-  `date` INT(11) NOT NULL
+  `date` datetime
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 ALTER TABLE `ws_p40_about` ADD UNIQUE KEY (`page`);
@@ -883,7 +883,7 @@ ALTER TABLE `ws_p40_about` ADD UNIQUE KEY (`page`);
 INSERT INTO `ws_p40_about`
 (`page`, `description`, `date`)
 VALUES
-('default', 'To be determined ...', 1610438176);
+('default', 'To be determined ...', "2020-09-04 09:18:00");
 
 --
 -- News rubrics

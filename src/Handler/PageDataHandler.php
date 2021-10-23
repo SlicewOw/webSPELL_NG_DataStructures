@@ -35,7 +35,7 @@ class PageDataHandler {
         $page_data->setPage($page_data_result['page']);
         $page_data->setInfo($page_data_result['description']);
         $page_data->setDate(
-            DateUtils::getDateTimeByMktimeValue((int) $page_data_result['date'])
+            new \DateTime($page_data_result['date'])
         );
 
         return $page_data;
@@ -98,7 +98,7 @@ class PageDataHandler {
                     [
                         0 => $page_data->getPage(),
                         1 => $page_data->getInfo(),
-                        2 => time()
+                        2 => (new \DateTime("now"))->format("Y-m-d H:i:s")
                     ]
                 );
 
@@ -116,7 +116,7 @@ class PageDataHandler {
             ->set("date", "?")
             ->where("page = ?")
             ->setParameter(0, $page_data->getInfo())
-            ->setParameter(1, time())
+            ->setParameter(1, (new \DateTime("now"))->format("Y-m-d H:i:s"))
             ->setParameter(2, $page_data->getPage());
 
         $queryBuilder->executeQuery();
