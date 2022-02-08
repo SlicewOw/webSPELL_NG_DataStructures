@@ -203,10 +203,10 @@ CREATE TABLE `ws_p40_settings` (
   `clantag` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `adminname` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `adminemail` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `facebook` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `twitter` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `youtube` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `steam` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `facebook` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `twitter` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `youtube` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `steam` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `cronjob` int(11) NOT NULL DEFAULT 0,
   `news` int(11) NOT NULL DEFAULT 0,
   `newsarchiv` int(11) NOT NULL DEFAULT 0,
@@ -278,8 +278,10 @@ CREATE TABLE `ws_p40_settings` (
 ALTER TABLE `ws_p40_settings` ADD PRIMARY KEY (`settingID`), ADD UNIQUE KEY `page` (`page`);
 ALTER TABLE `ws_p40_settings` MODIFY `settingID` int(11) NOT NULL AUTO_INCREMENT;
 
-INSERT INTO `ws_p40_settings` (`settingID`, `page`, `cup_url`, `tv_url`, `forum_url`, `admin_url`, `image_url`, `static_url`, `doc_url`, `bot_url`, `download_url`, `system_user`, `title`, `hp_url`, `clanname`, `clantag`, `adminname`, `adminemail`, `facebook`, `twitter`, `youtube`, `steam`, `cronjob`, `news`, `newsarchiv`, `headlines`, `headlineschars`, `topnewschars`, `articles`, `latestarticles`, `articleschars`, `clanwars`, `results`, `upcoming`, `shoutbox`, `sball`, `sbrefresh`, `topics`, `posts`, `latesttopics`, `latesttopicchars`, `awards`, `demos`, `guestbook`, `feedback`, `messages`, `users`, `profilelast`, `topnewsID`, `sessionduration`, `closed`, `gb_info`, `imprint`, `picsize_l`, `picsize_h`, `pictures`, `publicadmin`, `thumbwidth`, `usergalleries`, `maxusergalleries`, `default_language`, `insertlinks`, `search_min_len`, `max_wrong_pw`, `captcha_math`, `captcha_bgcol`, `captcha_fontcol`, `captcha_type`, `captcha_noise`, `captcha_linenoise`, `autoresize`, `bancheck`, `gpicsize_l`, `gpicsize_h`, `max_lastpic`, `spam_check`, `detect_language`, `spamapikey`, `spamapihost`, `spammaxposts`, `spamapiblockerror`, `date_format`, `time_format`, `user_guestbook`, `sc_files`, `sc_demos`, `modRewrite`) VALUES
-(1, 'gaming', 'http://localhost/', 'http://localhost/', 'http://localhost/', 'http://localhost/', 'http://localhost/', 'http://localhost/', 'http://localhost/', NULL, 'http://localhost/', NULL, 'myRisk Gaming e.V.', 'http://localhost/', '', '', '', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 450, 500, 12, 1, 130, 1, 1, 'de', 1, 3, 10, 2, '#FFFFFF', '#000000', 2, 100, 10, 2, 0, 60, 60, 10, 0, 0, '', '', 0, 0, 'd.m.y', 'G:i', 0, 1, 1, 1);
+INSERT INTO `ws_p40_settings`
+(`settingID`,   `page`,           `cup_url`,            `tv_url`,         `forum_url`,         `admin_url`,         `image_url`,        `static_url`,           `doc_url`, `bot_url`,      `download_url`, `system_user`,              `title`,            `hp_url`,           `clanname`,   `clantag`, `adminname`, `adminemail`)
+VALUES
+(          1, 'gaming', 'http://localhost/', 'http://localhost/', 'http://localhost/', 'http://localhost/', 'http://localhost/', 'http://localhost/', 'http://localhost/',      NULL, 'http://localhost/',          NULL, 'myRisk Gaming e.V.', 'http://localhost/', 'myRisk Gaming e.V.', 'myRisk eV',          '',           '');
 
 --
 -- Games

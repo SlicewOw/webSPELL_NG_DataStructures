@@ -87,7 +87,7 @@ class Email
 
         self::setMailSettings();
 
-        $settings = SettingsHandler::getSettings();
+        $settings = SettingsHandler::getSettings("gaming");
 
         $GLOBALS['mail_debug'] = '';
 
