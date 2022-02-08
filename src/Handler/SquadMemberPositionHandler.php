@@ -4,6 +4,7 @@ namespace webspell_ng\Handler;
 
 use Respect\Validation\Validator;
 
+use webspell_ng\Game;
 use webspell_ng\SquadMemberPosition;
 use webspell_ng\WebSpellDatabaseConnection;
 
@@ -29,18 +30,87 @@ class SquadMemberPositionHandler {
         $position_query = $queryBuilder->executeQuery();
         $position_result = $position_query->fetchAssociative();
 
-        if (empty($position_result)) {
+        return self::getMemberPositionByQueryResult($position_result);
+
+    }
+
+    public static function getMemberPositionByParameters(string $tag, ?Game $game = null): SquadMemberPosition
+    {
+
+        if (empty($tag)) {
+            throw new \InvalidArgumentException("tag_value_is_invalid");
+        }
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->select('*')
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_SQUADS_MEMBER_POSITION)
+            ->where('tag = ?')
+            ->setParameter(0, $tag);
+
+        if (!is_null($game)) {
+            $queryBuilder
+                ->andWhere('gameID = ?')
+                ->setParameter(1, $game->getGameId());
+        } else {
+            $queryBuilder
+                ->andWhere('gameID IS NULL');
+        }
+
+        $position_query = $queryBuilder->executeQuery();
+        $position_result = $position_query->fetchAssociative();
+
+        return self::getMemberPositionByQueryResult($position_result);
+
+    }
+
+    /**
+     * @return array<SquadMemberPosition>
+     */
+    public static function getAllMemberPositions(): array
+    {
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->select('*')
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_SQUADS_MEMBER_POSITION)
+            ->orderBy('sort', 'ASC');
+
+        $position_query = $queryBuilder->executeQuery();
+        $position_results = $position_query->fetchAllAssociative();
+
+        $all_member_positions = array();
+        foreach ($position_results as $position_result) {
+
+            array_push(
+                $all_member_positions,
+                self::getMemberPositionByQueryResult($position_result)
+            );
+
+        }
+
+        return $all_member_positions;
+
+    }
+
+    /**
+     * @param array<string,mixed>|false $query_result
+     */
+    private static function getMemberPositionByQueryResult($query_result): SquadMemberPosition
+    {
+
+        if (empty($query_result)) {
             throw new \UnexpectedValueException('unknown_member_position');
         }
 
         $member_position = new SquadMemberPosition();
-        $member_position->setPositionId($position_result['positionID']);
-        $member_position->setName($position_result['name']);
-        $member_position->setTag($position_result['tag']);
-        $member_position->setSort($position_result['sort']);
-        if (!is_null($position_result['gameID'])) {
+        $member_position->setPositionId($query_result['positionID']);
+        $member_position->setName($query_result['name']);
+        $member_position->setTag($query_result['tag']);
+        $member_position->setSort($query_result['sort']);
+        if (!is_null($query_result['gameID'])) {
             $member_position->setGame(
-                GameHandler::getGameByGameId($position_result['gameID'])
+                GameHandler::getGameByGameId($query_result['gameID'])
             );
         }
 
