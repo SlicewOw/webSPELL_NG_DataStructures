@@ -243,5 +243,4 @@ class User {
         return $this->getActivationKey() == "1";
     }
 
-
 }

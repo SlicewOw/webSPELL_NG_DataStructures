@@ -233,6 +233,37 @@ class UserHandler {
 
     }
 
+    public static function activateUser(string $activation_key): bool
+    {
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->select('*')
+            ->from(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_USER)
+            ->where('activated = ?')
+            ->setParameter(0, $activation_key);
+
+        $user_query = $queryBuilder->executeQuery();
+        $user_result = $user_query->fetchAssociative();
+
+        if (empty($user_result)) {
+            return false;
+        }
+
+        $queryBuilder = WebSpellDatabaseConnection::getDatabaseConnection()->createQueryBuilder();
+        $queryBuilder
+            ->update(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_USER)
+            ->set("activated", "?")
+            ->where("activated = ?")
+            ->setParameter(0, '1')
+            ->setParameter(1, $activation_key);
+
+        $queryBuilder->executeQuery();
+
+        return true;
+
+    }
+
     private static function saveUserLogNewUser(User $user): void
     {
 

@@ -92,6 +92,63 @@ final class UserHandlerTest extends TestCase
 
     }
 
+    public function testIfNewUserIsNotActivated(): void
+    {
+
+        $username = "Test User ä ß " . StringFormatterUtils::getRandomString(10);
+        $password = StringFormatterUtils::generateHashedPassword(
+            StringFormatterUtils::getRandomString(10)
+        );
+        $firstname = StringFormatterUtils::getRandomString(10);
+        $birthday = new \DateTime("2020-09-04 00:00:00");
+
+        $new_user = new User();
+        $new_user->setUsername($username);
+        $new_user->setPassword($password);
+        $new_user->setFirstname($firstname);
+        $new_user->setEmail(StringFormatterUtils::getRandomString(10) . "@myrisk-ev.de");
+        $new_user->setSex(UserEnums::SEXUALITY_WOMAN);
+        $new_user->setTown(StringFormatterUtils::getRandomString(10));
+        $new_user->setBirthday($birthday);
+        $new_user->setCountry(
+            CountryHandler::getCountryByCountryShortcut("uk")
+        );
+
+        $saved_user = UserHandler::saveUser($new_user);
+
+        $activation_key = $saved_user->getActivationKey();
+
+        $this->assertFalse(
+            $saved_user->isActivated(),
+            "User is activated successfully."
+        );
+
+        $this->assertTrue(
+            UserHandler::activateUser($activation_key),
+            "User is activated now."
+        );
+
+        $user_from_db = UserHandler::getUserByUserId($saved_user->getUserId());
+
+        $this->assertTrue(
+            $user_from_db->isActivated(),
+            "User is activated successfully."
+        );
+
+    }
+
+    public function testIfUnknownActivationKeyIsDetected(): void
+    {
+
+        $activation_key = "123456";
+
+        $this->assertFalse(
+            UserHandler::activateUser($activation_key),
+            "User is not activated as the key is unknown."
+        );
+
+    }
+
     public function testIfInvalidArgumentExceptionIsThrownIfUserIdIsInvalid(): void
     {
 
