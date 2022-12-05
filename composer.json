@@ -16,7 +16,7 @@
         "hassankhan/config": "^2.2"
     },
     "require-dev": {
-        "phpstan/phpstan": "^0.12.90",
+        "phpstan/phpstan": "^1.9",
         "phpunit/phpunit": "^9.5"
     },
     "autoload": {

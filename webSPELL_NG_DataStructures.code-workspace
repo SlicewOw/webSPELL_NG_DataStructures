@@ -1,0 +1,20 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "settings": {
+        "namespaceResolver.autoSort": true,
+        "namespaceResolver.sortAlphabetically": true,
+        "editor.formatOnSave": true,
+        "editor.formatOnSaveMode": "file",
+        "files.trimTrailingWhitespace": true,
+        "[php]": {
+            "editor.defaultFormatter": "bmewburn.vscode-intelephense-client",
+        },
+        "[html]": {
+            "editor.defaultFormatter": "vscode.html-language-features"
+        }
+    }
+}

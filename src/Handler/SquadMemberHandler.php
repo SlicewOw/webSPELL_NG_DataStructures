@@ -12,7 +12,8 @@ use webspell_ng\Handler\UserLogHandler;
 use webspell_ng\Utils\DateUtils;
 
 
-class SquadMemberHandler {
+class SquadMemberHandler
+{
 
     private const DB_TABLE_NAME_SQUADS_MEMBERS = "squads_members";
 
@@ -33,17 +34,14 @@ class SquadMemberHandler {
                     $queryBuilder->expr()->eq('squadID', $squad_id),
                     $queryBuilder->expr()->eq('active', 1)
                 )
-            )
-            ->setParameter(0, $squad_id);
+            );
 
         $member_query = $queryBuilder->executeQuery();
-        while ($member_result = $member_query->fetchAssociative())
-        {
-            array_push($members, self::getSquadMemberById($member_result['sqmID']));
+        while ($member_result = $member_query->fetchAssociative()) {
+            array_push($members, self::getSquadMemberById((int) $member_result['sqmID']));
         }
 
         return $members;
-
     }
 
     public static function getSquadMemberById(int $member_id): SquadMember
@@ -68,27 +66,26 @@ class SquadMemberHandler {
         }
 
         $member = new SquadMember();
-        $member->setMemberId($member_result['sqmID']);
-        $member->setIsActive($member_result['active']);
-        $member->setSort($member_result['sort']);
+        $member->setMemberId((int) $member_result['sqmID']);
+        $member->setIsActive($member_result['active'] == 1);
+        $member->setSort((int) $member_result['sort']);
         $member->setUser(
-            UserHandler::getUserByUserId($member_result['userID'])
+            UserHandler::getUserByUserId((int) $member_result['userID'])
         );
         $member->setMemberPosition(
-            SquadMemberPositionHandler::getMemberPositionById($member_result['positionID'])
+            SquadMemberPositionHandler::getMemberPositionById((int) $member_result['positionID'])
         );
         $member->setJoinDate(
-            DateUtils::getDateTimeByMktimeValue($member_result['join_date'])
+            DateUtils::getDateTimeByMktimeValue((int) $member_result['join_date'])
         );
 
         if (!is_null($member_result['left_date'])) {
             $member->setLeftDate(
-                DateUtils::getDateTimeByMktimeValue($member_result['left_date'])
+                DateUtils::getDateTimeByMktimeValue((int) $member_result['left_date'])
             );
         }
 
         return $member;
-
     }
 
     public static function saveSquadMember(Squad $squad, SquadMember $member): SquadMember
@@ -101,7 +98,6 @@ class SquadMemberHandler {
         }
 
         return $member;
-
     }
 
     private static function insertSquadMember(Squad $squad, SquadMember $member): SquadMember
@@ -142,7 +138,6 @@ class SquadMemberHandler {
         }
 
         return self::getSquadMemberById($member->getMemberId());
-
     }
 
     private static function updateSquadMember(Squad $squad, SquadMember $member): void
@@ -170,7 +165,6 @@ class SquadMemberHandler {
             ->setParameter(6, $member->getMemberId());
 
         $queryBuilder->executeQuery();
-
     }
 
     public static function kickSquadMember(Squad $squad, SquadMember $member): void
@@ -184,7 +178,6 @@ class SquadMemberHandler {
         self::saveSquadMember($squad, $member);
 
         self::saveUserLogLeftSquadMember($squad, $member);
-
     }
 
     private static function saveUserLogNewSquadMember(Squad $squad, SquadMember $member): void
@@ -214,7 +207,5 @@ class SquadMemberHandler {
         $log->setInfo($info);
         $log->setParentId($squad->getSquadId());
         return $log;
-
     }
-
 }
