@@ -15,7 +15,8 @@ use webspell_ng\Utils\DateUtils;
 use webspell_ng\Utils\ValidationUtils;
 
 
-class ClanwarHandler {
+class ClanwarHandler
+{
 
     private const DB_TABLE_NAME_CLANWARS = "clanwars";
 
@@ -53,20 +54,20 @@ class ClanwarHandler {
         }
 
         $clanwar = new Clanwar();
-        $clanwar->setClanwarId($clanwar_result["cwID"]);
+        $clanwar->setClanwarId((int) $clanwar_result["cwID"]);
         $clanwar->setStatus($clanwar_status);
         $clanwar->setSquad(
-            SquadHandler::getSquadBySquadId($clanwar_result["squadID"]),
+            SquadHandler::getSquadBySquadId((int) $clanwar_result["squadID"]),
             $hometeam
         );
         $clanwar->setOpponent(
-            ClanHandler::getClanByClanId($clanwar_result["opponentID"])
+            ClanHandler::getClanByClanId((int) $clanwar_result["opponentID"])
         );
         $clanwar->setLeague(
-            EventHandler::getEventById($clanwar_result["eventID"])
+            EventHandler::getEventById((int) $clanwar_result["eventID"])
         );
         $clanwar->setDate(
-            DateUtils::getDateTimeByMktimeValue($clanwar_result["date"])
+            DateUtils::getDateTimeByMktimeValue((int) $clanwar_result["date"])
         );
         $clanwar->setReports(
             $clanwar_result["report"],
@@ -82,7 +83,6 @@ class ClanwarHandler {
         );
 
         return $clanwar;
-
     }
 
     /**
@@ -190,8 +190,7 @@ class ClanwarHandler {
 
         $matches = array();
 
-        while ($clanwar_result = $clanwar_query->fetchAssociative())
-        {
+        while ($clanwar_result = $clanwar_query->fetchAssociative()) {
             array_push(
                 $matches,
                 self::getClanwarByClanwarId((int) $clanwar_result['cwID'])
@@ -199,7 +198,6 @@ class ClanwarHandler {
         }
 
         return $matches;
-
     }
 
     public static function saveMatch(Clanwar $clanwar): Clanwar
@@ -218,7 +216,6 @@ class ClanwarHandler {
         }
 
         return self::getClanwarByClanwarId($clanwar->getClanwarId());
-
     }
 
     private static function insertClanwar(Clanwar $clanwar): Clanwar
@@ -238,37 +235,37 @@ class ClanwarHandler {
         $queryBuilder
             ->insert(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_CLANWARS)
             ->values(
-                    [
-                        'date' => '?',
-                        'squadID' => '?',
-                        'gameID' => '?',
-                        'eventID' => '?',
-                        'opponentID' => '?',
-                        'homepage'=>'?',
-                        'hometeam' => '?',
-                        'report' => '?',
-                        'report_uk' => '?',
-                        'def_win' => '?',
-                        'def_loss' => '?',
-                        'active' => '?'
-                    ]
-                )
+                [
+                    'date' => '?',
+                    'squadID' => '?',
+                    'gameID' => '?',
+                    'eventID' => '?',
+                    'opponentID' => '?',
+                    'homepage' => '?',
+                    'hometeam' => '?',
+                    'report' => '?',
+                    'report_uk' => '?',
+                    'def_win' => '?',
+                    'def_loss' => '?',
+                    'active' => '?'
+                ]
+            )
             ->setParameters(
-                    [
-                        0 => $clanwar->getDate()->getTimestamp(),
-                        1 => $clanwar->getSquadId(),
-                        2 => $clanwar->getGame()->getGameId(),
-                        3 => $clanwar->getEvent()->getEventId(),
-                        4 => $clanwar->getOpponent()->getClanId(),
-                        5 => $clanwar->getMatchHomepage(),
-                        6 => $home_string,
-                        7 => $clanwar->getReportInGerman(),
-                        8 => $clanwar->getReportInEnglish(),
-                        9 => $clanwar->getIsDefaultWin() ? 1 : 0,
-                        10 => $clanwar->getIsDefaultLoss() ? 1 : 0,
-                        11 => 1
-                    ]
-                );
+                [
+                    0 => $clanwar->getDate()->getTimestamp(),
+                    1 => $clanwar->getSquadId(),
+                    2 => $clanwar->getGame()->getGameId(),
+                    3 => $clanwar->getEvent()->getEventId(),
+                    4 => $clanwar->getOpponent()->getClanId(),
+                    5 => $clanwar->getMatchHomepage(),
+                    6 => $home_string,
+                    7 => $clanwar->getReportInGerman(),
+                    8 => $clanwar->getReportInEnglish(),
+                    9 => $clanwar->getIsDefaultWin() ? 1 : 0,
+                    10 => $clanwar->getIsDefaultLoss() ? 1 : 0,
+                    11 => 1
+                ]
+            );
 
         $queryBuilder->executeQuery();
 
@@ -277,7 +274,6 @@ class ClanwarHandler {
         );
 
         return $clanwar;
-
     }
 
     private static function updateClanwar(Clanwar $clanwar): void
@@ -324,7 +320,6 @@ class ClanwarHandler {
             ->setParameter(12, $clanwar->getClanwarId());
 
         $queryBuilder->executeQuery();
-
     }
 
     public static function addMapToClanwar(Clanwar $clanwar, int $map_id, int $score_home, int $score_opponent): Clanwar
@@ -343,7 +338,6 @@ class ClanwarHandler {
         $clanwar->setMap($existing_maps);
 
         return $clanwar;
-
     }
 
     public static function getCountOfPlayedMatches(int $squad_id): int
@@ -362,14 +356,11 @@ class ClanwarHandler {
                     $queryBuilder->expr()->eq('squadID', $squad_id),
                     $queryBuilder->expr()->lt('date', time())
                 )
-            )
-            ->setParameter(0, $squad_id);
+            );
 
         $stats_query = $queryBuilder->executeQuery();
         $stats_result = $stats_query->fetchAssociative();
 
         return isset($stats_result['clanwars_played']) ? (int) $stats_result['clanwars_played'] : 0;
-
     }
-
 }
