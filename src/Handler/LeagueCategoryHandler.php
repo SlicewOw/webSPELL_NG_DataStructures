@@ -8,19 +8,24 @@ use \webspell_ng\WebSpellDatabaseConnection;
 use \webspell_ng\Utils\ValidationUtils;
 
 
-class LeagueCategoryHandler {
+class LeagueCategoryHandler
+{
 
     public static function setAwardLeagueCategory(Award $award): Award
     {
-        $award_category = self::setLeagueCategory($award->getHomepage(), $award->getAwardId(), 'awards', 'awardID');
-        $award->setLeagueCategory($award_category);
+        if (!is_null($award->getHomepage())) {
+            $award_category = self::setLeagueCategory($award->getHomepage(), $award->getAwardId(), 'awards', 'awardID');
+            $award->setLeagueCategory($award_category);
+        }
         return $award;
     }
 
     public static function setEventLeagueCategory(Event $event): Event
     {
-        $event_category = self::setLeagueCategory($event->getHomepage(), $event->getEventId(), 'events', 'eventID');
-        $event->setLeagueCategory($event_category);
+        if (!is_null($event->getHomepage())) {
+            $event_category = self::setLeagueCategory($event->getHomepage(), $event->getEventId(), 'events', 'eventID');
+            $event->setLeagueCategory($event_category);
+        }
         return $event;
     }
 
@@ -66,7 +71,6 @@ class LeagueCategoryHandler {
             } else if (isset($categorySubArray[1]) && ($categorySubArray[1] == $identifier)) {
                 unset($categorySubArray[1]);
             }
-
         }
 
         $category = implode('.', $categorySubArray);
@@ -82,7 +86,5 @@ class LeagueCategoryHandler {
         $queryBuilder->executeQuery();
 
         return $category;
-
     }
-
 }

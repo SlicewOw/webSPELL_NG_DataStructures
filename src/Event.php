@@ -31,7 +31,7 @@ class Event extends DataStatus
     private $category = null;
 
     /**
-     * @var string $homepage
+     * @var ?string $homepage
      */
     private $homepage = null;
 
@@ -80,13 +80,8 @@ class Event extends DataStatus
         return $this->date;
     }
 
-    public function setHomepage(string $event_url): void
+    public function setHomepage(?string $event_url): void
     {
-
-        if (!ValidationUtils::validateUrl($event_url)) {
-            throw new \UnexpectedValueException("event_homepage_value_is_invalid");
-        }
-
         $this->homepage = $event_url;
     }
 

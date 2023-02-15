@@ -93,6 +93,29 @@ final class EventHandlerTest extends TestCase
         $this->assertTrue(EventHandler::removeEventById($reloaded_event->getEventId()), "Event is deleted.");
     }
 
+    public function testIfEventInstanceCanBeCreatedWithoutAHomepage(): void
+    {
+
+        $squad_id = 1;
+        $event_name = self::$CONST_EVENT_PREFIX . ' ' . StringFormatterUtils::getRandomString(10);
+        $date = new \DateTime("10 days ago");
+
+        $new_event = new Event();
+        $new_event->setName($event_name);
+        $new_event->setDate($date);
+        $new_event->setSquad(
+            SquadHandler::getSquadBySquadId($squad_id)
+        );
+
+        $event = EventHandler::saveEvent($new_event);
+
+        $this->assertGreaterThan(0, $event->getEventId(), "Event ID is set.");
+
+        $reloaded_event = EventHandler::getEventById($event->getEventId());
+
+        $this->assertNull($reloaded_event->getHomepage(), "Homepage is not set, as expected.");
+    }
+
     public function testIfFalseIsReturnedIfEventIdIsInvalid(): void
     {
         $this->assertFalse(EventHandler::isExistingEvent(-1));
@@ -104,14 +127,6 @@ final class EventHandlerTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         EventHandler::getEventById(-1);
-    }
-
-    public function testIfUnexpectedValueExceptionIsRaisedIfParentIdIsInvalid(): void
-    {
-
-        $this->expectException(UnexpectedValueException::class);
-
-        LeagueCategoryHandler::setEventLeagueCategory(new Event());
     }
 
     public function testIfInvalidArgumentExceptionIsThrownIfEventDoesNotExist(): void

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
@@ -15,17 +17,6 @@ final class AwardTest extends TestCase
 
         $award = new Award();
         $award->setName("");
-
-    }
-
-    public function testIfUnexpectedValueExceptionIsThrownIfHomepageValueIsInvalid(): void
-    {
-
-        $this->expectException(UnexpectedValueException::class);
-
-        $award = new Award();
-        $award->setHomepage("this_is_not_an_link");
-
     }
 
     public function testIfUnexpectedValueExceptionIsThrownIfRankValueIsInvalid(): void
@@ -35,7 +26,6 @@ final class AwardTest extends TestCase
 
         $award = new Award();
         $award->setRank(-1);
-
     }
 
     public function testIfUnexpectedValueExceptionIsThrownIfLeagueCategoryValueIsInvalid(): void
@@ -45,7 +35,6 @@ final class AwardTest extends TestCase
 
         $award = new Award();
         $award->setLeagueCategory("");
-
     }
 
     public function testIfEmptyInfoIsSetIfStringIsEmpty(): void
@@ -55,7 +44,6 @@ final class AwardTest extends TestCase
         $award->setDescription("");
 
         $this->assertEmpty($award->getDescription(), "Description is empty.");
-
     }
 
     public function testIfHitsValueIsSet(): void
@@ -65,7 +53,5 @@ final class AwardTest extends TestCase
         $award->setHits(1337);
 
         $this->assertEquals(1337, $award->getHits(), "Hits are set.");
-
     }
-
 }
