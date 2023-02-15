@@ -1044,6 +1044,11 @@ ALTER TABLE `ws_p40_sponsors_social_network` ADD CONSTRAINT `FK_Sponsors_SC_Spon
 ALTER TABLE `ws_p40_sponsors_social_network` ADD CONSTRAINT `FK_Sponsors_SC_SocialNetworkID` FOREIGN KEY (`social_network_id`) REFERENCES `ws_p40_user_socials_types`(`typeID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
 --
+-- Other ForeignKeys
+--
+ALTER TABLE `ws_p40_events` ADD CONSTRAINT `FK_EventSquad_SquadID` FOREIGN KEY (`squadID`) REFERENCES `ws_p40_squads`(`squadID`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
 -- DONE :)
 --
 

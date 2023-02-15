@@ -7,7 +7,8 @@ use \webspell_ng\Squad;
 use \webspell_ng\Utils\ValidationUtils;
 
 
-class Event extends DataStatus {
+class Event extends DataStatus
+{
 
     /**
      * @var int $id
@@ -87,7 +88,6 @@ class Event extends DataStatus {
         }
 
         $this->homepage = $event_url;
-
     }
 
     public function getHomepage(): ?string
@@ -118,7 +118,7 @@ class Event extends DataStatus {
         $this->is_offline = $is_offline;
     }
 
-    public function getIsOffline(): bool
+    public function isOffline(): bool
     {
         return $this->is_offline;
     }
@@ -132,5 +132,4 @@ class Event extends DataStatus {
     {
         return $this->category;
     }
-
 }

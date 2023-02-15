@@ -11,7 +11,8 @@ use webspell_ng\Handler\SquadHandler;
 use webspell_ng\Utils\DateUtils;
 
 
-class EventHandler {
+class EventHandler
+{
 
     private const DB_TABLE_NAME_EVENTS = "events";
 
@@ -33,7 +34,6 @@ class EventHandler {
         $event_result = $event_query->fetchAssociative();
 
         return !empty($event_result);
-
     }
 
     public static function getEventById(int $event_id): Event
@@ -64,12 +64,14 @@ class EventHandler {
         $event->setSquad(
             SquadHandler::getSquadBySquadId((int) $event_result['squadID'])
         );
+        $event->setIsActive(
+            (int) $event_result['active'] == 1
+        );
         $event->setDate(
             DateUtils::getDateTimeByMktimeValue($event_result['date'])
         );
 
         return $event;
-
     }
 
     /**
@@ -92,13 +94,11 @@ class EventHandler {
         $event_query = $queryBuilder->executeQuery();
 
         $events = array();
-        while ($event_result = $event_query->fetchAssociative())
-        {
+        while ($event_result = $event_query->fetchAssociative()) {
             array_push($events, self::getEventById($event_result['eventID']));
         }
 
         return $events;
-
     }
 
     public static function saveEvent(Event $event): Event
@@ -115,7 +115,6 @@ class EventHandler {
         }
 
         return LeagueCategoryHandler::setEventLeagueCategory($event);
-
     }
 
     private static function insertEvent(Event $event): Event
@@ -125,25 +124,25 @@ class EventHandler {
         $queryBuilder
             ->insert(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_EVENTS)
             ->values(
-                    [
-                        'date' => '?',
-                        'name' => '?',
-                        'squadID' => '?',
-                        'homepage' => '?',
-                        'offline' => '?',
-                        'active' => '?'
-                    ]
-                )
+                [
+                    'date' => '?',
+                    'name' => '?',
+                    'squadID' => '?',
+                    'homepage' => '?',
+                    'offline' => '?',
+                    'active' => '?'
+                ]
+            )
             ->setParameters(
-                    [
-                        0 => $event->getDate()->getTimestamp(),
-                        1 => $event->getName(),
-                        2 => $event->getSquadId(),
-                        3 => $event->getHomepage(),
-                        4 => ($event->getIsOffline()) ? 1 : 0,
-                        5 => 1
-                    ]
-                );
+                [
+                    0 => $event->getDate()->getTimestamp(),
+                    1 => $event->getName(),
+                    2 => $event->getSquadId(),
+                    3 => $event->getHomepage(),
+                    4 => ($event->isOffline()) ? 1 : 0,
+                    5 => ($event->isActive()) ? 1 : 0
+                ]
+            );
 
         $queryBuilder->executeQuery();
 
@@ -152,7 +151,6 @@ class EventHandler {
         );
 
         return $event;
-
     }
 
     private static function updateEvent(Event $event): void
@@ -166,16 +164,17 @@ class EventHandler {
             ->set('squadID', '?')
             ->set('homepage', '?')
             ->set('offline', '?')
+            ->set('active', '?')
             ->where('eventID = ?')
             ->setParameter(0, $event->getDate()->getTimestamp())
             ->setParameter(1, $event->getName())
             ->setParameter(2, $event->getSquadId())
             ->setParameter(3, $event->getHomepage())
-            ->setParameter(4, $event->getIsOffline() ? 1 : 0)
-            ->setParameter(5, $event->getEventId());
+            ->setParameter(4, $event->isOffline() ? 1 : 0)
+            ->setParameter(5, $event->isActive() ? 1 : 0)
+            ->setParameter(6, $event->getEventId());
 
         $queryBuilder->executeQuery();
-
     }
 
     public static function removeEventById(int $event_id): bool
@@ -194,7 +193,5 @@ class EventHandler {
         $queryBuilder->executeQuery();
 
         return !self::isExistingEvent($event_id);
-
     }
-
 }

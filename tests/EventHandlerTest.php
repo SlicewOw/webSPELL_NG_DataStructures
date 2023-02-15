@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
@@ -17,6 +19,7 @@ final class EventHandlerTest extends TestCase
     public function testIfEventInstanceCanBeCreated(): void
     {
 
+        $squad_id = 1;
         $event_name = self::$CONST_EVENT_PREFIX . ' ' . StringFormatterUtils::getRandomString(10);
         $date = new \DateTime("2001-12-06 12:34:56");
 
@@ -25,10 +28,11 @@ final class EventHandlerTest extends TestCase
         $new_event->setDate($date);
         $new_event->setHomepage('https://tv.myrisk-ev.de');
         $new_event->setSquad(
-            SquadHandler::getSquadBySquadId(1)
+            SquadHandler::getSquadBySquadId($squad_id)
         );
+        $new_event->setIsActive(true);
 
-        $old_event_count = count(EventHandler::getEventsOfSquad(1));
+        $old_event_count = count(EventHandler::getEventsOfSquad($squad_id));
 
         $event = EventHandler::saveEvent($new_event);
 
@@ -37,15 +41,15 @@ final class EventHandlerTest extends TestCase
         $this->assertEquals($date, $event->getDate(), "Event date is set.");
         $this->assertEquals('https://tv.myrisk-ev.de', $event->getHomepage(), "Event URL is set.");
         $this->assertEquals(1, $event->getSquadId(), "Squad ID of event is set.");
-        $this->assertFalse($event->getIsOffline(), "Event is played online per default.");
+        $this->assertFalse($event->isOffline(), "Event is played online per default.");
         $this->assertEquals("tv.myrisk-ev", $event->getLeagueCategory(), "League category is set.");
+        $this->assertTrue($event->isActive(), "Event is active!");
 
         $this->assertTrue(EventHandler::isExistingEvent($event->getEventId()), "Event is saved into database.");
 
-        $events_of_squad = EventHandler::getEventsOfSquad(1);
+        $events_of_squad = EventHandler::getEventsOfSquad($squad_id);
         $this->assertNotEmpty($events_of_squad, "Events are returnd");
         $this->assertGreaterThan($old_event_count, count($events_of_squad), "New event of squad is recognized.");
-
     }
 
     public function testIfEventCanBeUpdated(): void
@@ -65,9 +69,12 @@ final class EventHandlerTest extends TestCase
         $tmp_event = EventHandler::saveEvent($new_event);
 
         $this->assertGreaterThan(0, $tmp_event->getEventId(), "Event ID is set.");
+        $this->assertFalse($tmp_event->isOffline(), "Event is played online per default.");
+        $this->assertFalse($tmp_event->isActive(), "An event is not active per default!");
 
         $tmp_event->setHomepage('https://cj.myrisk-ev.de');
         $tmp_event->setIsOffline(true);
+        $tmp_event->setIsActive(true);
 
         $event = EventHandler::saveEvent($tmp_event);
 
@@ -76,12 +83,12 @@ final class EventHandlerTest extends TestCase
         $this->assertEquals($date, $event->getDate(), "Event date is set.");
         $this->assertEquals('https://cj.myrisk-ev.de', $event->getHomepage(), "Event URL is set.");
         $this->assertEquals(1, $event->getSquadId(), "Squad ID of event is set.");
-        $this->assertTrue($event->getIsOffline(), "Event is played online per default.");
+        $this->assertTrue($event->isOffline(), "Event is played online per default.");
+        $this->assertTrue($event->isActive(), "The event is active now!");
 
         $this->assertTrue(EventHandler::isExistingEvent($event->getEventId()), "Event is saved into database.");
 
         $this->assertTrue(EventHandler::removeEventById($event->getEventId()), "Event is deleted.");
-
     }
 
     public function testIfFalseIsReturnedIfEventIdIsInvalid(): void
@@ -95,7 +102,6 @@ final class EventHandlerTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         EventHandler::getEventById(-1);
-
     }
 
     public function testIfUnexpectedValueExceptionIsRaisedIfParentIdIsInvalid(): void
@@ -104,7 +110,6 @@ final class EventHandlerTest extends TestCase
         $this->expectException(UnexpectedValueException::class);
 
         LeagueCategoryHandler::setEventLeagueCategory(new Event());
-
     }
 
     public function testIfInvalidArgumentExceptionIsThrownIfEventDoesNotExist(): void
@@ -113,7 +118,6 @@ final class EventHandlerTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         EventHandler::getEventById(999999999);
-
     }
 
     public function testIfInvalidArgumentExceptionIsThrownIfSquadIsNotSet(): void
@@ -122,7 +126,5 @@ final class EventHandlerTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
 
         EventHandler::saveEvent(new Event());
-
     }
-
 }
