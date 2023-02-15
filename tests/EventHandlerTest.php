@@ -76,19 +76,21 @@ final class EventHandlerTest extends TestCase
         $tmp_event->setIsOffline(true);
         $tmp_event->setIsActive(true);
 
-        $event = EventHandler::saveEvent($tmp_event);
+        EventHandler::saveEvent($tmp_event);
 
-        $this->assertEquals($tmp_event->getEventId(), $event->getEventId(), "Event ID is set.");
-        $this->assertEquals($event_name, $event->getName(), "Event name is set.");
-        $this->assertEquals($date, $event->getDate(), "Event date is set.");
-        $this->assertEquals('https://cj.myrisk-ev.de', $event->getHomepage(), "Event URL is set.");
-        $this->assertEquals(1, $event->getSquadId(), "Squad ID of event is set.");
-        $this->assertTrue($event->isOffline(), "Event is played online per default.");
-        $this->assertTrue($event->isActive(), "The event is active now!");
+        $reloaded_event = EventHandler::getEventById($tmp_event->getEventId());
 
-        $this->assertTrue(EventHandler::isExistingEvent($event->getEventId()), "Event is saved into database.");
+        $this->assertEquals($tmp_event->getEventId(), $reloaded_event->getEventId(), "Event ID is set.");
+        $this->assertEquals($event_name, $reloaded_event->getName(), "Event name is set.");
+        $this->assertEquals($date, $reloaded_event->getDate(), "Event date is set.");
+        $this->assertEquals('https://cj.myrisk-ev.de', $reloaded_event->getHomepage(), "Event URL is set.");
+        $this->assertEquals(1, $reloaded_event->getSquadId(), "Squad ID of event is set.");
+        $this->assertTrue($reloaded_event->isOffline(), "Event is played online per default.");
+        $this->assertTrue($reloaded_event->isActive(), "The event is active now!");
 
-        $this->assertTrue(EventHandler::removeEventById($event->getEventId()), "Event is deleted.");
+        $this->assertTrue(EventHandler::isExistingEvent($reloaded_event->getEventId()), "Event is saved into database.");
+
+        $this->assertTrue(EventHandler::removeEventById($reloaded_event->getEventId()), "Event is deleted.");
     }
 
     public function testIfFalseIsReturnedIfEventIdIsInvalid(): void

@@ -67,6 +67,9 @@ class EventHandler
         $event->setIsActive(
             (int) $event_result['active'] == 1
         );
+        $event->setIsOffline(
+            (int) $event_result['offline'] == 1
+        );
         $event->setDate(
             DateUtils::getDateTimeByMktimeValue($event_result['date'])
         );
