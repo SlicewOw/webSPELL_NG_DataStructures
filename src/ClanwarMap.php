@@ -5,7 +5,8 @@ namespace webspell_ng;
 use \webspell_ng\Map;
 
 
-class ClanwarMap {
+class ClanwarMap
+{
 
     /**
      * @var int $mapping_id
@@ -21,6 +22,21 @@ class ClanwarMap {
      * @var int $score_home
      */
     private $score_home = 0;
+
+    /**
+     * @var bool $default_win
+     */
+    private $default_win = false;
+
+    /**
+     * @var bool $default_loss
+     */
+    private $default_loss = false;
+
+    /**
+     * @var int $sort
+     */
+    private $sort = 1;
 
     /**
      * @var int $score_opponent
@@ -67,4 +83,33 @@ class ClanwarMap {
         return $this->score_opponent;
     }
 
+    public function setIsDefaultWin(bool $default_win): void
+    {
+        $this->default_win = $default_win;
+    }
+
+    public function isDefaultWin(): bool
+    {
+        return $this->default_win;
+    }
+
+    public function setIsDefaultLoss(bool $default_loss): void
+    {
+        $this->default_loss = $default_loss;
+    }
+
+    public function isDefaultLoss(): bool
+    {
+        return $this->default_loss;
+    }
+
+    public function setSort(int $sort): void
+    {
+        $this->sort = $sort;
+    }
+
+    public function getSort(): int
+    {
+        return $this->sort;
+    }
 }

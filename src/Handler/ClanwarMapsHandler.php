@@ -8,7 +8,8 @@ use \webspell_ng\WebSpellDatabaseConnection;
 use \webspell_ng\Utils\ValidationUtils;
 
 
-class ClanwarMapsHandler {
+class ClanwarMapsHandler
+{
 
     private const DB_TABLE_NAME_CLANWARS_MAPS_MAPPING = "clanwars_maps_mapping";
 
@@ -34,18 +35,23 @@ class ClanwarMapsHandler {
 
             $clanwar_map = new ClanwarMap();
             $clanwar_map->setMappingId((int) $clanwar_map_result['mappingID']);
+            $clanwar_map->setScoreHome((int) $clanwar_map_result['score_home']);
+            $clanwar_map->setScoreOpponent((int) $clanwar_map_result['score_opponent']);
+            $clanwar_map->setSort((int) $clanwar_map_result['sort']);
             $clanwar_map->setMap(
                 MapHandler::getMapByMapId((int) $clanwar_map_result['map_id'])
             );
-            $clanwar_map->setScoreHome((int) $clanwar_map_result['score_home']);
-            $clanwar_map->setScoreOpponent((int) $clanwar_map_result['score_opponent']);
+            $clanwar_map->setIsDefaultWin(
+                (int) $clanwar_map_result['def_win'] == 1
+            );
+            $clanwar_map->setIsDefaultLoss(
+                (int) $clanwar_map_result['def_loss'] == 1
+            );
 
             array_push($clanwar_maps, $clanwar_map);
-
         }
 
         return $clanwar_maps;
-
     }
 
     public static function saveMapsOfClanwar(Clanwar $clanwar): void
@@ -75,9 +81,7 @@ class ClanwarMapsHandler {
             }
 
             $map_index++;
-
         }
-
     }
 
     private static function insertClanwarMapping(int $clanwar_id, ClanwarMap $clanwar_map, int $map_index): void
@@ -91,28 +95,31 @@ class ClanwarMapsHandler {
         $queryBuilder
             ->insert(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_CLANWARS_MAPS_MAPPING)
             ->values(
-                    [
-                        self::DB_TABLE_COLUMN_NAME_CLANWAR_ID => '?',
-                        'map_id' => '?',
-                        'map_name' => '?',
-                        'score_home' => '?',
-                        'score_opponent' => '?',
-                        'sort' => '?'
-                    ]
-                )
+                [
+                    self::DB_TABLE_COLUMN_NAME_CLANWAR_ID => '?',
+                    'map_id' => '?',
+                    'map_name' => '?',
+                    'score_home' => '?',
+                    'score_opponent' => '?',
+                    'def_win' => '?',
+                    'def_loss' => '?',
+                    'sort' => '?'
+                ]
+            )
             ->setParameters(
-                    [
-                        0 => $clanwar_id,
-                        1 => $clanwar_map->getMap()->getMapId(),
-                        2 => $clanwar_map->getMap()->getName(),
-                        3 => $clanwar_map->getScoreHome(),
-                        4 => $clanwar_map->getScoreOpponent(),
-                        5 => $map_index++
-                    ]
-                );
+                [
+                    0 => $clanwar_id,
+                    1 => $clanwar_map->getMap()->getMapId(),
+                    2 => $clanwar_map->getMap()->getName(),
+                    3 => $clanwar_map->getScoreHome(),
+                    4 => $clanwar_map->getScoreOpponent(),
+                    5 => $clanwar_map->isDefaultWin() ? 1 : 0,
+                    6 => $clanwar_map->isDefaultLoss() ? 1 : 0,
+                    7 => $map_index++
+                ]
+            );
 
         $queryBuilder->executeQuery();
-
     }
 
     private static function updateClanwarMapping(int $clanwar_id, ClanwarMap $clanwar_map, int $map_index): void
@@ -130,6 +137,8 @@ class ClanwarMapsHandler {
             ->set('map_name', '?')
             ->set('score_home', '?')
             ->set('score_opponent', '?')
+            ->set('def_win', '?')
+            ->set('def_loss', '?')
             ->set('sort', '?')
             ->where('mappingID = ?')
             ->setParameter(0, $clanwar_id)
@@ -138,10 +147,11 @@ class ClanwarMapsHandler {
             ->setParameter(3, $clanwar_map->getScoreHome())
             ->setParameter(4, $clanwar_map->getScoreOpponent())
             ->setParameter(5, $map_index)
-            ->setParameter(6, $clanwar_map->getMappingId());
+            ->setParameter(6, $clanwar_map->isDefaultWin() ? 1 : 0)
+            ->setParameter(7, $clanwar_map->isDefaultLoss() ? 1 : 0)
+            ->setParameter(8, $clanwar_map->getMappingId());
 
         $queryBuilder->executeQuery();
-
     }
 
     public static function isAnyMapSavedForClanwar(int $clanwar_id): bool
@@ -162,7 +172,5 @@ class ClanwarMapsHandler {
         $clanwar_map_result = $clanwar_map_query->fetchAssociative();
 
         return !empty($clanwar_map_result);
-
     }
-
 }

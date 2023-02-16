@@ -9,7 +9,8 @@ use \webspell_ng\WebSpellDatabaseConnection;
 use \webspell_ng\Utils\StringFormatterUtils;
 
 
-class ClanHandler {
+class ClanHandler
+{
 
     private const DB_TABLE_NAME_TEAMS = "clans";
 
@@ -42,7 +43,6 @@ class ClanHandler {
         $clan->setClanLogotype($clan_result['logotype']);
 
         return $clan;
-
     }
 
     public static function isExistingClan(string $clan_name): bool
@@ -63,7 +63,6 @@ class ClanHandler {
         $clan_result = $clan_query->fetchAssociative();
 
         return !empty($clan_result);
-
     }
 
     public static function saveClan(Clan $clan): Clan
@@ -76,7 +75,6 @@ class ClanHandler {
         }
 
         return $clan;
-
     }
 
     private static function insertClan(Clan $clan): Clan
@@ -86,21 +84,21 @@ class ClanHandler {
         $queryBuilder
             ->insert(WebSpellDatabaseConnection::getTablePrefix() . self::DB_TABLE_NAME_TEAMS)
             ->values(
-                    [
-                        'name' => '?',
-                        'tag' => '?',
-                        'homepage' => '?',
-                        'logotype' => '?'
-                    ]
-                )
+                [
+                    'name' => '?',
+                    'tag' => '?',
+                    'homepage' => '?',
+                    'logotype' => '?'
+                ]
+            )
             ->setParameters(
-                    [
-                        0 => $clan->getClanName(),
-                        1 => $clan->getClanTag(),
-                        2 => $clan->getHomepage(),
-                        3 => $clan->getClanLogotype()
-                    ]
-                );
+                [
+                    0 => $clan->getClanName(),
+                    1 => $clan->getClanTag(),
+                    2 => $clan->getHomepage(),
+                    3 => $clan->getClanLogotype()
+                ]
+            );
 
         $queryBuilder->executeQuery();
 
@@ -109,7 +107,6 @@ class ClanHandler {
         );
 
         return $clan;
-
     }
 
     private static function updateClan(Clan $clan): void
@@ -121,14 +118,14 @@ class ClanHandler {
             ->set('name', '?')
             ->set('tag', '?')
             ->set('homepage', '?')
+            ->set('logotype', '?')
             ->where('clanID = ?')
             ->setParameter(0, $clan->getClanName())
             ->setParameter(1, $clan->getClanTag())
             ->setParameter(2, $clan->getHomepage())
-            ->setParameter(3, $clan->getClanId());
+            ->setParameter(3, $clan->getClanLogotype())
+            ->setParameter(4, $clan->getClanId());
 
         $queryBuilder->executeQuery();
-
     }
-
 }
