@@ -146,9 +146,9 @@ class ClanwarMapsHandler
             ->setParameter(2, $clanwar_map->getMap()->getName())
             ->setParameter(3, $clanwar_map->getScoreHome())
             ->setParameter(4, $clanwar_map->getScoreOpponent())
-            ->setParameter(5, $map_index)
-            ->setParameter(6, $clanwar_map->isDefaultWin() ? 1 : 0)
-            ->setParameter(7, $clanwar_map->isDefaultLoss() ? 1 : 0)
+            ->setParameter(5, $clanwar_map->isDefaultWin() ? 1 : 0)
+            ->setParameter(6, $clanwar_map->isDefaultLoss() ? 1 : 0)
+            ->setParameter(7, $map_index)
             ->setParameter(8, $clanwar_map->getMappingId());
 
         $queryBuilder->executeQuery();
